@@ -4,15 +4,13 @@ import com.sprint.mission.discodeit.dto.channel.query.ChannelInfoQuery;
 import com.sprint.mission.discodeit.dto.channel.response.ChannelInfoRes;
 import com.sprint.mission.discodeit.entity.ChannelType;
 import com.sprint.mission.discodeit.mapper.ChannelMapper;
-import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.query.QueryChannelService;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
