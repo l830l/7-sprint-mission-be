@@ -1,0 +1,90 @@
+version: '3.8' # Docker Compose 파일 형식의 버전. 대부분 3.8을 많이 사용
+services: # 실행할 여러 컨테이너들을 정의
+  app:
+    build: # 이미지를 직접 만들 때 사용
+      context: . # 빌드 경로(현재 경로로 설정)
+      dockerfile: Dockerfile # 어떤 도커파일을 쓸지 명시
+    container_name: my-sprint-app
+    ports:
+      - "8080:8080" # 외부 8080 요청 시, 컨테이너 내부 8080으로 연결
+    environment:
+      # 스프링 프로필 액티브 설정
+      - SPRING_PROFILES_ACTIVE=docker
+      # docker-compose 에서는 컨테이너 이름 뿐 아니라, service 의 이름으로도 컨테이ㅓ를 지목할 수 있음
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
+      - JAVA_OPTS="-Xmx400m -Xms200m" # JVM 메모리 설정(MAX 값 400MB로, START 값을 200MB로 지정한 것.)
+    #healthcheck:
+    #  test: ["CMD", "curl", "-f", "http://app:8080/actuator/health"]
+    # 위와 같이 헬스 체크를 넣을 수 있음. 특히, MSA 에서 서비스가 나뉘어져있을 때 서로 간의 health 체크 필요. 실행 우선 적으로 해야할 서비스를 헬스 체크
+    depends_on: # 서비스 시작 순서 제어 : spring 은 postgres의 healthy한 상태를 띄운 뒤에 실행 그 전까지는 대기
+      postgres:
+        condition: service_healthy # 실제로 헬스 체크 통과해서 status 가 healthy 하다는 뜻
+      redis:
+        condition: service_started # health check 와 상관 없이 단순 컨테이너가 시작하기만 하면 됨.
+        # service_completed_successfully 컨테이너가 실행되면 바로 동작시키라는 뜻(완벽하게 컨테이너 생성이 되어야 한다는 뜻)
+    networks:
+      - app-network
+
+
+  postgres:
+    image: postgres:16 # 이미지를 로컬에서 찾고, 없으면 docker hub 에서 가져온다
+    container_name: my-postgres
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    environment: # 환경 변수값들 셋팅
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    command: >
+      postgres 
+      -c shared_buffers=128MB 
+      -c max_connections=50
+    # 우리가 지금 사용하려는 ec2 성능이 좋지 않아서 생존을 위해 제한걸기
+    # DB의 전용 메모리 공간
+    # 우린 Spring boot 도 띄우고, 이것저것 띄우니까.
+    # 아래는 DB에 접속할 수 있는 최대 사용자의 양 50으로 제한(100이 기본값)
+    healthcheck: # 컨테이너가 정상인지 주기적으로 확인
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ] # healthcheck 를 위해 실행할 명령어
+      interval: 10s # 10초마다 체크
+      timeout: 5s # 5초 안에 응답 없으면 unhealthy
+      retries: 5 # 5번 실패하면 unhealthy 상태로 판정하겠다는 것
+    networks:
+      - app-network
+
+  redis: # NoSQL 기반의 인메모리 데이터베이스
+    image: redis:7.0.0-alpine
+    container_name: redis-cache
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --maxmemory 100mb --maxmemory-poliy allkeys-lru
+    # 기본 레디스는 인메모리에 데이터 저장만 하고 끝내는건데 aof 라는 기능이 활성화되서 데이터 영속화 가능(볼륨 연동 예정)
+    # 메모리 100mb 용량 제한으로 하고,
+    # maxmemoty 정책은 100mb 가 꽉찼는데 새 데이터 들어왔을 경우는 list recently use 가장 오랫동안 조회되지 않은 것부터 대체
+    volumes:
+      - ./redis-data:/data # redis-data 볼륨 안에 저장 하겠다는 뜻
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ] # 레디스 클라이언트 도구를 이용해서 ping 요청 > pong 이라는 응답을 줌
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+# 볼륨 정의
+volumes:
+  my-postgres-data:
+    driver: local # 볼륨데이터를 호스트의 로컬에 저장하겠다. 기본적으로 사용하는 드라이버를 host docker 시스템에 저장하겠다는 뜻(기본값). 다른 영역에 하고 싶을 경우, 여러가지 클라우드 서비스에 셋팅 할 수있음. 그 경우 클라우드 서비스에서 제공하는 url 주소를 셋팅. 안쓰면 기본적으로 local임.(기본값)
+  redis-data:
+    driver: local
+
+# 네트워크 설정(없으면 새로 만들어줌)
+networks:
+  app-network: # app-network (사용자 정의에 따름)
+    driver: bridge # 브릿지 형식임을 나타냄
+
+      
+  
