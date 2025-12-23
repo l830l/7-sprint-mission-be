@@ -4,6 +4,8 @@ import com.sprint.mission.discodeit.controller.docs.BinaryContentControllerDocs;
 import com.sprint.mission.discodeit.dto.binarycontent.response.BinaryContentInfoRes;
 import com.sprint.mission.discodeit.mapper.BinaryContentMapper;
 import com.sprint.mission.discodeit.service.BinaryContentService;
+import com.sprint.mission.discodeit.service.basic.S3FileService;
+import com.sprint.mission.discodeit.service.basic.S3PrivateFileService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import java.util.List;
 import java.util.UUID;
@@ -11,9 +13,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/binary-contents")
@@ -22,6 +27,8 @@ public class BinaryContentController implements BinaryContentControllerDocs {
 
   private final BinaryContentService binaryContentService;
   private final BinaryContentStorage binaryContentStorage;
+  private final S3FileService s3FileService;
+  private final S3PrivateFileService s3PrivateFileService;
 
   //단일 파일 조회
   @GetMapping("/{binaryContentId}")
@@ -43,5 +50,11 @@ public class BinaryContentController implements BinaryContentControllerDocs {
         binaryContentService.findById(binaryContentId));
     binaryContentStorage.download(res);
     return ResponseEntity.ok(res);
+  }
+
+  @PostMapping
+  public ResponseEntity<String> uploadFile(@RequestPart("file") MultipartFile file) {
+    String url = s3PrivateFileService.uploadToS3Bucket("s3/test/", file);
+    return ResponseEntity.ok(url);
   }
 }
