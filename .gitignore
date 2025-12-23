@@ -38,6 +38,8 @@ out/
 
 ### myCustom ###
 **/logs/**
+.env
+**/.aws/**
 
 # secrets
 **/application-secret.yml
