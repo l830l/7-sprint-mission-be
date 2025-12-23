@@ -3,7 +3,7 @@ name: Deploy to AWS ECS
 on:
   push:
     branches:
-      - 최지혜 # 최지혜 브랜치에 코드가 올라오면 작업 시작(보통은 main)
+      - 최지혜-sprint7 # 최지혜-sprint7 브랜치에 코드가 올라오면 작업 시작(보통은 main)
 
 # 해당 워크 플로우에서 자주 사용할만한 값을 환경 변수로 등록해놓고 사용 가능
 env:
@@ -86,11 +86,29 @@ jobs:
       # 8. 현재 Task 정의를 다운로드
       # Amazon Elastic Container Service > 태스크 정의 > my-spring-app > 개정 2개 > JSON 내용 다운됨.
       - name: Download current task definition
+        # AWS ECS에서 Task Definition 을 다운로드할 때 읽기 전용 필드들이 포함되는데
+        # 이걸 마지막 스텝에서 그대로 등록하려하면 에러가 발생
+        # 읽기 전용 필드들을 제거해주는 작업을 진행.
         run: |
           aws ecs describe-task-definition \
             --task-definition my-spring-app \
             --query taskDefinition > task-definition.json
-
+          
+          sudo apt-get update && sudo apt-get install -y jq
+          
+          jq 'del(
+          .taskDefinitionArn,
+          .revision,
+          .status,
+          .requiresAttributes,
+          .compatibilities,
+          .registeredAt,
+          .registeredBy,
+          .enableFaultInjection
+          )' task-definition.json > task-definition-clean.json
+          
+          mv task-definition-clean.json task-definition.json      
+      
       # 9. Task Definition에 새 이미지 반영
       - name: Fill in the new image ID in task definition
         id: task-def
