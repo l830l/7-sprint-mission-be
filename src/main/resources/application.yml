@@ -1,46 +1,30 @@
 spring:
   application:
     name: discodeit
+
   servlet:
     multipart:
       maxFileSize: 10MB # 파일 하나의 최대 크기
       maxRequestSize: 30MB  # 한 번에 최대 업로드 가능 용량
-  datasource:
-    url: jdbc:postgresql://myapp-postgres-db.c9wuuamwq18f.ap-northeast-2.rds.amazonaws.com:5432/postgres # discodeit
-    username: postgres # discodeit_user
-    password: ${DB_PASSWORD} # discodeit1234
+
   mail:
     host: smtp.gmail.com   # 사용하려는 메일 서버
     port: 587
-    username: ${MAIL_ID}
-    password: ${MAIL_PASSWORD}
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
+
   jpa:
-    hibernate:
-      ddl-auto: update    # validate
+    open-in-view: false
     properties:
       hibernate:
-        format_sql: true  # SQL을 이쁘게 포맷팅
-        default_batch_fetch_size: 50 # 연관관계(LAZY)에서 N+1 문제를 줄이기 위해 한 번에 50개씩 IN 쿼리로 묶어서 가져오게 하는 옵션
-    open-in-view: false
-
-  cloud:
-    aws:
-      credentials:
-        accessKey: ${AWS_S3_ACCESS_KEY}
-        secretKey: ${AWS_S3_SECRET_KEY}
-      region:
-        static:
-          ap-northeast-2
-      s3:
-        bucket: s3-practice-bucket5451
+        format_sql: true
+        default_batch_fetch_size: 50
 
 logging:
   level:
-    org.hibernate.SQL: debug # 실행되는 SQL 문장 자체를 로깅
-    org.hibernate.orm.jdbc.bind: trace # SQL 안의 바인딩 값(?, ?, ?)에 들어가는 실제 파라미터를 출력
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
 
 springdoc:
   swagger-ui:
@@ -53,29 +37,8 @@ springdoc:
   api-docs:
     path: /my-api
 
-discodeit:
-  storage:
-    type: local
-    local:
-      root-path: A:/myCodes/codit/sprint/storage
-
 management:
   endpoints:
     web:
       exposure:
         include: health, info, metrics
----
-
-# Docker 환경용 프로필 (스프링 초기화 시 프로필 active 가 docker 라면 아래 설정을 우선시 하겠다)
-spring:
-  config:
-    activate:
-      on-profile: docker
-
-
-
-  # 환경 변수로 외부에서 주입 받음
-  datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
