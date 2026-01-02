@@ -13,4 +13,6 @@ FROM eclipse-temurin:17-jre-alpine AS sprint-exec
 COPY --from=sprint-build /app/build/libs/*.jar app.jar
 ENV TZ=Asia/Seoul
 RUN apk add --no-cache curl tzdata
+# 8080 번 포트를 노출시키겠다는 명령 단, 이걸 쓴다고 port mapping 을 안해도 되는것이 아님(문서 느낌)
+EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
