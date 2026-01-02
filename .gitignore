@@ -41,5 +41,6 @@ out/
 .env
 **/.aws/**
 
-# secrets
-**/application-secret.yml
+# application.yml을 제외한 yml
+*.yml
+!**/application.yml
