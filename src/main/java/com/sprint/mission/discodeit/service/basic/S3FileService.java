@@ -6,12 +6,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -33,6 +33,7 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 
 @Slf4j
 @Service
+@Profile("prod")
 @RequiredArgsConstructor
 public class S3FileService {
 
