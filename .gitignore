@@ -36,9 +36,13 @@ out/
 ### VS Code ###
 .vscode/
 
-### myCustom ###
-**/logs/**
+### 로그파일 ###
+**/.logs/**
+
+### 환경변수 ###
 .env
+
+### aws ###
 **/.aws/**
 
 # application.yml을 제외한 yml
