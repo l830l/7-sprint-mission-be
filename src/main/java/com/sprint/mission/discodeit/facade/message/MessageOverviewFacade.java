@@ -3,32 +3,39 @@ package com.sprint.mission.discodeit.facade.message;
 import com.sprint.mission.discodeit.dto.common.response.PageResponse;
 import com.sprint.mission.discodeit.dto.message.response.MessageViewRes;
 import com.sprint.mission.discodeit.entity.Message;
-import com.sprint.mission.discodeit.facade.mapper.MessageFacadeMapper;
+import com.sprint.mission.discodeit.mapper.MessageMapper;
+import com.sprint.mission.discodeit.mapper.PageResponseMapper;
+import com.sprint.mission.discodeit.repository.query.MessageRepositoryImpl;
 import com.sprint.mission.discodeit.service.MessageService;
-import java.util.List;
+import com.sprint.mission.discodeit.service.query.QueryMessageService;
+import com.sprint.mission.discodeit.vo.MessageCursor;
 import java.util.UUID;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.sprint.mission.discodeit.mapper.PageResponseMapper;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MessageOverviewFacade {
 
-  private final MessageService messageService;
-  private final MessageFacadeMapper messageFacadeMapper;
+  private final QueryMessageService queryMessageService;
 
   //메세지 전체 조회
-  public PageResponse<MessageViewRes> findAllByChannelId(@NonNull UUID channelId, int page) {
-    Slice<Message> slice = messageService.getRecentMessages(channelId, page);
+  public PageResponse<MessageViewRes> findAllByChannelId(
+      UUID channelId, String cursor, int size) {
+    Slice<Message> slice = queryMessageService.getRecentMessages(channelId, cursor, size);
+    Slice<MessageViewRes> dtoSlice = slice.map(MessageMapper::toResDto);
 
-    // Entity -> DTO 변환 후 PageResponse 생성
-    return PageResponseMapper.fromSlice(
-        slice.map(messageFacadeMapper::mapToView) // Slice<T>에도 map 가능
-    );
+    String nextCursor = null;
+    if (slice.hasNext() && !slice.isEmpty()) {
+      Message lastMessage = slice.getContent().get(slice.getContent().size() - 1);
+      nextCursor = new MessageCursor(lastMessage.getCreatedAt(), lastMessage.getId()
+      ).toPagingCursor();
+    }
+
+    return PageResponseMapper.fromSlice(dtoSlice, nextCursor);
   }
 }

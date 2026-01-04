@@ -45,8 +45,9 @@ public class MessageController implements MessageControllerDocs {
   @GetMapping
   public ResponseEntity<PageResponse<MessageViewRes>> findAllByChannelId(
       @RequestParam UUID channelId,
-      @RequestParam(defaultValue = "0") int page) {
-    return ResponseEntity.ok(messageOverviewFacade.findAllByChannelId(channelId, page));
+      @RequestParam(required = false) String cursor,
+      @RequestParam(defaultValue = "50") int size) {
+    return ResponseEntity.ok(messageOverviewFacade.findAllByChannelId(channelId, cursor, size));
   }
 
   //메세지 입력

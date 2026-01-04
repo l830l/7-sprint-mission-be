@@ -6,11 +6,12 @@ import com.sprint.mission.discodeit.exception.CustomException;
 import com.sprint.mission.discodeit.exception.ErrorCode;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.service.MessageService;
-import java.time.Instant;
+import com.sprint.mission.discodeit.vo.MessageCursor;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ public class BasicMessageService implements MessageService {
   //레포지토리
   private final MessageRepository messageRepository;
 
+
   //메세지를 id 로 참음
   @Override
   public Message findById(UUID id) {
@@ -34,14 +36,6 @@ public class BasicMessageService implements MessageService {
   @Override
   public List<Message> findAllByChannelId(UUID channelId) {
     return messageRepository.findAllByChannelId(channelId);
-  }
-
-  @Override
-  public Slice<Message> getRecentMessages(UUID channelId, int page) {
-    return messageRepository.findByChannelIdOrderByCreatedAtDesc(
-        channelId,
-        PageRequest.of(page, 50) // 50개씩, 최신순 기본 정렬
-    );
   }
 
   //메세지 생성

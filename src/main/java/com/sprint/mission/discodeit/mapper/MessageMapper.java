@@ -12,8 +12,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class MessageMapper {
 
-  public static MessageViewRes toResDto(Message message,
-      List<BinaryContentInfoRes> attachmentDatas) {
+  public static MessageViewRes toResDto(Message message) {
+    List<BinaryContentInfoRes> attachmentDatas = message.getAttachments().stream()
+        .map(BinaryContentMapper::toResDto).toList();
+
     return new MessageViewRes(
         message.getId(),
         message.getSpeaker().getId(),

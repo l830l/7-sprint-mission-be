@@ -61,7 +61,8 @@ public interface MessageControllerDocs {
   )
   ResponseEntity<PageResponse<MessageViewRes>> findAllByChannelId(
       @RequestParam UUID channelId,
-      @RequestParam(defaultValue = "0") int page);
+      @RequestParam(required = false) String cursor,
+      @RequestParam(defaultValue = "50") int size);
 
   @Operation(summary = "Message 생성")
   @ApiResponses(
