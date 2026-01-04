@@ -18,15 +18,12 @@ import lombok.NoArgsConstructor;
 public class Channel extends BaseUpdatableEntity {
 
   //Field
-  // 채널명
   @Column(name = "name", length = 100)
   private String name;
 
-  // 채널 설명
   @Column(name = "description", length = 500)
   private String description;
-
-  // 공개/비공개 타입
+  
   @Enumerated(EnumType.STRING)
   @Column(name = "type", length = 10, nullable = false)
   private ChannelType publicType;
