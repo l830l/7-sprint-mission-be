@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+
 public class UserDetailViewFacade {
 
   private final UserService userService;
@@ -26,18 +26,21 @@ public class UserDetailViewFacade {
   private final UserStatusService userStatusService;
 
   //유저 단일 조회 : 유저 목록에서 유저를 클릭했을 때
+  @Transactional(readOnly = true)
   public UserDetailInfoRes findById(@NonNull UUID userId) {
     User user = userService.findById(userId);
     return toDetailInfo(user);
   }
 
   //유저 단일 조회 : 닉네임
+  @Transactional(readOnly = true)
   public UserDetailInfoRes findByNickname(@NonNull String nickname) {
     User user = userService.findByNickname(nickname);
     return toDetailInfo(user);
   }
 
   //유저 단일 조회 : 이메일
+  @Transactional(readOnly = true)
   public UserDetailInfoRes findByEmail(@NonNull String email) {
     User user = userService.findByEmail(email);
     return toDetailInfo(user);

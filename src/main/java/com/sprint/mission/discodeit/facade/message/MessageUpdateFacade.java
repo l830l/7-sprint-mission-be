@@ -18,13 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class MessageUpdateFacade {
 
   private final MessageService messageService;
   private final BinaryContentService binaryContentService;
   private final BinaryContentStorage binaryContentStorage;
 
+  @Transactional
   public MessageViewRes updateMessage(@NonNull UUID messageId, @NonNull MessageUpdateReq req) {
     Message message = messageService.findById(messageId);
     // 기존 첨부파일 중 삭제할 파일 처리

@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class MessageCreationFacade {
 
   private final MessageService messageService;
@@ -33,6 +32,7 @@ public class MessageCreationFacade {
   private final BinaryContentStorage binaryContentStorage;
 
   //메세지 추가
+  @Transactional
   public MessageViewRes createMessage(@NonNull UUID speakerId, @NonNull UUID channelId,
       @NonNull MessageCreateReq req) {
     if (channelService.findById(channelId) == null) {

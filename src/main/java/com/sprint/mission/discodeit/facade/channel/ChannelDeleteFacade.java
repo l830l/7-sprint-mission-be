@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-@Transactional
 public class ChannelDeleteFacade {
 
   private final ChannelService channelService;
@@ -20,6 +19,7 @@ public class ChannelDeleteFacade {
   private final ChannelMemberService channelMemberService;
   private final BinaryContentStorage binaryContentStorage;
 
+  @Transactional
   public void deleteChannel(@NonNull UUID channelId) {
     channelMemberService.findAllByChannelId(channelId)
         .forEach(readStatus -> channelMemberService.delete(readStatus.getId()));

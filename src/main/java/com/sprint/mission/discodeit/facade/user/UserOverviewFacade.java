@@ -15,13 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class UserOverviewFacade {
 
   private final UserService userService;
   private final UserStatusService userStatusService;
 
   //유저 전체 조회
+  @Transactional(readOnly = true)
   public List<UserSimpleInfoRes> findAll() {
     return userService.findAll().stream()
         .map(this::mapToSimpleInfo).toList();

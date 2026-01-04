@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class ChannerMemberCreateFacade {
 
   private final ChannelMemberService channelMemberService;
@@ -23,6 +22,7 @@ public class ChannerMemberCreateFacade {
   private final UserService userService;
   private final ChannelMemberFactory channelMemberFactory;
 
+  @Transactional
   public ChannelMember create(@NonNull ChannelMemberCreateReq req) {
     if (channelService.findById(req.channelId()) == null) {
       throw new CustomException(ErrorCode.CHANNEL_NOT_FOUND);

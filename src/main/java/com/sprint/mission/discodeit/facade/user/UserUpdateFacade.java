@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UserUpdateFacade {
 
   private final UserService userService;
@@ -28,6 +27,7 @@ public class UserUpdateFacade {
   private final BinaryContentStorage binaryContentStorage;
 
   //유저 수정
+  @Transactional
   public UserDetailInfoRes updateUser(@NonNull UUID userId, @NonNull UserUpdateReq req) {
     User user = userService.findById(userId);
 

@@ -15,12 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+
 public class ChannelOverViewFacade {
 
   private final QueryChannelService queryChannelService;
 
   //채널 목록 : Public 인 경우 전부, Private 인 경우 자신이 참여한 채널만
+  @Transactional(readOnly = true)
   public Map<ChannelType, List<ChannelInfoRes>> findAllMyChannels(UUID userId,
       String searchTxt) {
     String normalizedSearch = (searchTxt == null || searchTxt.trim().isEmpty()) ? "" : searchTxt;

@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-@Transactional
 public class AuthFacade {
 
   private final UserService userService;
@@ -26,6 +25,7 @@ public class AuthFacade {
   private final BinaryContentService binaryContentService;
 
   //로그인
+  @Transactional
   public UserDetailInfoRes login(@NonNull UserLoginReq req) {
     User user = userService.findByNickname(req.nickname());
     if (user == null) {
@@ -44,6 +44,7 @@ public class AuthFacade {
   }
 
   //로그아웃
+  @Transactional
   public void logout(@NonNull UUID userId) {
     userStatusService.findByUserId(userId);
     UserStatus userStatus = userStatusService.findByUserId(userId);
