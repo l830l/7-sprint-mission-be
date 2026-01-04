@@ -6,14 +6,12 @@ import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.exception.CustomException;
 import com.sprint.mission.discodeit.exception.ErrorCode;
-import com.sprint.mission.discodeit.facade.mapper.MessageFacadeMapper;
 import com.sprint.mission.discodeit.factory.BinaryContentFactory;
 import com.sprint.mission.discodeit.factory.MessageFactory;
 import com.sprint.mission.discodeit.service.BinaryContentService;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
-import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -29,7 +27,6 @@ public class MessageCreationFacade {
 
   private final MessageService messageService;
   private final BinaryContentService binaryContentService;
-  private final MessageFacadeMapper messageFacadeMapper;
   private final ChannelService channelService;
   private final MessageFactory messageFactory;
   private final BinaryContentStorage binaryContentStorage;
@@ -54,7 +51,8 @@ public class MessageCreationFacade {
 
     Message message = messageService.create(
         messageFactory.create(speakerId, channelId, req, attachments));
-    return messageFacadeMapper.mapToView(message);
+    return null;
+    //return messageFacadeMapper.mapToView(message);
   }
 }
 
