@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.dto.channel.response;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record ChannelPrivateInfoRes(
@@ -8,7 +8,7 @@ public record ChannelPrivateInfoRes(
     String type,
     UUID managerId,
     String name,
-    Instant lastMessageTime
+    LocalDateTime lastMessageTime
 ) implements ChannelInfoRes {
 
 }

@@ -9,12 +9,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.Instant;
-import java.util.UUID;
+import org.springframework.cglib.core.Local;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,7 +28,7 @@ public class UserStatus extends BaseUpdatableEntity {
   private User user;      //접속자 UUID
 
   @Column(name = "last_active_at", nullable = false)
-  private Instant offlineAt;      //로그아웃 한 시간
+  private LocalDateTime offlineAt;      //로그아웃 한 시간
 
   @Transient
   private boolean isOnline;
@@ -39,7 +38,7 @@ public class UserStatus extends BaseUpdatableEntity {
   //Constructor
   private UserStatus(User user) {
     this.user = user;
-    this.offlineAt = Instant.now();
+    this.offlineAt = LocalDateTime.now();
   }
 
   //Factory Method
@@ -50,12 +49,12 @@ public class UserStatus extends BaseUpdatableEntity {
   //종료되었을 때
   public void updateOfflineAt() {
     super.update();
-    this.offlineAt = Instant.now();
+    this.offlineAt = LocalDateTime.now();
   }
 
   //온라인 상태 계산
   public void update() {
     super.update();
-    this.isOnline = offlineAt.isAfter(Instant.now().minusSeconds(OFFLINE_THRESHOLD_SECONDS));
+    this.isOnline = offlineAt.isAfter(LocalDateTime.now().minusSeconds(OFFLINE_THRESHOLD_SECONDS));
   }
 }

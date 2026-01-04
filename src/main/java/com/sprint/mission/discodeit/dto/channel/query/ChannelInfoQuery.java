@@ -1,7 +1,7 @@
 package com.sprint.mission.discodeit.dto.channel.query;
 
 import com.sprint.mission.discodeit.entity.ChannelType;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,5 +15,5 @@ public class ChannelInfoQuery {
   private String description;
   private ChannelType publicType;
   private UUID managerId;
-  private Instant lastMessageTime;
+  private LocalDateTime lastMessageTime;
 }
