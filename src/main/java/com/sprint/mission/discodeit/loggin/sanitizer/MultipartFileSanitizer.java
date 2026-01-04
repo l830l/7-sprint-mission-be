@@ -1,4 +1,4 @@
-package com.sprint.mission.discodeit.loggin;
+package com.sprint.mission.discodeit.loggin.sanitizer;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;

@@ -1,6 +1,7 @@
-package com.sprint.mission.discodeit.loggin;
+package com.sprint.mission.discodeit.loggin.aspect;
 
-import com.sprint.mission.discodeit.dto.common.Sanitizable;
+import com.sprint.mission.discodeit.loggin.support.LogArgumentSanitizer;
+import java.lang.reflect.Method;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -14,18 +15,13 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-
 @Aspect
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class LoggingAspect {
+public class ControllerLoggingAspect {
 
-  //각 케이스에 해당하는 유형 리스트
-  private final List<ArgSanitizer> sanitizers;
+  private final LogArgumentSanitizer logArgumentSanitizer;
 
   // Pointcut : Controller에서 GET 요청 빼고, CUD 관련 메서드들만
   @Pointcut("execution(public * com.sprint.mission.discodeit.controller..*(..))")
@@ -53,7 +49,7 @@ public class LoggingAspect {
     );
 
     // 파라미터 안전 로그
-    log.info("📌 요청 파라미터: {}", sanitizeArgs(pjp.getArgs()));
+    log.info("📌 요청 파라미터: {}", logArgumentSanitizer.sanitizeArgs(pjp.getArgs()));
 
     Object result = pjp.proceed();
 
@@ -82,27 +78,5 @@ public class LoggingAspect {
     return "UNKNOWN";
   }
 
-  //매개변수 있는지 검사 해서 있으면 매개변수 처리 함수 호출
-  private List<?> sanitizeArgs(Object[] args) {
-    if (args == null || args.length == 0) {
-      return List.of();
-    }
-    return Arrays.stream(args)
-        .map(this::sanitizeArg)
-        .toList();
-  }
 
-  //매개변수 처리 함수 : multipartfile, password 관련 필드 없애기
-  private Object sanitizeArg(Object arg) {
-    if (arg instanceof Sanitizable<?> s) {
-      return s.toLoggingDTO();
-    }
-    for (ArgSanitizer sanitizer : sanitizers) {
-      if (sanitizer.isFilterCase(arg)) {
-        return sanitizer.sanitize(arg);
-      }
-    }
-
-    return arg;
-  }
 }
