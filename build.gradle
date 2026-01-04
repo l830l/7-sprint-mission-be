@@ -77,6 +77,9 @@ dependencies {
     //S3 연동 : AWS SDK for Java
     implementation platform('software.amazon.awssdk:bom:2.20.56')
     implementation 'software.amazon.awssdk:s3'
+
+    // env
+    implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 }
 
 // QueryDSL: QClass 생성 폴더
