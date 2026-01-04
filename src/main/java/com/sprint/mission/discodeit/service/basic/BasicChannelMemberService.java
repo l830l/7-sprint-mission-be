@@ -24,7 +24,7 @@ public class BasicChannelMemberService implements ChannelMemberService {
   @Override
   public ChannelMember create(ChannelMember channelMember) {
     //유저id 랑 channel id 가 이미 있는 readStatus 가 있으면 에러
-    if (channelMemberRepository.existsByChannel_IdAndUser_Id(
+    if (channelMemberRepository.existsByChannelIdAndUserId(
         channelMember.getChannel().getId(), channelMember.getUser().getId()
     )) {
       throw new CustomException(ErrorCode.READSTATUS_ALREADY_EXISTS);
@@ -53,7 +53,7 @@ public class BasicChannelMemberService implements ChannelMemberService {
 
   @Override
   public ChannelMember findManagerByChannelId(UUID channelId) {
-    return channelMemberRepository.findByChannel_IdAndRole(channelId, ChannelMemberRole.MANAGER)
+    return channelMemberRepository.findByChannelIdAndRole(channelId, ChannelMemberRole.MANAGER)
         .stream().findFirst().orElseThrow(
             () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
@@ -61,13 +61,13 @@ public class BasicChannelMemberService implements ChannelMemberService {
 
   @Override
   public List<ChannelMember> findMembersByChannelId(UUID channelId) {
-    return channelMemberRepository.findByChannel_IdAndRole(channelId, ChannelMemberRole.MEMBER)
+    return channelMemberRepository.findByChannelIdAndRole(channelId, ChannelMemberRole.MEMBER)
         .stream().toList();
   }
 
   @Override
   public List<ChannelMember> findAllByChannelId(UUID channelId) {
-    return channelMemberRepository.findAllByChannel_id(channelId);
+    return channelMemberRepository.findAllByChannelId(channelId);
   }
 
   // ===== 🎯 Controller Direct (DTO 반환) =====

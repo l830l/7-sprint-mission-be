@@ -58,7 +58,7 @@ public class BasicChannelService implements ChannelService {
     return channelRepository.findAll().stream().filter(channel ->
         channel.getPublicType() == ChannelType.PUBLIC ||
             (channel.getPublicType() == ChannelType.PRIVATE &&
-                channelMemberRepository.existsByChannel_IdAndUser_Id(channel.getId(), userId)
+                channelMemberRepository.existsByChannelIdAndUserId(channel.getId(), userId)
             )).collect(Collectors.groupingBy(Channel::getPublicType));
   }
 

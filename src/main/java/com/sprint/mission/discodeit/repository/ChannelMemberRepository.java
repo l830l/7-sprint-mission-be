@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ChannelMemberRepository extends JpaRepository<ChannelMember, UUID> {
 
-  boolean existsByChannel_IdAndUser_Id(UUID channelId, UUID userId);
+  boolean existsByChannelIdAndUserId(UUID channelId, UUID userId);
 
-  List<ChannelMember> findAllByChannel_id(UUID channelId);
+  List<ChannelMember> findAllByChannelId(UUID channelId);
 
-  List<ChannelMember> findByChannel_IdAndRole(UUID channelId, ChannelMemberRole role);
+  List<ChannelMember> findByChannelIdAndRole(UUID channelId, ChannelMemberRole role);
 }
