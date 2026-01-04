@@ -44,12 +44,6 @@ public class BasicMessageService implements MessageService {
     );
   }
 
-  //채널에서 가장 마지막 메세지를 조회
-  @Override
-  public Instant getListMessageTime(UUID channelId) {
-    return messageRepository.findLatestCreatedAt(channelId).orElse(null);
-  }
-
   //메세지 생성
   @Override
   public Message create(Message message) {

@@ -11,9 +11,7 @@ import org.springframework.data.domain.Slice;
 public interface MessageService {
 
   List<Message> findAllByChannelId(UUID channelId);
-
-  Instant getListMessageTime(UUID channelId);
-
+  
   Message create(Message message);
 
   void update(UUID id, String content, List<BinaryContent> attachments);
