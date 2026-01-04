@@ -5,6 +5,7 @@ import com.sprint.mission.discodeit.dto.message.response.MessageViewRes;
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.factory.BinaryContentFactory;
+import com.sprint.mission.discodeit.mapper.MessageMapper;
 import com.sprint.mission.discodeit.service.BinaryContentService;
 import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
@@ -48,8 +49,7 @@ public class MessageUpdateFacade {
 
     // 메시지 내용 업데이트
     messageService.update(messageId, req.content(), message.getAttachments());
-    return null;
-    //return messageFacadeMapper.mapToView(message);
+    return MessageMapper.toResDto(message);
   }
 }
 

@@ -8,6 +8,7 @@ import com.sprint.mission.discodeit.exception.CustomException;
 import com.sprint.mission.discodeit.exception.ErrorCode;
 import com.sprint.mission.discodeit.factory.BinaryContentFactory;
 import com.sprint.mission.discodeit.factory.MessageFactory;
+import com.sprint.mission.discodeit.mapper.MessageMapper;
 import com.sprint.mission.discodeit.service.BinaryContentService;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
@@ -51,8 +52,7 @@ public class MessageCreationFacade {
 
     Message message = messageService.create(
         messageFactory.create(speakerId, channelId, req, attachments));
-    return null;
-    //return messageFacadeMapper.mapToView(message);
+    return MessageMapper.toResDto(message);
   }
 }
 
