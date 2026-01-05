@@ -22,4 +22,15 @@ public record ErrorResponse(
         errorCode.getStatus().value()
     );
   }
+
+  public static ErrorResponse from(ErrorCode errorCode) {
+    return new ErrorResponse(
+        LocalDateTime.now(),
+        errorCode.getCode(),
+        errorCode.getMessage(),
+        null,
+        "Exception",
+        errorCode.getStatus().value()
+    );
+  }
 }
