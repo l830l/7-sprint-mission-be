@@ -2,16 +2,15 @@ package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.dto.binarycontent.response.BinaryContentInfoRes;
 import com.sprint.mission.discodeit.entity.BinaryContent;
-import com.sprint.mission.discodeit.exception.DiscodeitException;
 import com.sprint.mission.discodeit.exception.ErrorCode;
+import com.sprint.mission.discodeit.exception.binarycontent.BinaryContentNotFoundException;
 import com.sprint.mission.discodeit.mapper.BinaryContentMapper;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.service.BinaryContentService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
@@ -29,7 +28,7 @@ public class BasicBinaryContentService implements BinaryContentService {
   @Override
   public BinaryContent findById(UUID id) {
     return binaryContentRepository.findById(id).orElseThrow(
-        () -> new DiscodeitException(ErrorCode.BINARYCONTENT_NOT_FOUNT));
+        () -> new BinaryContentNotFoundException(ErrorCode.BINARYCONTENT_NOT_FOUNT));
   }
 
   @Override
@@ -40,7 +39,7 @@ public class BasicBinaryContentService implements BinaryContentService {
   @Override
   public void delete(UUID id) {
     if (!binaryContentRepository.existsById(id)) {
-      throw new DiscodeitException(ErrorCode.BINARYCONTENT_NOT_FOUNT);
+      throw new BinaryContentNotFoundException(ErrorCode.BINARYCONTENT_NOT_FOUNT);
     }
     binaryContentRepository.deleteById(id);
   }
