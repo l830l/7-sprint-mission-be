@@ -5,8 +5,9 @@ import com.sprint.mission.discodeit.dto.channel.request.ChannelCreateSecReq;
 import com.sprint.mission.discodeit.dto.channel.request.ChannelUpdateReq;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ChannelType;
-import com.sprint.mission.discodeit.exception.DiscodeitException;
 import com.sprint.mission.discodeit.exception.ErrorCode;
+import com.sprint.mission.discodeit.exception.channel.ChannelNotFoundException;
+import com.sprint.mission.discodeit.exception.channel.ChannelPrivateCannotModifyException;
 import com.sprint.mission.discodeit.factory.ChannelFactory;
 import com.sprint.mission.discodeit.repository.ChannelMemberRepository;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
@@ -47,7 +48,7 @@ public class BasicChannelService implements ChannelService {
   @Override
   public void delete(UUID id) {
     if (!channelRepository.existsById(id)) {
-      throw new DiscodeitException(ErrorCode.CHANNEL_NOT_FOUND);
+      throw new ChannelNotFoundException(ErrorCode.CHANNEL_NOT_FOUND);
     }
     channelRepository.deleteById(id);
   }
@@ -73,7 +74,7 @@ public class BasicChannelService implements ChannelService {
   @Override
   public Channel findById(UUID id) {
     return channelRepository.findById(id).orElseThrow(
-        () -> new DiscodeitException(ErrorCode.CHANNEL_NOT_FOUND)
+        () -> new ChannelNotFoundException(ErrorCode.CHANNEL_NOT_FOUND)
     );
   }
 
@@ -82,10 +83,10 @@ public class BasicChannelService implements ChannelService {
   @Transactional
   public Channel update(@NonNull UUID id, @NonNull ChannelUpdateReq req) {
     Channel channel = channelRepository.findById(id).orElseThrow(
-        () -> new DiscodeitException(ErrorCode.CHANNEL_NOT_FOUND)
+        () -> new ChannelNotFoundException(ErrorCode.CHANNEL_NOT_FOUND)
     );
     if (channel.getPublicType() == ChannelType.PRIVATE) {
-      throw new DiscodeitException(ErrorCode.CHANNEL_PRIVATE_CANNOT_MODIFY);
+      throw new ChannelPrivateCannotModifyException(ErrorCode.CHANNEL_PRIVATE_CANNOT_MODIFY);
     }
     channel.update(req.name(), req.description());
     return channel;
