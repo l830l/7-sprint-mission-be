@@ -10,35 +10,8 @@ public enum ErrorCode {
   // Common
   INTERNAL_SERVER_ERROR("COMMON_001", HttpStatus.INTERNAL_SERVER_ERROR,
       "서버 내부 오류가 발생했습니다."),
-  FIELD_ACCESS_FAILED("COMMON_002", HttpStatus.INTERNAL_SERVER_ERROR,
-      "클래스의 필드 접근에 실패하였습니다."),
   INVALID_CURSOR("COMMON_003", HttpStatus.BAD_REQUEST,
       "커서의 값이 잘못되었습니다"),
-
-  // File
-  DATA_DIRECTORY_CREATE_FAILED("FILE_001", HttpStatus.INTERNAL_SERVER_ERROR,
-      "데이터 저장용 디렉토리 생성에 실패하였습니다."),
-
-  BACKUP_DIRECTORY_CREATE_FAILED("FILE_002", HttpStatus.INTERNAL_SERVER_ERROR,
-      "백업용 디렉토리 생성에 실패하였습니다."),
-
-  FILE_BACKUP_CREATE_FAILED("FILE_003", HttpStatus.INTERNAL_SERVER_ERROR,
-      "백업 파일 생성 중 오류가 발생하였습니다."),
-
-  FILE_BACKUP_RESTORE_FAILED("FILE_004", HttpStatus.INTERNAL_SERVER_ERROR,
-      "백업 파일을 복원하는 중 오류가 발생하였습니다."),
-
-  FILE_SAVE_FAILED("FILE_005", HttpStatus.INTERNAL_SERVER_ERROR,
-      "데이터 파일 저장에 실패하였습니다."),
-
-  FILE_READ_FAILED("FILE_006", HttpStatus.INTERNAL_SERVER_ERROR,
-      "데이터 파일을 읽어오는 중 오류가 발생하였습니다."),
-
-  FILE_DELETE_FAILED("FILE_007", HttpStatus.INTERNAL_SERVER_ERROR,
-      "데이터 파일 삭제에 실패하였습니다."),
-
-  FILE_READ_ALL_FAILED("FILE_008", HttpStatus.INTERNAL_SERVER_ERROR,
-      "모든 데이터 파일을 읽어오는 중 오류가 발생하였습니다."),
 
   // Auth
   INVALID_NICKNAME("AUTH_001", HttpStatus.NOT_FOUND,
