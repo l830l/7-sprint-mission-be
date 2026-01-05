@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.exception.DiscodeitException;
 import com.sprint.mission.discodeit.exception.ErrorCode;
+import com.sprint.mission.discodeit.exception.message.MessageNotFoundException;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.service.MessageService;
 import java.util.List;
@@ -25,7 +26,7 @@ public class BasicMessageService implements MessageService {
   @Override
   public Message findById(UUID id) {
     return messageRepository.findById(id).orElseThrow(() ->
-        new DiscodeitException(ErrorCode.MESSAGE_NOT_FOUND));
+        new MessageNotFoundException(ErrorCode.MESSAGE_NOT_FOUND));
   }
 
   //채널 안의 메세지들을 모두 조회
