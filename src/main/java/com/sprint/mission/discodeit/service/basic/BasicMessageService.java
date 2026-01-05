@@ -2,7 +2,6 @@ package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.Message;
-import com.sprint.mission.discodeit.exception.DiscodeitException;
 import com.sprint.mission.discodeit.exception.ErrorCode;
 import com.sprint.mission.discodeit.exception.message.MessageNotFoundException;
 import com.sprint.mission.discodeit.repository.MessageRepository;
@@ -53,7 +52,7 @@ public class BasicMessageService implements MessageService {
   @Override
   public void delete(UUID id) {
     if (!messageRepository.existsById(id)) {
-      throw new DiscodeitException(ErrorCode.MESSAGE_NOT_FOUND);
+      throw new MessageNotFoundException(ErrorCode.MESSAGE_NOT_FOUND);
     }
     messageRepository.deleteById(id);
   }

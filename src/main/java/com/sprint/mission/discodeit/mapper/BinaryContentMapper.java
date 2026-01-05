@@ -3,8 +3,8 @@ package com.sprint.mission.discodeit.mapper;
 import com.sprint.mission.discodeit.dto.binarycontent.request.BinaryContentCreateReq;
 import com.sprint.mission.discodeit.dto.binarycontent.response.BinaryContentInfoRes;
 import com.sprint.mission.discodeit.entity.BinaryContent;
-import com.sprint.mission.discodeit.exception.DiscodeitException;
 import com.sprint.mission.discodeit.exception.ErrorCode;
+import com.sprint.mission.discodeit.exception.binarycontent.FileConversionFail;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public class BinaryContentMapper {
           file.getContentType()
       );
     } catch (IOException e) {
-      throw new DiscodeitException(ErrorCode.FILE_CONVERSION_FAILED);
+      throw new FileConversionFail(ErrorCode.FILE_CONVERSION_FAILED);
     }
   }
 
