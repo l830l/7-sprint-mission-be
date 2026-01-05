@@ -2,7 +2,7 @@ package com.sprint.mission.discodeit.controller.docs;
 
 import com.sprint.mission.discodeit.dto.auth.request.UserLoginReq;
 import com.sprint.mission.discodeit.dto.user.response.UserDetailInfoRes;
-import com.sprint.mission.discodeit.exception.ErrorInfoRes;
+import com.sprint.mission.discodeit.exception.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -52,7 +52,7 @@ public interface AuthControllerDocs {
               description = "사용자를 찾을 수 없음",
               content = @Content(
                   mediaType = "*/*",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "해당 닉네임 유저 없음 예시",
                       value = """
@@ -70,7 +70,7 @@ public interface AuthControllerDocs {
               description = "비밀번호가 일치하지 않음",
               content = @Content(
                   mediaType = "*/*",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "비밀번호 틀림 예시",
                       value = """

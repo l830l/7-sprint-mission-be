@@ -1,7 +1,7 @@
 package com.sprint.mission.discodeit.controller.docs;
 
 import com.sprint.mission.discodeit.dto.binarycontent.response.BinaryContentInfoRes;
-import com.sprint.mission.discodeit.exception.ErrorInfoRes;
+import com.sprint.mission.discodeit.exception.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -82,7 +82,7 @@ public interface BinaryContentControllerDocs {
               description = "해당 UUID 를 가진 파일이 없음",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "해당 UUID 를 가진 파일이 없음 예시",
                       value = """

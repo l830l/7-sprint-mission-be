@@ -4,7 +4,7 @@ import com.sprint.mission.discodeit.dto.user.request.UserInfoReq;
 import com.sprint.mission.discodeit.dto.user.response.UserDetailInfoRes;
 import com.sprint.mission.discodeit.dto.user.response.UserSimpleInfoRes;
 import com.sprint.mission.discodeit.dto.userStatus.response.UserStatusSimpleViewRes;
-import com.sprint.mission.discodeit.exception.ErrorInfoRes;
+import com.sprint.mission.discodeit.exception.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -106,7 +106,7 @@ public interface UserControllerDocs {
               description = "사용자를 찾을 수 없음",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "해당 UUID 를 가지고 있는 유저 찾을 수 없음 예시",
                       value = """
@@ -159,7 +159,7 @@ public interface UserControllerDocs {
               description = "중복된 이메일 입력",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "중복된 이메일로 계정을 생성할 수 없음 예시",
                       value = """
@@ -177,7 +177,7 @@ public interface UserControllerDocs {
               description = "중복된 닉네임 입력",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "중복된 닉네임으로 계정을 생성할 수 없음 예시",
                       value = """
@@ -195,7 +195,7 @@ public interface UserControllerDocs {
               description = "이메일 형식에 맞지 않게 입력",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "이메일 형식에 맞지 않게 입력 예시",
                       value = """
@@ -213,7 +213,7 @@ public interface UserControllerDocs {
               description = "2글자 미만의 닉네임 입력",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "2글자 미만의 닉네임 입력 예시",
                       value = """
@@ -231,7 +231,7 @@ public interface UserControllerDocs {
               description = "6자 이하의 비밀번호 입력",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "6자 이하의 비밀번호로 계정을 생성할 수 없음 예시",
                       value = """
@@ -286,7 +286,7 @@ public interface UserControllerDocs {
               description = "해당 UUID 를 가진 사용자가 없음",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "해당 UUID 를 가진 사용자가 없음 예시",
                       value = """
@@ -304,7 +304,7 @@ public interface UserControllerDocs {
               description = "중복된 이메일 입력",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "중복된 이메일로 계정을 생성할 수 없음 예시",
                       value = """
@@ -322,7 +322,7 @@ public interface UserControllerDocs {
               description = "중복된 이메일 입력",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "중복된 이메일로 계정을 생성할 수 없음 예시",
                       value = """
@@ -340,7 +340,7 @@ public interface UserControllerDocs {
               description = "중복된 닉네임 입력",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "중복된 닉네임으로 계정을 생성할 수 없음 예시",
                       value = """
@@ -358,7 +358,7 @@ public interface UserControllerDocs {
               description = "이메일 형식에 맞지 않게 입력",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "이메일 형식에 맞지 않게 입력 예시",
                       value = """
@@ -376,7 +376,7 @@ public interface UserControllerDocs {
               description = "2글자 미만의 닉네임 입력",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "2글자 미만의 닉네임 입력 예시",
                       value = """
@@ -394,7 +394,7 @@ public interface UserControllerDocs {
               description = "6자 이하의 비밀번호 입력",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "6자 이하의 비밀번호로 계정을 생성할 수 없음 예시",
                       value = """
@@ -426,7 +426,7 @@ public interface UserControllerDocs {
               description = "해당 UUID 를 가진 사용자가 없음",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "해당 UUID 를 가진 사용자가 없음 예시",
                       value = """
@@ -468,7 +468,7 @@ public interface UserControllerDocs {
               description = "해당 UUID 를 가진 사용자가 없음",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "해당 UUID 를 가진 사용자가 없음 예시",
                       value = """

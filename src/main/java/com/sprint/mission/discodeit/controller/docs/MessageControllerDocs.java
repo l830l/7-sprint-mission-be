@@ -3,7 +3,7 @@ package com.sprint.mission.discodeit.controller.docs;
 import com.sprint.mission.discodeit.dto.common.response.PageResponse;
 import com.sprint.mission.discodeit.dto.message.request.MessageInfoReq;
 import com.sprint.mission.discodeit.dto.message.response.MessageViewRes;
-import com.sprint.mission.discodeit.exception.ErrorInfoRes;
+import com.sprint.mission.discodeit.exception.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -101,7 +101,7 @@ public interface MessageControllerDocs {
               description = "Channel를 찾을 수 없음",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "Channel를 찾을 수 없음 예시",
                       value = """
@@ -159,7 +159,7 @@ public interface MessageControllerDocs {
               description = "Message를 찾을 수 없음",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "Message를 찾을 수 없음 예시",
                       value = """
@@ -192,7 +192,7 @@ public interface MessageControllerDocs {
               description = "해당 UUID 를 가진 메세지가 없음",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "해당 UUID 를 가진 메세지가 없음 예시",
                       value = """

@@ -9,9 +9,9 @@ public class DiscodeitException extends RuntimeException {
 
   private final LocalDateTime createdAt;
   private final ErrorCode errorCode;
-  private final Map<String, Object> details;
+  private final Map<String, String> details;
 
-  public DiscodeitException(ErrorCode errorCode, Map<String, Object> details) {
+  public DiscodeitException(ErrorCode errorCode, Map<String, String> details) {
     super(errorCode.getMessage());
     this.errorCode = errorCode;
     this.details = details;

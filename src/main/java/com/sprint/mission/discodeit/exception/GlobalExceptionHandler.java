@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<ErrorInfoRes> handleValidationException(
+  public ResponseEntity<ErrorResponse> handleValidationException(
       MethodArgumentNotValidException e, HttpServletRequest request) {
 
     FieldError fieldError = e.getBindingResult().getFieldError(); // 첫 번째 오류 처리
@@ -45,11 +45,11 @@ public class GlobalExceptionHandler {
 
     return ResponseEntity
         .status(errorCode.getStatus())
-        .body(ErrorInfoRes.from(errorCode));
+        .body(ErrorResponse.from(errorCode));
   }
 
   @ExceptionHandler(DiscodeitException.class)
-  public ResponseEntity<ErrorInfoRes> handleCustomException(DiscodeitException e,
+  public ResponseEntity<ErrorResponse> handleCustomException(DiscodeitException e,
       HttpServletRequest request) {
     ErrorCode errorCode = e.getErrorCode();
     log.error("[CustomException] {} - {} | url={} | method={} | ip={} \n",
@@ -62,11 +62,11 @@ public class GlobalExceptionHandler {
     );
     return ResponseEntity
         .status(errorCode.getStatus())
-        .body(ErrorInfoRes.from(errorCode));
+        .body(ErrorResponse.from(errorCode));
   }
 
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<ErrorInfoRes> handleException(Exception e,
+  public ResponseEntity<ErrorResponse> handleException(Exception e,
       HttpServletRequest request) {
     log.error("[Exception] {} | url={} | method={} | ip={}",
         e.getMessage(),
@@ -78,6 +78,6 @@ public class GlobalExceptionHandler {
     ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
     return ResponseEntity
         .status(errorCode.getStatus())
-        .body(ErrorInfoRes.from(errorCode));
+        .body(ErrorResponse.from(errorCode));
   }
 }

@@ -2,7 +2,7 @@ package com.sprint.mission.discodeit.controller.docs;
 
 import com.sprint.mission.discodeit.dto.channelmember.request.ChannelMemberCreateReq;
 import com.sprint.mission.discodeit.dto.channelmember.response.ChannelMemberInfoRes;
-import com.sprint.mission.discodeit.exception.ErrorInfoRes;
+import com.sprint.mission.discodeit.exception.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -44,7 +44,7 @@ public interface ReadStateControllerDocs {
               description = "User를 찾을 수 없음",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "User를 찾을 수 없음 예시",
                       value = """
@@ -62,7 +62,7 @@ public interface ReadStateControllerDocs {
               description = "Channel를 찾을 수 없음",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "Channel를 찾을 수 없음 예시",
                       value = """
@@ -80,7 +80,7 @@ public interface ReadStateControllerDocs {
               description = "이미 읽음 상태가 존재함",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "이미 읽음 상태가 존재함 예시",
                       value = """
@@ -124,7 +124,7 @@ public interface ReadStateControllerDocs {
               description = "Message 읽음 상태를 찾을 수 없음",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "Message 읽음 상태를 찾을 수 없음 예시",
                       value = """

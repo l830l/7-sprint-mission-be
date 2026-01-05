@@ -7,7 +7,7 @@ import com.sprint.mission.discodeit.dto.channel.response.ChannelInfoRes;
 import com.sprint.mission.discodeit.dto.channel.response.ChannelPrivateInfoRes;
 import com.sprint.mission.discodeit.dto.channel.response.ChannelPublicInfoRes;
 import com.sprint.mission.discodeit.entity.ChannelType;
-import com.sprint.mission.discodeit.exception.ErrorInfoRes;
+import com.sprint.mission.discodeit.exception.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -166,7 +166,7 @@ public interface ChannelControllerDocs {
               description = "해당 UUID 를 가진 채널이 없음",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "해당 UUID 를 가진 채널이 없음 예시",
                       value = """
@@ -184,7 +184,7 @@ public interface ChannelControllerDocs {
               description = "Private Channel은 수정할 수 없음",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "Private Channel은 수정할 수 없음 예시",
                       value = """
@@ -214,7 +214,7 @@ public interface ChannelControllerDocs {
               description = "해당 UUID 를 가진 채널이 없음",
               content = @Content(
                   mediaType = "application/json",
-                  schema = @Schema(implementation = ErrorInfoRes.class),
+                  schema = @Schema(implementation = ErrorResponse.class),
                   examples = @ExampleObject(
                       name = "해당 UUID 를 가진 채널이 없음 예시",
                       value = """
