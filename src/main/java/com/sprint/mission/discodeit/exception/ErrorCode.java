@@ -45,11 +45,11 @@ public enum ErrorCode {
   MESSAGE_NOT_FOUND("MESSAGE_001", HttpStatus.NOT_FOUND,
       "해당 UUID를 가진 메세지가 존재하지 않습니다."),
 
-  // ReadStatus
-  READSTATUS_NOT_FOUND("READSTATUS_001", HttpStatus.NOT_FOUND,
-      "해당 UUID를 가진 읽은 상태가 존재하지 않습니다."),
-  READSTATUS_ALREADY_EXISTS("READSTATUS_002", HttpStatus.BAD_REQUEST,
-      "이미 읽은 상태가 존재합니다."),
+  // ChannelMember
+  CHANNELMEMEBER_NOT_FOUND("CHANNELMEMEBER_001", HttpStatus.NOT_FOUND,
+      "해당 UUID를 가진 채널 멤버 연결이 존재하지 않습니다."),
+  CHANNELMEMEBER_ALREADY_EXISTS("CHANNELMEMEBER_002", HttpStatus.BAD_REQUEST,
+      "이미 채널 멤버 연결이 존재합니다."),
 
   // User
   USER_NOT_FOUND("USER_001", HttpStatus.NOT_FOUND,
