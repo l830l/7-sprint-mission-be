@@ -4,8 +4,8 @@ import com.sprint.mission.discodeit.dto.message.request.MessageCreateReq;
 import com.sprint.mission.discodeit.dto.message.response.MessageViewRes;
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.Message;
-import com.sprint.mission.discodeit.exception.DiscodeitException;
 import com.sprint.mission.discodeit.exception.ErrorCode;
+import com.sprint.mission.discodeit.exception.channel.ChannelNotFoundException;
 import com.sprint.mission.discodeit.factory.BinaryContentFactory;
 import com.sprint.mission.discodeit.factory.MessageFactory;
 import com.sprint.mission.discodeit.mapper.MessageMapper;
@@ -36,7 +36,7 @@ public class MessageCreationFacade {
   public MessageViewRes createMessage(@NonNull UUID speakerId, @NonNull UUID channelId,
       @NonNull MessageCreateReq req) {
     if (channelService.findById(channelId) == null) {
-      throw new DiscodeitException(ErrorCode.CHANNEL_NOT_FOUND);
+      throw new ChannelNotFoundException(ErrorCode.CHANNEL_NOT_FOUND);
     }
 
     List<BinaryContent> attachments = new ArrayList<>();
