@@ -2,8 +2,9 @@ package com.sprint.mission.discodeit.facade.channelmember;
 
 import com.sprint.mission.discodeit.dto.channelmember.request.ChannelMemberCreateReq;
 import com.sprint.mission.discodeit.entity.ChannelMember;
-import com.sprint.mission.discodeit.exception.DiscodeitException;
 import com.sprint.mission.discodeit.exception.ErrorCode;
+import com.sprint.mission.discodeit.exception.channel.ChannelNotFoundException;
+import com.sprint.mission.discodeit.exception.user.UserNotFoundException;
 import com.sprint.mission.discodeit.factory.ChannelMemberFactory;
 import com.sprint.mission.discodeit.service.ChannelMemberService;
 import com.sprint.mission.discodeit.service.ChannelService;
@@ -25,10 +26,10 @@ public class ChannerMemberCreateFacade {
   @Transactional
   public ChannelMember create(@NonNull ChannelMemberCreateReq req) {
     if (channelService.findById(req.channelId()) == null) {
-      throw new DiscodeitException(ErrorCode.CHANNEL_NOT_FOUND);
+      throw new ChannelNotFoundException(ErrorCode.CHANNEL_NOT_FOUND);
     }
     if (userService.findById(req.userId()) == null) {
-      throw new DiscodeitException(ErrorCode.USER_NOT_FOUND);
+      throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
     }
     return channelMemberService.create(channelMemberFactory.create(req));
   }
