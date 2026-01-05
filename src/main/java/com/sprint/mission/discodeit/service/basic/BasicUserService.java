@@ -4,15 +4,16 @@ import com.sprint.mission.discodeit.common.email.EmailSender;
 import com.sprint.mission.discodeit.dto.auth.response.AvailabilityRes;
 import com.sprint.mission.discodeit.dto.user.request.UserUpdateReq;
 import com.sprint.mission.discodeit.entity.User;
-import com.sprint.mission.discodeit.exception.DiscodeitException;
 import com.sprint.mission.discodeit.exception.ErrorCode;
+import com.sprint.mission.discodeit.exception.user.InvalidUserNicknameException;
+import com.sprint.mission.discodeit.exception.user.UserAlreadyExistsException;
+import com.sprint.mission.discodeit.exception.user.UserNotFoundException;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
@@ -39,10 +40,10 @@ public class BasicUserService implements UserService {
   @Transactional
   public void sendEmailTemporaryPassword(String email, String nickname) {
     User user = userRepository.findByEmail(email).orElseThrow(
-        () -> new DiscodeitException(ErrorCode.USER_NOT_FOUND)
+        () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
     );
     if (!user.getNickname().equals(nickname)) {
-      throw new DiscodeitException(ErrorCode.INVALID_USER_NICKNAME);
+      throw new InvalidUserNicknameException(ErrorCode.INVALID_USER_NICKNAME);
     }
     String passwordTemp = UUID.randomUUID().toString().replaceAll("-", "");
     user.updateTemporaryPassword(passwordTemp);
@@ -73,7 +74,7 @@ public class BasicUserService implements UserService {
   @Override
   public User findById(UUID id) {
     return userRepository.findById(id).orElseThrow(
-        () -> new DiscodeitException(ErrorCode.USER_NOT_FOUND)
+        () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
     );
   }
 
@@ -93,7 +94,7 @@ public class BasicUserService implements UserService {
   @Override
   public void delete(UUID id) {
     if (!userRepository.existsById(id)) {
-      throw new DiscodeitException(ErrorCode.USER_NOT_FOUND);
+      throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
     }
     userRepository.deleteById(id);
   }
@@ -130,20 +131,20 @@ public class BasicUserService implements UserService {
   // 신규 유저 중복 검사
   private void validateDuplicate(String email, String nickname) {
     if (userRepository.existsByEmail(email)) {
-      throw new DiscodeitException(ErrorCode.EMAIL_ALREADY_EXISTS);
+      throw new UserAlreadyExistsException(ErrorCode.EMAIL_ALREADY_EXISTS);
     }
     if (userRepository.existsByNickname(nickname)) {
-      throw new DiscodeitException(ErrorCode.NICKNAME_ALREADY_EXISTS);
+      throw new UserAlreadyExistsException(ErrorCode.NICKNAME_ALREADY_EXISTS);
     }
   }
 
   //기존 유저 회원 정보 수정 시 중복 검사
   private void validateDuplicate(UUID userId, String email, String nickname) {
     if (userRepository.existsByIdNotAndEmail(userId, email)) {
-      throw new DiscodeitException(ErrorCode.EMAIL_ALREADY_EXISTS);
+      throw new UserAlreadyExistsException(ErrorCode.EMAIL_ALREADY_EXISTS);
     }
     if (userRepository.existsByIdNotAndNickname(userId, nickname)) {
-      throw new DiscodeitException(ErrorCode.NICKNAME_ALREADY_EXISTS);
+      throw new UserAlreadyExistsException(ErrorCode.NICKNAME_ALREADY_EXISTS);
     }
   }
 }
