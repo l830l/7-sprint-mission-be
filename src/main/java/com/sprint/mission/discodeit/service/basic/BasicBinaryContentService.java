@@ -2,7 +2,7 @@ package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.dto.binarycontent.response.BinaryContentInfoRes;
 import com.sprint.mission.discodeit.entity.BinaryContent;
-import com.sprint.mission.discodeit.exception.CustomException;
+import com.sprint.mission.discodeit.exception.DiscodeitException;
 import com.sprint.mission.discodeit.exception.ErrorCode;
 import com.sprint.mission.discodeit.mapper.BinaryContentMapper;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
@@ -29,7 +29,7 @@ public class BasicBinaryContentService implements BinaryContentService {
   @Override
   public BinaryContent findById(UUID id) {
     return binaryContentRepository.findById(id).orElseThrow(
-        () -> new CustomException(ErrorCode.BINARYCONTENT_NOT_FOUNT));
+        () -> new DiscodeitException(ErrorCode.BINARYCONTENT_NOT_FOUNT));
   }
 
   @Override
@@ -40,7 +40,7 @@ public class BasicBinaryContentService implements BinaryContentService {
   @Override
   public void delete(UUID id) {
     if (!binaryContentRepository.existsById(id)) {
-      throw new CustomException(ErrorCode.BINARYCONTENT_NOT_FOUNT);
+      throw new DiscodeitException(ErrorCode.BINARYCONTENT_NOT_FOUNT);
     }
     binaryContentRepository.deleteById(id);
   }

@@ -48,8 +48,8 @@ public class GlobalExceptionHandler {
         .body(ErrorInfoRes.from(errorCode));
   }
 
-  @ExceptionHandler(CustomException.class)
-  public ResponseEntity<ErrorInfoRes> handleCustomException(CustomException e,
+  @ExceptionHandler(DiscodeitException.class)
+  public ResponseEntity<ErrorInfoRes> handleCustomException(DiscodeitException e,
       HttpServletRequest request) {
     ErrorCode errorCode = e.getErrorCode();
     log.error("[CustomException] {} - {} | url={} | method={} | ip={} \n",

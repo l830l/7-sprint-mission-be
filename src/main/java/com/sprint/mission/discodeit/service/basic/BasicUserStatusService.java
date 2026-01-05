@@ -2,7 +2,7 @@ package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.dto.userStatus.response.UserStatusViewRes;
 import com.sprint.mission.discodeit.entity.UserStatus;
-import com.sprint.mission.discodeit.exception.CustomException;
+import com.sprint.mission.discodeit.exception.DiscodeitException;
 import com.sprint.mission.discodeit.exception.ErrorCode;
 import com.sprint.mission.discodeit.mapper.UserStateMapper;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
@@ -29,7 +29,7 @@ public class BasicUserStatusService implements UserStatusService {
   @Override
   public UserStatus findByUserId(UUID userId) {
     return userStatusRepository.findByUser_Id(userId).orElseThrow(
-        () -> new CustomException(ErrorCode.USER_STATUS_MISSING)
+        () -> new DiscodeitException(ErrorCode.USER_STATUS_MISSING)
     );
   }
 
@@ -37,7 +37,7 @@ public class BasicUserStatusService implements UserStatusService {
   @Override
   public UserStatusViewRes findById(@NonNull UUID id) {
     UserStatus userStatus = userStatusRepository.findById(id).orElseThrow(
-        () -> new CustomException(ErrorCode.USERSTATUS_NOT_FOUND)
+        () -> new DiscodeitException(ErrorCode.USERSTATUS_NOT_FOUND)
     );
     return UserStateMapper.toDetailResDto(userStatus);
   }
@@ -47,7 +47,7 @@ public class BasicUserStatusService implements UserStatusService {
   @Transactional
   public void updateOfflineAt(@NonNull UUID id) {
     UserStatus userStatus = userStatusRepository.findById(id).orElseThrow(
-        () -> new CustomException(ErrorCode.USERSTATUS_NOT_FOUND)
+        () -> new DiscodeitException(ErrorCode.USERSTATUS_NOT_FOUND)
     );
     userStatus.updateOfflineAt();
   }
@@ -56,7 +56,7 @@ public class BasicUserStatusService implements UserStatusService {
   @Transactional
   public void update(@NonNull UUID id) {
     UserStatus userStatus = userStatusRepository.findById(id).orElseThrow(
-        () -> new CustomException(ErrorCode.USERSTATUS_NOT_FOUND)
+        () -> new DiscodeitException(ErrorCode.USERSTATUS_NOT_FOUND)
     );
     userStatus.update();
   }

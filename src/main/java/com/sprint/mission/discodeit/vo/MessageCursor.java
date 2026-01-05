@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.vo;
 
-import com.sprint.mission.discodeit.exception.CustomException;
+import com.sprint.mission.discodeit.exception.DiscodeitException;
 import com.sprint.mission.discodeit.exception.ErrorCode;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -20,7 +20,7 @@ public record MessageCursor(
 
     String[] parts = cursor.split(DELIMITER);
     if (parts.length != 2) {
-      throw new CustomException(ErrorCode.INVALID_CURSOR);
+      throw new DiscodeitException(ErrorCode.INVALID_CURSOR);
     }
 
     try {
@@ -28,7 +28,7 @@ public record MessageCursor(
       UUID messageId = UUID.fromString(parts[1]);
       return new MessageCursor(createdAt, messageId);
     } catch (Exception e) {
-      throw new CustomException(ErrorCode.INVALID_CURSOR);
+      throw new DiscodeitException(ErrorCode.INVALID_CURSOR);
     }
   }
 

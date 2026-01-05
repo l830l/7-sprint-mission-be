@@ -3,7 +3,7 @@ package com.sprint.mission.discodeit.service.basic;
 import com.sprint.mission.discodeit.dto.channelmember.response.ChannelMemberInfoRes;
 import com.sprint.mission.discodeit.entity.ChannelMember;
 import com.sprint.mission.discodeit.entity.ChannelMemberRole;
-import com.sprint.mission.discodeit.exception.CustomException;
+import com.sprint.mission.discodeit.exception.DiscodeitException;
 import com.sprint.mission.discodeit.exception.ErrorCode;
 import com.sprint.mission.discodeit.mapper.ChannelMemberMapper;
 import com.sprint.mission.discodeit.repository.ChannelMemberRepository;
@@ -27,7 +27,7 @@ public class BasicChannelMemberService implements ChannelMemberService {
     if (channelMemberRepository.existsByChannelIdAndUserId(
         channelMember.getChannel().getId(), channelMember.getUser().getId()
     )) {
-      throw new CustomException(ErrorCode.READSTATUS_ALREADY_EXISTS);
+      throw new DiscodeitException(ErrorCode.READSTATUS_ALREADY_EXISTS);
     }
 
     return channelMemberRepository.save(channelMember);
@@ -37,7 +37,7 @@ public class BasicChannelMemberService implements ChannelMemberService {
   @Transactional
   public ChannelMember update(UUID id) {
     ChannelMember channelMember = channelMemberRepository.findById(id).orElseThrow(
-        () -> new CustomException(ErrorCode.READSTATUS_NOT_FOUND)
+        () -> new DiscodeitException(ErrorCode.READSTATUS_NOT_FOUND)
     );
     channelMember.updateReadAt();
     return channelMember;
@@ -46,7 +46,7 @@ public class BasicChannelMemberService implements ChannelMemberService {
   @Override
   public void delete(UUID id) {
     if (!channelMemberRepository.existsById(id)) {
-      throw new CustomException(ErrorCode.READSTATUS_NOT_FOUND);
+      throw new DiscodeitException(ErrorCode.READSTATUS_NOT_FOUND);
     }
     channelMemberRepository.deleteById(id);
   }
@@ -55,7 +55,7 @@ public class BasicChannelMemberService implements ChannelMemberService {
   public ChannelMember findManagerByChannelId(UUID channelId) {
     return channelMemberRepository.findByChannelIdAndRole(channelId, ChannelMemberRole.MANAGER)
         .stream().findFirst().orElseThrow(
-            () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+            () -> new DiscodeitException(ErrorCode.USER_NOT_FOUND)
         );
   }
 
@@ -75,7 +75,7 @@ public class BasicChannelMemberService implements ChannelMemberService {
   @Transactional(readOnly = true)
   public ChannelMemberInfoRes findById(UUID id) {
     ChannelMember channelMember = channelMemberRepository.findById(id).orElseThrow(() ->
-        new CustomException(ErrorCode.READSTATUS_NOT_FOUND));
+        new DiscodeitException(ErrorCode.READSTATUS_NOT_FOUND));
     return ChannelMemberMapper.toResDto(channelMember);
   }
 }

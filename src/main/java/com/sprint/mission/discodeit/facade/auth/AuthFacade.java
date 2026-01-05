@@ -4,7 +4,7 @@ import com.sprint.mission.discodeit.dto.auth.request.UserLoginReq;
 import com.sprint.mission.discodeit.dto.user.response.UserDetailInfoRes;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
-import com.sprint.mission.discodeit.exception.CustomException;
+import com.sprint.mission.discodeit.exception.DiscodeitException;
 import com.sprint.mission.discodeit.exception.ErrorCode;
 import com.sprint.mission.discodeit.mapper.UserMapper;
 import com.sprint.mission.discodeit.service.BinaryContentService;
@@ -29,10 +29,10 @@ public class AuthFacade {
   public UserDetailInfoRes login(@NonNull UserLoginReq req) {
     User user = userService.findByNickname(req.nickname());
     if (user == null) {
-      throw new CustomException(ErrorCode.INVALID_NICKNAME);
+      throw new DiscodeitException(ErrorCode.INVALID_NICKNAME);
     }
     if (!user.getPassword().equals(req.password())) {
-      throw new CustomException(ErrorCode.INVALID_PASSWORD);
+      throw new DiscodeitException(ErrorCode.INVALID_PASSWORD);
     }
 
     UserStatus userStatus = userStatusService.findByUserId(user.getId());

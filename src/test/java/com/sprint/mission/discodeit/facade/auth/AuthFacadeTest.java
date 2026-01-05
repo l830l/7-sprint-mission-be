@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import com.sprint.mission.discodeit.dto.auth.request.UserLoginReq;
-import com.sprint.mission.discodeit.exception.CustomException;
+import com.sprint.mission.discodeit.exception.DiscodeitException;
 import com.sprint.mission.discodeit.exception.ErrorCode;
 import com.sprint.mission.discodeit.service.BinaryContentService;
 import com.sprint.mission.discodeit.service.UserService;
@@ -46,15 +46,15 @@ class AuthFacadeTest {
           .thenReturn(null);
 
       // when & then
-      CustomException exception = catchThrowableOfType(
+      DiscodeitException exception = catchThrowableOfType(
           () -> authFacade.login(req),
-          CustomException.class
+          DiscodeitException.class
       );
 
       assertThat(exception.getErrorCode())
           .isEqualTo(ErrorCode.INVALID_NICKNAME);
     }
 
-    
+
   }
 }
