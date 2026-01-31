@@ -1,0 +1,79 @@
+package com.sprint.mission.discodeit.global.exception;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
+
+@Getter
+@AllArgsConstructor
+public enum ErrorCode {
+    // Common
+    INTERNAL_SERVER_ERROR("COMMON_001", HttpStatus.INTERNAL_SERVER_ERROR,
+            "서버 내부 오류가 발생했습니다."),
+    INVALID_CURSOR("COMMON_003", HttpStatus.BAD_REQUEST,
+            "커서의 값이 잘못되었습니다"),
+    INVALID_INPUT("COMMON_002", HttpStatus.BAD_REQUEST,
+            "입력값이 잘못되었습니다"),
+
+    // Auth
+    INVALID_NICKNAME("AUTH_001", HttpStatus.NOT_FOUND,
+            "해당 닉네임의 유저가 존재하지 않습니다."),
+    INVALID_PASSWORD("AUTH_002", HttpStatus.UNAUTHORIZED,
+            "비밀번호가 올바르지 않습니다."),
+    EMAIL_INVALID("AUTH_003", HttpStatus.BAD_REQUEST,
+            "이메일 형식이 올바르지 않습니다."),
+    NICKNAME_INVALID("AUTH_004", HttpStatus.BAD_REQUEST,
+            "닉네임은 2글자 이상이어야 합니다."),
+    PASSWORD_INVALID("AUTH_005", HttpStatus.BAD_REQUEST,
+            "비밀번호는 최소 6글자 이상이어야 합니다."),
+
+    // BinaryContent
+    BINARYCONTENT_NOT_FOUNT("BINARYCONTENT_001", HttpStatus.NOT_FOUND,
+            "해당 UUID를 가진 바이너리 컨텐츠가 존재하지 않습니다."),
+    FILE_CONVERSION_FAILED("BINARYCONTENT_002", HttpStatus.INTERNAL_SERVER_ERROR,
+            "파일 변환 중 오류가 발생했습니다."),
+    INVALID_FILE_REQUEST("BINARYCONTENT_003", HttpStatus.BAD_REQUEST,
+            "잘못된 파일 요청입니다."),
+
+    // Channel
+    CHANNEL_NOT_FOUND("CHANNEL_001", HttpStatus.NOT_FOUND,
+            "해당 UUID를 가진 채널이 존재하지 않습니다."),
+    CHANNEL_PRIVATE_CANNOT_MODIFY("CHANNEL_002", HttpStatus.BAD_REQUEST,
+            "Private 채널은 수정할 수 없습니다."),
+    INVALID_CHANNEL_TYPE("CHANNEL_003", HttpStatus.BAD_REQUEST,
+            "유효하지 않은 채널 타입입니다."),
+
+    // Message
+    MESSAGE_NOT_FOUND("MESSAGE_001", HttpStatus.NOT_FOUND,
+            "해당 UUID를 가진 메세지가 존재하지 않습니다."),
+
+    // ChannelMember
+    CHANNELMEMEBER_NOT_FOUND("CHANNELMEMEBER_001", HttpStatus.NOT_FOUND,
+            "해당 UUID를 가진 채널 멤버 연결이 존재하지 않습니다."),
+    CHANNELMEMEBER_ALREADY_EXISTS("CHANNELMEMEBER_002", HttpStatus.BAD_REQUEST,
+            "이미 채널 멤버 연결이 존재합니다."),
+
+    // User
+    USER_NOT_FOUND("USER_001", HttpStatus.NOT_FOUND,
+            "해당 UUID를 가진 유저가 존재하지 않습니다."),
+    EMAIL_ALREADY_EXISTS("USER_002", HttpStatus.CONFLICT,
+            "이미 존재하는 이메일로 값을 지정할 수 없습니다."),
+    NICKNAME_ALREADY_EXISTS("USER_003", HttpStatus.CONFLICT,
+            "이미 존재하는 닉네임으로 값을 지정할 수 없습니다."),
+    EMAIL_NOT_FOUND("USER_004", HttpStatus.NOT_FOUND,
+            "해당 이메일을 가진 유저가 존재하지 않습니다."),
+    INVALID_USER_NICKNAME("USER_005", HttpStatus.BAD_REQUEST,
+            "해당 이메일로 가입한 유저의 닉네임이 바르지 않습니다."),
+
+
+    // UserStatus
+    USERSTATUS_NOT_FOUND("USERSTATUS_001", HttpStatus.NOT_FOUND,
+            "해당 UUID를 가진 상태 정보가 존재하지 않습니다."),
+    USER_STATUS_MISSING("USERSTATUS_001", HttpStatus.NOT_FOUND,
+            "해당 유저의 상태 정보가 존재하지 않습니다.");
+
+    //field
+    private final String code;
+    private final HttpStatus status;
+    private final String message;
+}

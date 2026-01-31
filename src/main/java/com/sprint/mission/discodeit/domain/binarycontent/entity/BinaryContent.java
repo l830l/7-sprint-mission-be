@@ -1,0 +1,39 @@
+package com.sprint.mission.discodeit.domain.binarycontent.entity;
+
+import com.sprint.mission.discodeit.domain.BaseEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Table(name = "binary_contents")
+public class BinaryContent extends BaseEntity {
+
+    //Field
+    @Column(name = "file_name", nullable = false)
+    private String fileName;
+
+    @Column(name = "size", nullable = false)
+    private Long size;
+
+    @Column(name = "content_type", nullable = false, length = 100)
+    private String fileType;
+
+    //Constructor
+    private BinaryContent(String fileName, String fileType, long size) {
+        this.fileName = fileName;
+        this.fileType = fileType;
+        this.size = size;
+    }
+
+    //Factory Method
+    public static BinaryContent create(String fileName, String fileType, long size) {
+        return new BinaryContent(fileName, fileType, size);
+    }
+}
