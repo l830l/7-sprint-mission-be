@@ -4,10 +4,10 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sprint.mission.discodeit.domain.channel.dto.query.ChannelInfoQuery;
 import com.sprint.mission.discodeit.domain.channel.entity.ChannelType;
+import com.sprint.mission.discodeit.domain.channel.entity.QChannel;
 import com.sprint.mission.discodeit.domain.channelmember.entity.ChannelMemberRole;
-import com.sprint.mission.discodeit.entity.QChannel;
-import com.sprint.mission.discodeit.entity.QChannelMember;
-import com.sprint.mission.discodeit.entity.QMessage;
+import com.sprint.mission.discodeit.domain.channelmember.entity.QChannelMember;
+import com.sprint.mission.discodeit.domain.message.entity.QMessage;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;

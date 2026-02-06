@@ -3,7 +3,7 @@ package com.sprint.mission.discodeit.domain.message.repository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sprint.mission.discodeit.domain.message.entity.Message;
-import com.sprint.mission.discodeit.entity.QMessage;
+import com.sprint.mission.discodeit.domain.message.entity.QMessage;
 import jakarta.persistence.EntityManager;
 
 import java.time.LocalDateTime;
