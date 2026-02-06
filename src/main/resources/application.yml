@@ -2,21 +2,25 @@ spring:
   config:
     import: optional:dotenv:./.env
 
+  profiles:
+    active:
+      - dev
+
   application:
     name: discodeit
 
   servlet:
     multipart:
-      maxFileSize: 10MB # 파일 하나의 최대 크기
-      maxRequestSize: 30MB  # 한 번에 최대 업로드 가능 용량
+      maxFileSize: 10MB
+      maxRequestSize: 30MB
 
   mail:
-    host: smtp.gmail.com   # 사용하려는 메일 서버
+    host: smtp.gmail.com
     port: 587
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true
-
+  
   jpa:
     open-in-view: false
     properties:
@@ -41,8 +45,10 @@ springdoc:
   api-docs:
     path: /my-api
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health, info, metrics, loggers
+info:
+  app:
+    name: discodeit
+    version: 1.0.0
+    encoding: UTF-8
+    java-version: 17
+    spring-version: 3.5.9

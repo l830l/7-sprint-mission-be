@@ -1,0 +1,45 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/discodeit
+    username: discodeit_user
+    password: discodeit1234
+
+  mail:
+    username: greylife5451@gmail.com
+    password: hgedemyzrahtzkys
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+discodeit:
+  storage:
+    type: local
+    local:
+      root-path: A:/myCodes/codit/sprint/storage
+
+logging:
+  level:
+    root: info
+    com.sprint.mission.discodeit: debug
+    org.hibernate.orm.jdbc.bind: trace
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, loggers
+  endpoint:
+    health:
+      show-details: always
+  info:
+    env:
+      enabled: false

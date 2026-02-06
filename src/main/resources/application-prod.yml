@@ -1,0 +1,43 @@
+server:
+  port: 80
+
+spring:
+  datasource:
+    url: jdbc:postgresql://myapp-postgres-db.c9wuuamwq18f.ap-northeast-2.rds.amazonaws.com:5432/postgres # discodeit
+    username: postgres
+    password: ${DB_PASSWORD}
+
+  mail:
+    username: ${MAIL_ID}
+    password: ${MAIL_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
+    sql:
+      init:
+        mode: never
+
+  discodeit:
+    storage:
+      type: s3
+
+logging:
+  level:
+    root: INFO
+    com.sprint.mission.discodeit: INFO
+
+management:
+  endpoint:
+    health:
+      show-details: never
+      show-components: when_authorized
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: false
