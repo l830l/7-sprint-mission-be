@@ -2,18 +2,17 @@ package com.sprint.mission.discodeit.domain.message.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sprint.mission.discodeit.domain.message.dto.query.MessageCursorQuery;
 import com.sprint.mission.discodeit.domain.message.entity.Message;
-import com.sprint.mission.discodeit.domain.message.entity.QMessage;
 import jakarta.persistence.EntityManager;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
-
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+import static com.sprint.mission.discodeit.domain.message.entity.QMessage.message;
 
 @Repository
 public class MessageRepositoryImpl implements MessageRepositoryCustom {
@@ -24,69 +23,36 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    //첫 페이지 반환
     @Override
-    public Slice<Message> findFirstPage(UUID channelId, Pageable pageable) {
-        QMessage m = QMessage.message;
-
-        List<Message> results = queryFactory
-                .selectFrom(m)
-                .where(m.channel.id.eq(channelId))
-                .orderBy(
-                        m.createdAt.desc(),
-                        m.id.desc()
-                )
-                .limit(pageable.getPageSize() + 1)
+    public Slice<Message> findAllByCursor(MessageCursorQuery query) {
+        List<Message> result = queryFactory
+                .selectFrom(message)
+                .where(cursorCondition(query), keywordCondition(query))
+                .orderBy(message.createdAt.desc(), message.id.desc())
+                .limit(query.limit() + 1)
                 .fetch();
 
-        return toSlice(results, pageable);
-    }
-
-    // 첫 페이지가 아닌 페이지
-    @Override
-    public Slice<Message> findNextPage(
-            UUID channelId,
-            LocalDateTime cursorCreatedAt,
-            UUID cursorMessageId,
-            Pageable pageable
-    ) {
-        QMessage m = QMessage.message;
-
-        List<Message> results = queryFactory
-                .selectFrom(m)
-                .where(
-                        m.channel.id.eq(channelId),
-                        cursorCondition(m, cursorCreatedAt, cursorMessageId)
-                )
-                .orderBy(
-                        m.createdAt.desc(),
-                        m.id.desc()
-                )
-                .limit(pageable.getPageSize() + 1)
-                .fetch();
-
-        return toSlice(results, pageable);
-    }
-
-    private BooleanExpression cursorCondition(
-            QMessage m,
-            LocalDateTime createdAt,
-            UUID messageId
-    ) {
-        return m.createdAt.lt(createdAt)
-                .or(
-                        m.createdAt.eq(createdAt)
-                                .and(m.id.lt(messageId))
-                );
-    }
-
-    private Slice<Message> toSlice(List<Message> results, Pageable pageable) {
-        boolean hasNext = results.size() > pageable.getPageSize();
-
+        boolean hasNext = result.size() > query.limit();
         if (hasNext) {
-            results.remove(results.size() - 1);
+            result.remove(result.size() - 1);
         }
 
-        return new SliceImpl<>(results, pageable, hasNext);
+        return new SliceImpl<>(result, PageRequest.of(0, query.limit()), hasNext);
+    }
+
+    // 현재 커서 이후(또는 이전) 범위 조건: where 절
+    private BooleanExpression cursorCondition(MessageCursorQuery query) {
+        // 첫 페이지
+        if (query.cursor() == null || query.after() == null) {
+            return null;
+        }
+
+        return message.createdAt.lt(query.cursor())
+                .or(message.createdAt.eq(query.cursor()).and(message.id.lt(query.after())));
+    }
+
+    // 키워드 조건
+    private BooleanExpression keywordCondition(MessageCursorQuery query) {
+        return query.keyword() == null ? null : message.content.containsIgnoreCase(query.keyword());
     }
 }
