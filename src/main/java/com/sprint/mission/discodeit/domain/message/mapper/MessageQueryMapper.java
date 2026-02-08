@@ -10,7 +10,7 @@ public class MessageQueryMapper {
         return new MessageCursorQuery(
                 req.cursor(),
                 req.after(),
-                req.limit(),
+                req.size(),
                 req.keyword()
         );
     }

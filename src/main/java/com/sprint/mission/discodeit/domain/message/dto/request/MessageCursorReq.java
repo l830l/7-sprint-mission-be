@@ -8,12 +8,11 @@ import java.util.UUID;
 public record MessageCursorReq(
         LocalDateTime cursor,
         UUID after,
-        Integer limit,
+        Integer size,
         String keyword
 ) {
     public MessageCursorReq {
-        // Todo : 나중에 50으로 바꾸기
-        if (limit == null) limit = 5;
+        if (size == null) size = 50;
     }
 
     public String keywordValue() {

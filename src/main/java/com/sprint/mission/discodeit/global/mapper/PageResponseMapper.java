@@ -13,8 +13,8 @@ public class PageResponseMapper {
     ) {
         return new PageResponse<>(
                 slice.getContent(),
-                nextCursor.getCursor().toString(),
-                nextCursor.getAfter().toString(),
+                nextCursor.getCursor() == null ? null : nextCursor.getCursor().toString(),
+                nextCursor.getAfter() == null ? null : nextCursor.getAfter().toString(),
                 slice.getSize(),
                 slice.hasNext()
         );
