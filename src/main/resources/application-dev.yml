@@ -24,7 +24,7 @@ discodeit:
   storage:
     type: local
     local:
-      root-path: A:/myCodes/codit/sprint/storage
+      root-path: ./storage
 
 logging:
   level:
