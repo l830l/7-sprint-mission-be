@@ -37,7 +37,7 @@ public class UserCreationFacade {
     public UserDetailInfoRes createUser(@NonNull UserCreateReq req) {
         UUID profileId = null;
 
-        if (req.profileImage().data() != null) {
+        if (req.profileImage() != null && req.profileImage().data() != null) {
 
             BinaryContent profile = binaryContentService.create(
                     BinaryContentFactory.create(req.profileImage())

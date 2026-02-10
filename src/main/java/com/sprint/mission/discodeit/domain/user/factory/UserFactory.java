@@ -17,6 +17,13 @@ public class UserFactory {
     private final BinaryContentService binaryContentService;
 
     public User create(UserCreateReq req, UUID profileId) {
+        if (profileId == null) {
+            return User.createWithoutProfile(
+                    req.email(),
+                    req.nickname(),
+                    req.password()
+            );
+        }
         BinaryContent profile = binaryContentService.findById(profileId);
         return User.createWithProfile(
                 req.email(),
