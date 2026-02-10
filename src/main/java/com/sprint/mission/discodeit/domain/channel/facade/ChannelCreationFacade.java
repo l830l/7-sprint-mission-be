@@ -34,7 +34,7 @@ public class ChannelCreationFacade {
         Channel channel = channelService.create(req);
         channelMemberService.create(
                 channelMemberFactory.create(managerId, channel.getId(), ChannelMemberRole.MANAGER));
-        return ChannelMapper.toResDto(queryChannelService.get(channel.getId()));
+        return ChannelMapper.toPublicResDto(queryChannelService.get(channel.getId()));
     }
 
     //비밀 채널 추가
@@ -46,14 +46,21 @@ public class ChannelCreationFacade {
                 channelMemberFactory.create(
                         managerId,
                         channel.getId(),
-                        ChannelMemberRole.MANAGER));
-        req.userIds().forEach(userId -> channelMemberService.create(
-                channelMemberFactory.create(
-                        userId,
-                        channel.getId(),
-                        ChannelMemberRole.MEMBER
-                ))
+                        ChannelMemberRole.MANAGER
+                )
         );
-        return ChannelMapper.toResDto(queryChannelService.get(channel.getId()));
+        req.userIds().forEach(userId -> {
+                    channelMemberService.create(
+                            channelMemberFactory.create(
+                                    userId,
+                                    channel.getId(),
+                                    ChannelMemberRole.MEMBER
+                            ));
+                }
+        );
+        return ChannelMapper.toPrivateResDto(
+                queryChannelService.get(channel.getId()),
+                req.userIds()
+        );
     }
 }

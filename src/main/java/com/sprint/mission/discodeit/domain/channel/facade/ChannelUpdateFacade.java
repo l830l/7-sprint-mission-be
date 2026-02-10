@@ -22,6 +22,6 @@ public class ChannelUpdateFacade {
     @Transactional
     public ChannelInfoRes update(UUID id, ChannelUpdateReq req) {
         channelService.update(id, req);
-        return ChannelMapper.toResDto(queryChannelService.get(id));
+        return ChannelMapper.toPublicResDto(queryChannelService.get(id));
     }
 }

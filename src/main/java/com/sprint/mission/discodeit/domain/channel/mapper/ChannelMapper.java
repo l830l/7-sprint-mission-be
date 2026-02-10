@@ -7,6 +7,7 @@ import com.sprint.mission.discodeit.domain.channel.dto.response.ChannelPublicInf
 import com.sprint.mission.discodeit.domain.channel.entity.Channel;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import lombok.RequiredArgsConstructor;
@@ -19,11 +20,13 @@ public class ChannelMapper {
     public static ChannelInfoRes toPrivateResDto(
             Channel channel,
             UUID managerId,
+            List<UUID> userIds,
             LocalDateTime lastMessageTime) {
         return new ChannelPrivateInfoRes(
                 channel.getId(),
                 channel.getPublicType().getValue(),
                 managerId,
+                userIds,
                 channel.getName(),
                 lastMessageTime
         );
@@ -43,7 +46,7 @@ public class ChannelMapper {
         );
     }
 
-    public static ChannelInfoRes toResDto(
+    public static ChannelInfoRes toPublicResDto(
             ChannelInfoQuery channel) {
         return new ChannelPublicInfoRes(
                 channel.getChannelId(),
@@ -51,6 +54,18 @@ public class ChannelMapper {
                 channel.getManagerId(),
                 channel.getName(),
                 channel.getDescription(),
+                channel.getLastMessageTime()
+        );
+    }
+
+    public static ChannelInfoRes toPrivateResDto(
+            ChannelInfoQuery channel, List<UUID> userIds) {
+        return new ChannelPrivateInfoRes(
+                channel.getChannelId(),
+                channel.getPublicType().getValue(),
+                channel.getManagerId(),
+                userIds,
+                channel.getName(),
                 channel.getLastMessageTime()
         );
     }

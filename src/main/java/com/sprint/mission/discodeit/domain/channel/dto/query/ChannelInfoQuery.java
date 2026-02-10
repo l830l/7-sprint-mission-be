@@ -11,7 +11,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class ChannelInfoQuery {
-
     private UUID channelId;
     private String name;
     private String description;
