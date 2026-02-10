@@ -46,3 +46,8 @@ info:
     encoding: UTF-8
     java-version: 17
     spring-version: 3.5.9
+
+logging:
+  level:
+    root: INFO
+    com.sprint.mission.discodeit: INFO
