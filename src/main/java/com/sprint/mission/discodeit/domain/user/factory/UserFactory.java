@@ -24,7 +24,7 @@ public class UserFactory {
                     req.password()
             );
         }
-        BinaryContent profile = binaryContentService.findById(profileId);
+        BinaryContent profile = binaryContentService.getInfo(profileId);
         return User.createWithProfile(
                 req.email(),
                 req.nickname(),

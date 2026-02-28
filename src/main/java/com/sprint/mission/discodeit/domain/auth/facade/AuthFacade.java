@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.domain.auth.facade;
 
 import com.sprint.mission.discodeit.domain.auth.dto.request.UserLoginReq;
+import com.sprint.mission.discodeit.domain.binarycontent.mapper.BinaryContentMapper;
 import com.sprint.mission.discodeit.domain.user.dto.response.UserDetailInfoRes;
 import com.sprint.mission.discodeit.domain.user.entity.User;
 import com.sprint.mission.discodeit.domain.userstatus.entity.UserStatus;
@@ -42,7 +43,7 @@ public class AuthFacade {
         userStatusService.updateOfflineAt(userStatus.getId());
         return UserMapper.toDetailResDto(user,
                 user.getProfile() == null ? null
-                        : binaryContentService.getBinaryContent(user.getProfile().getId()),
+                        : BinaryContentMapper.toResDto(binaryContentService.getInfo(user.getProfile().getId())),
                 true);
     }
 

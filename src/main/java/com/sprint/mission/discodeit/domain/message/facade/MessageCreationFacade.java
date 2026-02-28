@@ -44,12 +44,11 @@ public class MessageCreationFacade {
         List<BinaryContent> attachments = new ArrayList<>();
         if (!req.attachmentIds().isEmpty()) {
             req.attachmentIds().forEach(BinaryContentReq -> {
-                BinaryContent newBinaryContent = binaryContentService.create(
-                        BinaryContentFactory.create(BinaryContentReq)
-                );
-                binaryContentStorage.put(newBinaryContent.getId(), BinaryContentReq.data());
-                attachments.add(newBinaryContent);
-            });
+                        BinaryContent binaryContent = binaryContentService.upload(BinaryContentReq);
+                        attachments.add(binaryContent);
+                        binaryContentStorage.put(binaryContent.getId(), BinaryContentReq.data());
+                    }
+            );
         }
 
         Message message = messageService.create(

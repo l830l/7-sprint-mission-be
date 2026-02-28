@@ -1,22 +1,17 @@
 package com.sprint.mission.discodeit.domain.binarycontent.service;
 
-import com.sprint.mission.discodeit.domain.binarycontent.dto.response.BinaryContentInfoRes;
+import com.sprint.mission.discodeit.domain.binarycontent.dto.request.BinaryContentCreateReq;
 import com.sprint.mission.discodeit.domain.binarycontent.entity.BinaryContent;
+import org.springframework.core.io.Resource;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface BinaryContentService {
+    BinaryContent upload(BinaryContentCreateReq req);
 
-    BinaryContent create(BinaryContent binaryContent);
+    Resource download(UUID binaryContentId);
 
-    BinaryContent findById(UUID id);
+    BinaryContent getInfo(UUID binaryContentId);
 
-    List<BinaryContent> findAll();
-
-    void delete(UUID id);
-
-    BinaryContentInfoRes getBinaryContent(UUID id);
-
-    List<BinaryContentInfoRes> getBinaryContentList(List<UUID> binaryContentIdList);
+    void delete(UUID binaryContentId);
 }

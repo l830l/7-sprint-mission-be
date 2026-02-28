@@ -35,17 +35,16 @@ public class UserCreationFacade {
     //유저 추가
     @Transactional
     public UserDetailInfoRes createUser(@NonNull UserCreateReq req) {
-        UUID profileId = null;
+        User user = null;
 
         if (req.profileImage() != null && req.profileImage().data() != null) {
-
-            BinaryContent profile = binaryContentService.create(
-                    BinaryContentFactory.create(req.profileImage())
-            );
-            profileId = profile.getId();
-            binaryContentStorage.put(profileId, req.profileImage().data());
+            BinaryContent profile = binaryContentService.upload(req.profileImage());
+            user = userService.create(userFactory.create(req, profile.getId()));
+            binaryContentStorage.put(profile.getId(), req.profileImage().data());
+        } else {
+            user = userService.create(userFactory.create(req, null));
         }
-        User user = userService.create(userFactory.create(req, profileId));
+
         userStatusService.create(UserStatus.create(user));
         return UserMapper.toDetailResDto(
                 user,

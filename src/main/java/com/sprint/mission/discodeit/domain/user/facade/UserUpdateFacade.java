@@ -45,9 +45,7 @@ public class UserUpdateFacade {
 
         //올라온 데이터가 있으면 무조건 만들어서 배정
         if (req.profileImage() != null) {
-            BinaryContent profileImg = binaryContentService.create(
-                    BinaryContentFactory.create(req.profileImage())
-            );
+            BinaryContent profileImg = binaryContentService.upload(req.profileImage());
             user.updateProfile(profileImg);
             binaryContentStorage.put(profileImg.getId(), req.profileImage().data());
         }

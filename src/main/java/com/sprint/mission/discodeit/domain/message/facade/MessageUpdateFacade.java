@@ -42,7 +42,7 @@ public class MessageUpdateFacade {
         // 새로운 첨부파일 생성
         List<BinaryContent> newAttachments = req.newAttachmentReqs().stream()
                 .map(r -> {
-                    BinaryContent binaryContent = binaryContentService.create(BinaryContentFactory.create(r));
+                    BinaryContent binaryContent = binaryContentService.upload(r);
                     binaryContentStorage.put(binaryContent.getId(), r.data());
                     return binaryContent;
                 }).toList();

@@ -24,7 +24,8 @@ public class BinaryContentMapper {
             return new BinaryContentCreateReq(
                     file.getBytes(),
                     file.getOriginalFilename(),
-                    file.getContentType()
+                    file.getContentType(),
+                    file.getSize()
             );
         } catch (IOException e) {
             throw new FileConversionFail(ErrorCode.FILE_CONVERSION_FAILED);

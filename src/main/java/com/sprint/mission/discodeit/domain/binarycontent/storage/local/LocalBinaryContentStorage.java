@@ -64,19 +64,13 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
 
     // 다운로드
     @Override
-    public ResponseEntity<Resource> download(BinaryContentInfoRes dto) {
+    public Resource download(BinaryContentInfoRes dto) {
         try {
             Path filePath = resolvePath(dto.binaryContentId());
             if (!Files.exists(filePath)) {
                 throw new RuntimeException("파일 없음: " + dto.binaryContentId());
             }
-
-            Resource resource = new FileSystemResource(filePath);
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION,
-                            "attachment; filename=\"" + dto.fileName() + "\"")
-                    .contentType(MediaType.parseMediaType(dto.fileType()))
-                    .body(resource);
+            return new FileSystemResource(filePath);
         } catch (Exception e) {
             throw new RuntimeException("파일 다운로드 실패", e);
         }
@@ -88,7 +82,8 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
         try {
             Path filePath = resolvePath(binaryId);
             if (!Files.exists(filePath)) {
-                throw new RuntimeException("삭제할 파일 없음: " + binaryId);
+                //throw new RuntimeException("삭제할 파일 없음: " + binaryId);
+                return;
             }
             Files.delete(filePath);
         } catch (Exception e) {

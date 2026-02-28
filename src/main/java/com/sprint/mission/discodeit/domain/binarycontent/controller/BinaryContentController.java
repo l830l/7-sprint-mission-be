@@ -1,59 +1,60 @@
 package com.sprint.mission.discodeit.domain.binarycontent.controller;
 
 import com.sprint.mission.discodeit.domain.binarycontent.controller.docs.BinaryContentControllerDocs;
+import com.sprint.mission.discodeit.domain.binarycontent.dto.request.BinaryContentCreateReq;
 import com.sprint.mission.discodeit.domain.binarycontent.dto.response.BinaryContentInfoRes;
 import com.sprint.mission.discodeit.domain.binarycontent.mapper.BinaryContentMapper;
 import com.sprint.mission.discodeit.domain.binarycontent.service.BinaryContentService;
-import com.sprint.mission.discodeit.domain.binarycontent.storage.BinaryContentStorage;
-
-import java.util.List;
-import java.util.UUID;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/binary-contents")
 @RequiredArgsConstructor
 public class BinaryContentController implements BinaryContentControllerDocs {
-
     private final BinaryContentService binaryContentService;
-    private final BinaryContentStorage binaryContentStorage;
-    //private final S3FileService s3FileService;
-    //private final S3PrivateFileService s3PrivateFileService;
 
-    //단일 파일 조회
-    @GetMapping("/{binaryContentId}")
-    public ResponseEntity<BinaryContentInfoRes> getFileInfo(@PathVariable UUID binaryContentId) {
-        return ResponseEntity.ok(binaryContentService.getBinaryContent(binaryContentId));
+    // 파일 업로드
+    @PostMapping
+    public ResponseEntity<BinaryContentInfoRes> upload(@RequestPart MultipartFile file) {
+        BinaryContentCreateReq req = BinaryContentMapper.toReqDto(file);
+        BinaryContentInfoRes binaryContent = BinaryContentMapper.toResDto(binaryContentService.upload(req));
+        return ResponseEntity.created(URI.create("/api/binary-contents/" + binaryContent.binaryContentId()))
+                .body(binaryContent);
     }
 
-    //BinaryId 여러개로 조회
-    @GetMapping
-    public ResponseEntity<List<BinaryContentInfoRes>> getAllFilesInfo(
-            @RequestParam List<UUID> binaryContentIdList) {
-        return ResponseEntity.ok(binaryContentService.getBinaryContentList(binaryContentIdList));
+    // 파일 조회
+    @GetMapping("/{id}")
+    public ResponseEntity<Resource> download(@PathVariable UUID id) {
+        Resource file = binaryContentService.download(id);
+        BinaryContentInfoRes metadata = BinaryContentMapper.toResDto(binaryContentService.getInfo(id));
+
+        MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
+        if (metadata.fileType() != null && !metadata.fileType().isBlank()) {
+            mediaType = MediaType.parseMediaType(metadata.fileType());
+        }
+
+        return ResponseEntity.ok()
+                .contentType(mediaType)
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename=\"" + file.getFilename() + "\""
+                )
+                .body(file);
     }
 
-    //단일 파일 다운로드
-    @GetMapping("/{binaryContentId}/download")
-    public ResponseEntity<BinaryContentInfoRes> downloadFile(@PathVariable UUID binaryContentId) {
-        BinaryContentInfoRes res = BinaryContentMapper.toResDto(
-                binaryContentService.findById(binaryContentId));
-        binaryContentStorage.download(res);
-        return ResponseEntity.ok(res);
+    // 파일 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        binaryContentService.delete(id);
+        return ResponseEntity.noContent().build();
     }
-
-  /*
-  @PostMapping
-  public ResponseEntity<String> uploadFile(@RequestPart("file") MultipartFile file) {
-    String url = s3PrivateFileService.uploadToS3Bucket("s3/test/", file);
-    return ResponseEntity.ok(url);
-  }
-   */
 }
