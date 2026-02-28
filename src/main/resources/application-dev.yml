@@ -42,4 +42,4 @@ management:
       show-details: always
   info:
     env:
-      enabled: false
+      enabled: true
