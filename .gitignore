@@ -51,3 +51,7 @@ out/
 # application.yml을 제외한 yml
 *.yml
 !**/application.yml
+
+### backup
+/_backup/
+/storage/
