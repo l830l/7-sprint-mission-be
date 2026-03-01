@@ -7,6 +7,13 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.UUID;
 
 public class BinaryContentFixture {
+    public static BinaryContent create() {
+        BinaryContent newBinaryContent = BinaryContent.create(
+                "test", "image/png", 64L);
+        ReflectionTestUtils.setField(newBinaryContent, "id", UUID.randomUUID());
+        return newBinaryContent;
+    }
+
     public static BinaryContent create(
             String fileName, String fileType, long fileSize) {
         BinaryContent newBinaryContent = BinaryContent.create(
