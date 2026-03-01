@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.domain.user.service;
 
 import com.sprint.mission.discodeit.domain.auth.dto.response.AvailabilityRes;
+import com.sprint.mission.discodeit.domain.user.dto.request.UserFindPasswordReq;
 import com.sprint.mission.discodeit.domain.user.dto.request.UserUpdateReq;
 import com.sprint.mission.discodeit.domain.user.entity.User;
 
@@ -29,5 +30,5 @@ public interface UserService {
 
     void sendEmailId(String email);
 
-    void sendEmailTemporaryPassword(String email, String nickname);
+    void sendEmailTemporaryPassword(UserFindPasswordReq req);
 }

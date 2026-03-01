@@ -123,7 +123,7 @@ public class UserController implements UserControllerDocs {
     //메일로 임시 비밀번호 발송
     @PostMapping("/password/reset")
     public ResponseEntity<Void> sendEmailPasswordReset(@Valid @RequestBody UserFindPasswordReq req) {
-        userService.sendEmailTemporaryPassword(req.email(), req.nickname());
+        userService.sendEmailTemporaryPassword(req);
         return ResponseEntity.ok().build();
     }
 }

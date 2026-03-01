@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.domain.user.service;
 
+import com.sprint.mission.discodeit.domain.user.dto.request.UserFindPasswordReq;
 import com.sprint.mission.discodeit.global.email.EmailSender;
 import com.sprint.mission.discodeit.domain.auth.dto.response.AvailabilityRes;
 import com.sprint.mission.discodeit.domain.user.dto.request.UserUpdateReq;
@@ -39,17 +40,17 @@ public class UserServiceImpl implements UserService {
     //메일로 임시 비밀번호 발송 및 임시 비밀번호 발급
     @Override
     @Transactional
-    public void sendEmailTemporaryPassword(String email, String nickname) {
-        User user = userRepository.findByEmail(email).orElseThrow(
+    public void sendEmailTemporaryPassword(UserFindPasswordReq req) {
+        User user = userRepository.findByEmail(req.email()).orElseThrow(
                 () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
         );
-        if (!user.getNickname().equals(nickname)) {
+        if (!user.getNickname().equals(req.nickname())) {
             throw new InvalidUserNicknameException(ErrorCode.INVALID_USER_NICKNAME);
         }
         String passwordTemp = UUID.randomUUID().toString().replaceAll("-", "");
         user.updateTemporaryPassword(passwordTemp);
         emailSender.sendEmailAsync(
-                email,
+                req.email(),
                 "[ch-at] 임시 비밀번호를 보내드립니다",
                 String.format("""
                         임시 비밀번호: %s
