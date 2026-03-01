@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - 최지혜
-      - 최지혜-sprint-7
+      - 최지혜-sprint7
   pull_request:
 
 jobs:
