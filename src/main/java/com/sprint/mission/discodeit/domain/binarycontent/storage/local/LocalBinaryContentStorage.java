@@ -5,8 +5,11 @@ import com.sprint.mission.discodeit.domain.binarycontent.dto.response.BinaryCont
 import com.sprint.mission.discodeit.domain.binarycontent.storage.BinaryContentStorage;
 import jakarta.annotation.PostConstruct;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.UUID;
 
@@ -31,20 +34,22 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
         try {
             Files.createDirectories(root);
         } catch (Exception e) {
-            throw new RuntimeException("로컬 storage 루트 경로 생성 실패: " + root, e);
+            throw new IllegalStateException("로컬 storage 루트 경로 생성 실패: " + root, e);
         }
     }
 
     // 저장
     @Override
     public UUID put(UUID binaryId, byte[] data) {
+        if (binaryId == null) {
+            throw new NullPointerException("binaryId는 null일 수 없습니다");
+        }
         try {
-            UUID id = (binaryId != null) ? binaryId : UUID.randomUUID();
-            Path filePath = resolvePath(id);
+            Path filePath = resolvePath(binaryId);
             Files.write(filePath, data);
-            return id;
-        } catch (Exception e) {
-            throw new RuntimeException("파일 저장 실패", e);
+            return binaryId;
+        } catch (IOException e) {
+            throw new UncheckedIOException("파일 저장 실패: " + binaryId, e);
         }
     }
 
@@ -53,26 +58,21 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
     public InputStream get(UUID binaryId) {
         try {
             Path filePath = resolvePath(binaryId);
-            if (!Files.exists(filePath)) {
-                throw new RuntimeException("파일 없음: " + binaryId);
-            }
             return Files.newInputStream(filePath);
-        } catch (Exception e) {
-            throw new RuntimeException("파일 읽기 실패", e);
+        } catch (IOException e) {
+            throw new UncheckedIOException("파일 읽기 실패: " + binaryId, e);
         }
     }
 
     // 다운로드
     @Override
-    public Resource download(BinaryContentInfoRes dto) {
+    public Resource download(UUID binaryContentId) {
         try {
-            Path filePath = resolvePath(dto.binaryContentId());
-            if (!Files.exists(filePath)) {
-                throw new RuntimeException("파일 없음: " + dto.binaryContentId());
-            }
+            Path filePath = resolvePath(binaryContentId);
+            Files.newInputStream(filePath).close(); // 존재 확인
             return new FileSystemResource(filePath);
-        } catch (Exception e) {
-            throw new RuntimeException("파일 다운로드 실패", e);
+        } catch (IOException e) {
+            throw new UncheckedIOException("파일 다운로드 실패: " + binaryContentId, e);
         }
     }
 
@@ -81,13 +81,9 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
     public void delete(UUID binaryId) {
         try {
             Path filePath = resolvePath(binaryId);
-            if (!Files.exists(filePath)) {
-                //throw new RuntimeException("삭제할 파일 없음: " + binaryId);
-                return;
-            }
-            Files.delete(filePath);
-        } catch (Exception e) {
-            throw new RuntimeException("파일 삭제 실패: " + binaryId, e);
+            Files.deleteIfExists(filePath);
+        } catch (IOException e) {
+            throw new UncheckedIOException("파일 삭제 실패: " + binaryId, e);
         }
     }
 

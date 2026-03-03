@@ -35,9 +35,8 @@ public class BinaryContentServiceImpl implements BinaryContentService {
     @Override
     @Transactional(readOnly = true)
     public Resource download(UUID binaryContentId) {
-        BinaryContent binaryContent = find(binaryContentId);
-        BinaryContentInfoRes dto = BinaryContentMapper.toResDto(binaryContent);
-        return binaryContentStorage.download(dto);
+        find(binaryContentId);
+        return binaryContentStorage.download(binaryContentId);
     }
 
     @Override

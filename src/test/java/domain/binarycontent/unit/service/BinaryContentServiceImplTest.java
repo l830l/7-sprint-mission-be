@@ -73,7 +73,7 @@ public class BinaryContentServiceImplTest {
             Resource resource = mock(Resource.class);
             given(binaryContentRepository.findById(any(UUID.class)))
                     .willReturn(Optional.of(binaryContent));
-            given(binaryContentStorage.download(any(BinaryContentInfoRes.class)))
+            given(binaryContentStorage.download(any(UUID.class)))
                     .willReturn(resource);
 
             // when
@@ -81,10 +81,10 @@ public class BinaryContentServiceImplTest {
 
             // then
             assertThat(result).isEqualTo(resource);
-            then(binaryContentStorage).should(times(1))
-                    .download(any(BinaryContentInfoRes.class));
             then(binaryContentRepository).should(times(1))
                     .findById(any(UUID.class));
+            then(binaryContentStorage).should(times(1))
+                    .download(any(UUID.class));
         }
 
         @Test

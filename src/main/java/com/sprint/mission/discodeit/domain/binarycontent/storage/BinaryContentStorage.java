@@ -14,7 +14,7 @@ public interface BinaryContentStorage {
 
     InputStream get(UUID binaryId);
 
-    Resource download(BinaryContentInfoRes dto);
+    Resource download(UUID binaryId);
 
     void delete(UUID binaryId);
 }
