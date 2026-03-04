@@ -30,7 +30,7 @@ public class UserUpdateFacade {
 
     //유저 수정
     @Transactional
-    public UserDetailInfoRes updateUser(@NonNull UUID userId, @NonNull UserUpdateReq req) {
+    public UserDetailInfoRes updateUser(UUID userId, UserUpdateReq req) {
         User user = userService.findById(userId);
 
         //이메일과 닉네임 부터 update(조건 맞지 않으면 바로 예외처리)
