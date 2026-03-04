@@ -34,7 +34,7 @@ public class UserCreationFacade {
 
     //유저 추가
     @Transactional
-    public UserDetailInfoRes createUser(@NonNull UserCreateReq req) {
+    public UserDetailInfoRes createUser(UserCreateReq req) {
         User user = null;
 
         if (req.profileImage() != null && req.profileImage().data() != null) {
