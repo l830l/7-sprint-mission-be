@@ -42,7 +42,9 @@ jacocoTestReport {
                         '**/*Request.class',
                         '**/*Response.class',
                         '**/*Exception.class',
-                        '**/generated/**'
+                        '**/generated/**',
+                        '**/dto/**',
+                        '**/vo/**'
                 ])
             })
     )
