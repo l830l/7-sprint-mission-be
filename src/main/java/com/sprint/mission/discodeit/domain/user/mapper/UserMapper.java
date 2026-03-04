@@ -31,8 +31,8 @@ public class UserMapper {
                 user.getEmail(),
                 profileImg,
                 isOnline,
-                DateTimeUtil.format(user.getCreatedAt()),
-                DateTimeUtil.format(user.getUpdatedAt())
+                user.getCreatedAt(),
+                user.getUpdatedAt()
         );
     }
 }

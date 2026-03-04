@@ -1,9 +1,11 @@
 package com.sprint.mission.discodeit.domain.user.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sprint.mission.discodeit.domain.binarycontent.dto.response.BinaryContentInfoRes;
 import com.sprint.mission.discodeit.domain.user.entity.User;
 import com.sprint.mission.discodeit.global.util.DateTimeUtil;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record UserDetailInfoRes(
@@ -11,9 +13,13 @@ public record UserDetailInfoRes(
         String nickname,        //닉네임
         String email,           //이메일
         BinaryContentInfoRes profileImg,    //프로필 이미지
-        boolean isOnline,       //온라인 상태    
-        String createAt,         //가입일
-        String updateAt         //수정일
+        boolean isOnline,       //온라인 상태
+
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        LocalDateTime createAt,         //가입일
+
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        LocalDateTime updateAt         //수정일
 ) {
     public static UserDetailInfoRes from(User user, BinaryContentInfoRes profileImg, boolean isOnline) {
         return new UserDetailInfoRes(
@@ -22,8 +28,8 @@ public record UserDetailInfoRes(
                 user.getEmail(),
                 profileImg,
                 isOnline,
-                DateTimeUtil.format(user.getCreatedAt()),
-                DateTimeUtil.format(user.getUpdatedAt())
+                user.getCreatedAt(),
+                user.getUpdatedAt()
         );
     }
 }
