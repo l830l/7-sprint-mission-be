@@ -25,7 +25,7 @@ public class UserDeleteFacade {
 
     //유저 삭제
     @Transactional
-    public void deleteUser(@NonNull UUID userId) {
+    public void deleteUser(UUID userId) {
         User user = userService.findById(userId);
         UserStatus userStatus = userStatusService.findByUserId(userId);
 
