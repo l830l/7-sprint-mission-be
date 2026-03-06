@@ -41,9 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void sendEmailTemporaryPassword(UserFindPasswordReq req) {
-        User user = userRepository.findByEmail(req.email()).orElseThrow(
-                () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
-        );
+        User user = findByEmail(req.email());
         if (!user.getNickname().equals(req.nickname())) {
             throw new InvalidUserNicknameException(ErrorCode.INVALID_USER_NICKNAME);
         }
@@ -83,7 +81,9 @@ public class UserServiceImpl implements UserService {
     //이메일 찾기
     @Override
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElse(null);
+        return userRepository.findByEmail(email).orElseThrow(
+                () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
+        );
     }
 
     //닉네임으로 찾기
@@ -95,9 +95,6 @@ public class UserServiceImpl implements UserService {
     //삭제
     @Override
     public void delete(UUID id) {
-        if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException(ErrorCode.USER_NOT_FOUND);
-        }
         userRepository.deleteById(id);
     }
 
@@ -105,12 +102,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(UUID id, UserUpdateReq req) {
         User user = findById(id);
+        validateDuplicate(id, req.email(), req.nickname());
         //기존 비밀번호를 클라이언트 쪽에서 알 수 없기 때문에, 새로 올라온 비밀번호가 없으면 비밀번호 변경X
         String replacaPassword = req.password() == null ? user.getPassword() : req.password();
-        if (req.password() == null) {
-            replacaPassword = user.getPassword();
-        }
-        validateDuplicate(id, req.email(), req.nickname());
         user.update(req.email(), req.nickname(), replacaPassword);
     }
 
