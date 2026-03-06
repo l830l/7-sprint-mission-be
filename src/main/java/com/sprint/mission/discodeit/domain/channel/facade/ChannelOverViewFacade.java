@@ -5,6 +5,7 @@ import com.sprint.mission.discodeit.domain.channel.dto.response.ChannelInfoRes;
 import com.sprint.mission.discodeit.domain.channel.entity.ChannelType;
 import com.sprint.mission.discodeit.domain.channel.exception.ChannelInvalideTypeException;
 import com.sprint.mission.discodeit.domain.channel.mapper.ChannelMapper;
+import com.sprint.mission.discodeit.domain.channel.service.ChannelService;
 import com.sprint.mission.discodeit.domain.channel.service.QueryChannelService;
 
 import java.util.List;
@@ -23,8 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 public class ChannelOverViewFacade {
 
-    private final QueryChannelService queryChannelService;
     private final ChannelMemberService channelMemberService;
+    private final ChannelService channelService;
 
     //채널 목록 : Public 인 경우 전부, Private 인 경우 자신이 참여한 채널만
     @Transactional(readOnly = true)
@@ -32,7 +33,7 @@ public class ChannelOverViewFacade {
                                                                     String searchTxt) {
         String normalizedSearch = (searchTxt == null || searchTxt.trim().isEmpty()) ? "" : searchTxt;
 
-        return queryChannelService.getAllByUser(userId, normalizedSearch).stream()
+        return channelService.getAllByUser(userId, normalizedSearch).stream()
                 .collect(Collectors.groupingBy(
                         ChannelInfoQuery::getPublicType,
                         Collectors.mapping(

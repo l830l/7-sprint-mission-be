@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.domain.channel.service;
 
+import com.sprint.mission.discodeit.domain.channel.dto.query.ChannelInfoQuery;
 import com.sprint.mission.discodeit.domain.channel.dto.request.ChannelCreateReq;
 import com.sprint.mission.discodeit.domain.channel.dto.request.ChannelCreateSecReq;
 import com.sprint.mission.discodeit.domain.channel.dto.request.ChannelUpdateReq;
@@ -20,9 +21,9 @@ public interface ChannelService {
 
     void delete(UUID id);
 
-    Map<ChannelType, List<Channel>> findAllByUserId(UUID userId);
-
-    Channel findByName(String name);
-
     Channel findById(UUID id);
+
+    ChannelInfoQuery get(UUID id);
+
+    List<ChannelInfoQuery> getAllByUser(UUID userId, String searchTxt);
 }

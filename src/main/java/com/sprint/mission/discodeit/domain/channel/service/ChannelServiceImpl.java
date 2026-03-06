@@ -1,10 +1,12 @@
 package com.sprint.mission.discodeit.domain.channel.service;
 
+import com.sprint.mission.discodeit.domain.channel.dto.query.ChannelInfoQuery;
 import com.sprint.mission.discodeit.domain.channel.dto.request.ChannelCreateReq;
 import com.sprint.mission.discodeit.domain.channel.dto.request.ChannelCreateSecReq;
 import com.sprint.mission.discodeit.domain.channel.dto.request.ChannelUpdateReq;
 import com.sprint.mission.discodeit.domain.channel.entity.Channel;
 import com.sprint.mission.discodeit.domain.channel.entity.ChannelType;
+import com.sprint.mission.discodeit.domain.channel.repository.ChannelRepositoryCustom;
 import com.sprint.mission.discodeit.global.exception.ErrorCode;
 import com.sprint.mission.discodeit.domain.channel.exception.ChannelNotFoundException;
 import com.sprint.mission.discodeit.domain.channel.exception.ChannelPrivateCannotModifyException;
@@ -29,6 +31,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     //레포지토리
     private final ChannelRepository channelRepository;
+    private final ChannelRepositoryCustom channelRepositoryCustom;
     private final ChannelMemberRepository channelMemberRepository;
     private final ChannelFactory channelFactory;
 
@@ -54,21 +57,17 @@ public class ChannelServiceImpl implements ChannelService {
         channelRepository.deleteById(id);
     }
 
-    //채널 목록 : Public 인 경우 전부, Private 인 경우 자신이 참여한 채널만
+    // 내가 참여한 채널 목록 조회
     @Override
-    public Map<ChannelType, List<Channel>> findAllByUserId(UUID userId) {
-        return channelRepository.findAll().stream().filter(channel ->
-                channel.getPublicType() == ChannelType.PUBLIC ||
-                        (channel.getPublicType() == ChannelType.PRIVATE &&
-                                channelMemberRepository.existsByChannelIdAndUserId(channel.getId(), userId)
-                        )).collect(Collectors.groupingBy(Channel::getPublicType));
+    public List<ChannelInfoQuery> getAllByUser(UUID userId, String searchTxt) {
+        return channelRepositoryCustom.findAllMyChannels(userId,
+                searchTxt);
     }
 
-    //채널명으로 찾기
+    // 단일 채널 조회
     @Override
-    public Channel findByName(String name) {
-        Optional<Channel> channel = channelRepository.findByNameContaining(name);
-        return channel.orElse(null);
+    public ChannelInfoQuery get(UUID channelId) {
+        return channelRepositoryCustom.findByChannelId(channelId);
     }
 
     //채널 id 로 조회

@@ -25,7 +25,6 @@ public class ChannelCreationFacade {
     private final ChannelService channelService;
     private final ChannelMemberService channelMemberService;
     private final ChannelMemberFactory channelMemberFactory;
-    private final QueryChannelService queryChannelService;
 
     //공개 채널 추가
     @Transactional
@@ -34,7 +33,7 @@ public class ChannelCreationFacade {
         Channel channel = channelService.create(req);
         channelMemberService.create(
                 channelMemberFactory.create(managerId, channel.getId(), ChannelMemberRole.MANAGER));
-        return ChannelMapper.toPublicResDto(queryChannelService.get(channel.getId()));
+        return ChannelMapper.toPublicResDto(channelService.get(channel.getId()));
     }
 
     //비밀 채널 추가
@@ -59,7 +58,7 @@ public class ChannelCreationFacade {
                 }
         );
         return ChannelMapper.toPrivateResDto(
-                queryChannelService.get(channel.getId()),
+                channelService.get(channel.getId()),
                 req.userIds()
         );
     }

@@ -16,12 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ChannelUpdateFacade {
 
-    private final QueryChannelService queryChannelService;
     private final ChannelService channelService;
 
     @Transactional
     public ChannelInfoRes update(UUID id, ChannelUpdateReq req) {
         channelService.update(id, req);
-        return ChannelMapper.toPublicResDto(queryChannelService.get(id));
+        return ChannelMapper.toPublicResDto(channelService.get(id));
     }
 }
