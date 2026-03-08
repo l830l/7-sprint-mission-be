@@ -7,7 +7,6 @@ import com.sprint.mission.discodeit.domain.channel.dto.request.ChannelCreateSecR
 import com.sprint.mission.discodeit.domain.channel.dto.response.ChannelPrivateInfoRes;
 import com.sprint.mission.discodeit.domain.channel.dto.response.ChannelPublicInfoRes;
 import com.sprint.mission.discodeit.domain.channel.entity.Channel;
-import com.sprint.mission.discodeit.domain.channel.entity.ChannelType;
 import com.sprint.mission.discodeit.domain.channel.facade.ChannelCreationFacade;
 import com.sprint.mission.discodeit.domain.channel.service.ChannelService;
 import com.sprint.mission.discodeit.domain.channelmember.entity.ChannelMember;
