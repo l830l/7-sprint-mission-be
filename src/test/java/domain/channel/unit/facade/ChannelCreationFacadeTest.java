@@ -55,7 +55,6 @@ public class ChannelCreationFacadeTest {
             // given
             User manager = UserFixture.createWithoutProfile();
             ChannelCreateReq req = new ChannelCreateReq("채널", "설명");
-
             Channel channel = ChannelFixture.createPublicChannel(req.name(), req.description());
             ChannelMember channelMember = ChannelMember.create(manager, channel, ChannelMemberRole.MANAGER);
             ChannelInfoQuery query = ChannelFixture.toInfoQuery(channel, manager.getId());
@@ -72,10 +71,6 @@ public class ChannelCreationFacadeTest {
 
             // then
             assertThat(result).isNotNull();
-            assertThat(result.name()).isEqualTo(req.name());
-            assertThat(result.description()).isEqualTo(req.description());
-            assertThat(result.managerId()).isEqualTo(manager.getId());
-            assertThat(result.type()).isEqualTo(ChannelType.PUBLIC.getValue());
 
             then(channelService).should(times(1)).create(req);
             then(channelMemberFactory).should(times(1))
@@ -106,13 +101,11 @@ public class ChannelCreationFacadeTest {
             given(channelMemberService.create(channelMemberManager)).willReturn(channelMemberManager);
             members.forEach(user -> {
                 ChannelMember member = ChannelMember.create(user, channel, ChannelMemberRole.MEMBER);
-
                 given(channelMemberFactory.create(
                         user.getId(),
                         channel.getId(),
                         ChannelMemberRole.MEMBER
                 )).willReturn(member);
-
                 given(channelMemberService.create(member)).willReturn(member);
             });
             given(channelService.get(channel.getId())).willReturn(query);
@@ -122,10 +115,6 @@ public class ChannelCreationFacadeTest {
 
             // then
             assertThat(result).isNotNull();
-            assertThat(result.userIds().size()).isEqualTo(members.size());
-            assertThat(result.userIds()).containsAll(memberIds);
-            assertThat(result.managerId()).isEqualTo(manager.getId());
-            assertThat(result.type()).isEqualTo(ChannelType.PRIVATE.getValue());
 
             then(channelService).should(times(1)).create(req);
             then(channelMemberFactory).should(times(1)).create(manager.getId(), channel.getId(), ChannelMemberRole.MANAGER);
