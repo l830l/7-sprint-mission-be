@@ -9,7 +9,6 @@ import com.sprint.mission.discodeit.domain.channelmember.factory.ChannelMemberFa
 import com.sprint.mission.discodeit.domain.channel.mapper.ChannelMapper;
 import com.sprint.mission.discodeit.domain.channelmember.service.ChannelMemberService;
 import com.sprint.mission.discodeit.domain.channel.service.ChannelService;
-import com.sprint.mission.discodeit.domain.channel.service.QueryChannelService;
 
 import java.util.UUID;
 
@@ -41,22 +40,10 @@ public class ChannelCreationFacade {
     public ChannelInfoRes createPrivateChannel(@NonNull UUID managerId,
                                                @NonNull ChannelCreateSecReq req) {
         Channel channel = channelService.create(req);
-        channelMemberService.create(
-                channelMemberFactory.create(
-                        managerId,
-                        channel.getId(),
-                        ChannelMemberRole.MANAGER
-                )
-        );
-        req.userIds().forEach(userId -> {
-                    channelMemberService.create(
-                            channelMemberFactory.create(
-                                    userId,
-                                    channel.getId(),
-                                    ChannelMemberRole.MEMBER
-                            ));
-                }
-        );
+        channelMemberService.create(channelMemberFactory.create(
+                managerId, channel.getId(), ChannelMemberRole.MANAGER));
+        req.userIds().forEach(userId -> channelMemberService.create(
+                channelMemberFactory.create(userId, channel.getId(), ChannelMemberRole.MEMBER)));
         return ChannelMapper.toPrivateResDto(
                 channelService.get(channel.getId()),
                 req.userIds()
