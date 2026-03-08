@@ -19,8 +19,6 @@ public class ChannelFactory {
     }
 
     public Channel create(ChannelCreateSecReq req) {
-        return Channel.createPrivate(
-                req.userIds()
-        );
+        return Channel.createPrivate();
     }
 }
