@@ -6,18 +6,16 @@ import com.sprint.mission.discodeit.domain.channel.entity.ChannelType;
 import com.sprint.mission.discodeit.domain.channel.exception.ChannelInvalideTypeException;
 import com.sprint.mission.discodeit.domain.channel.mapper.ChannelMapper;
 import com.sprint.mission.discodeit.domain.channel.service.ChannelService;
-import com.sprint.mission.discodeit.domain.channel.service.QueryChannelService;
-
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import com.sprint.mission.discodeit.domain.channelmember.service.ChannelMemberService;
 import com.sprint.mission.discodeit.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,24 +34,18 @@ public class ChannelOverViewFacade {
         return channelService.getAllByUser(userId, normalizedSearch).stream()
                 .collect(Collectors.groupingBy(
                         ChannelInfoQuery::getPublicType,
-                        Collectors.mapping(
-                                channel -> {
-                                    return switch (channel.getPublicType()) {
-                                        case PUBLIC -> ChannelMapper.toPublicResDto(channel);
-                                        case PRIVATE -> ChannelMapper.toPrivateResDto(
-                                                channel,
-                                                channelMemberService
-                                                        .findAllByChannelId(channel.getChannelId())
-                                                        .stream()
-                                                        .map(cm -> cm.getUser().getId())
-                                                        .toList()
-                                        );
-                                        default ->
-                                                throw new ChannelInvalideTypeException(ErrorCode.INVALID_CHANNEL_TYPE);
-                                    };
-                                },
-                                Collectors.toList()
-                        )
+                        Collectors.mapping(channel -> switch (channel.getPublicType()) {
+                            case PUBLIC -> ChannelMapper.toPublicResDto(channel);
+                            case PRIVATE -> ChannelMapper.toPrivateResDto(
+                                    channel,
+                                    channelMemberService
+                                            .findAllByChannelId(channel.getChannelId())
+                                            .stream()
+                                            .map(cm -> cm.getUser().getId())
+                                            .toList()
+                            );
+                            default -> throw new ChannelInvalideTypeException(ErrorCode.INVALID_CHANNEL_TYPE);
+                        }, Collectors.toList())
                 ));
     }
 }
