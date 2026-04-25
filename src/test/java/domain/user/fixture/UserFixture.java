@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class UserFixture {
-    private static int userCount = 1;
+    private static long userCount = 1;
 
     // 기본 프로필 유저
     public static User createWithoutProfile() {
@@ -25,10 +25,10 @@ public class UserFixture {
 
     // 커스텀 프로필 유저
     public static User createWithProfile() {
-        BinaryContent emptyProfile = BinaryContent.create(
+        BinaryContent emptyProfile = new BinaryContent(
                 "emptyProfile" + userCount,
                 ".jpg",
-                userCount
+                10L
         );
         ReflectionTestUtils.setField(emptyProfile, "id", UUID.randomUUID());
 

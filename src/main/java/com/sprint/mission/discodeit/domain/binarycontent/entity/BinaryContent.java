@@ -5,35 +5,23 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "binary_contents")
+@AllArgsConstructor
 public class BinaryContent extends BaseEntity {
 
-    //Field
-    @Column(name = "file_name", nullable = false)
-    private String fileName;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @Column(name = "size", nullable = false)
+    @Column(name = "type")
+    private String type;
+
+    @Column(name = "size")
     private Long size;
-
-    @Column(name = "content_type", nullable = false, length = 100)
-    private String fileType;
-
-    //Constructor
-    private BinaryContent(String fileName, String fileType, long size) {
-        this.fileName = fileName;
-        this.fileType = fileType;
-        this.size = size;
-    }
-
-    //Factory Method
-    public static BinaryContent create(String fileName, String fileType, long size) {
-        return new BinaryContent(fileName, fileType, size);
-    }
 }

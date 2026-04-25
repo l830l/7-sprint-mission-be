@@ -119,9 +119,9 @@ public class UserUpdateFacadeTest {
             assertThat(result.nickname()).isEqualTo(req.nickname());
             assertThat(result.profileImg()).isNotNull();
             assertThat(result.profileImg().binaryContentId()).isEqualTo(binaryContent.getId());
-            assertThat(result.profileImg().fileName()).isEqualTo(binaryReq.fileName());
-            assertThat(result.profileImg().fileType()).isEqualTo(binaryReq.fileType());
-            assertThat(result.profileImg().fileSize()).isEqualTo(binaryReq.fileSize());
+            assertThat(result.profileImg().fileName()).isEqualTo(binaryReq.name());
+            assertThat(result.profileImg().fileType()).isEqualTo(binaryReq.type());
+            assertThat(result.profileImg().fileSize()).isEqualTo(binaryReq.size());
             assertThat(result.updateAt()).isEqualTo(user.getUpdatedAt());
 
             then(userService).should().update(user.getId(), req);
@@ -211,9 +211,9 @@ public class UserUpdateFacadeTest {
             assertThat(result.nickname()).isEqualTo(req.nickname());
             assertThat(result.profileImg()).isNotNull();
             assertThat(result.profileImg().binaryContentId()).isEqualTo(binaryContent.getId());
-            assertThat(result.profileImg().fileName()).isEqualTo(binaryReq.fileName());
-            assertThat(result.profileImg().fileType()).isEqualTo(binaryReq.fileType());
-            assertThat(result.profileImg().fileSize()).isEqualTo(binaryReq.fileSize());
+            assertThat(result.profileImg().fileName()).isEqualTo(binaryReq.name());
+            assertThat(result.profileImg().fileType()).isEqualTo(binaryReq.type());
+            assertThat(result.profileImg().fileSize()).isEqualTo(binaryReq.size());
             assertThat(result.updateAt()).isEqualTo(user.getUpdatedAt());
 
             then(userService).should().update(user.getId(), req);
