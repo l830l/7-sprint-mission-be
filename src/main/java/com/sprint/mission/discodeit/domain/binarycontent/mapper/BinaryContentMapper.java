@@ -3,19 +3,13 @@ package com.sprint.mission.discodeit.domain.binarycontent.mapper;
 import com.sprint.mission.discodeit.domain.binarycontent.dto.request.BinaryContentCreateReq;
 import com.sprint.mission.discodeit.domain.binarycontent.dto.response.BinaryContentInfoRes;
 import com.sprint.mission.discodeit.domain.binarycontent.entity.BinaryContent;
-import com.sprint.mission.discodeit.global.exception.ErrorCode;
 import com.sprint.mission.discodeit.domain.binarycontent.exception.FileConversionFail;
+import com.sprint.mission.discodeit.global.exception.ErrorCode;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
-
-@Component
-@RequiredArgsConstructor
 public class BinaryContentMapper {
-
     public static BinaryContentCreateReq toReqDto(MultipartFile file) {
         if (file == null || file.isEmpty()) {
             return null;
@@ -38,8 +32,8 @@ public class BinaryContentMapper {
         } else {
             return new BinaryContentInfoRes(
                     binaryContent.getId(),
-                    binaryContent.getFileName(),
-                    binaryContent.getFileType(),
+                    binaryContent.getName(),
+                    binaryContent.getType(),
                     binaryContent.getSize()
             );
         }

@@ -1,26 +1,19 @@
 package com.sprint.mission.discodeit.domain.binarycontent.storage.local;
 
-import com.sprint.mission.discodeit.domain.binarycontent.dto.response.BinaryContentInfoRes;
-
 import com.sprint.mission.discodeit.domain.binarycontent.storage.BinaryContentStorage;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.UUID;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 
 @Component
 @ConditionalOnProperty(value = "discodeit.storage.type", havingValue = "local")

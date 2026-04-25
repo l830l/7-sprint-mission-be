@@ -1,7 +1,6 @@
 package domain.binarycontent.unit.service;
 
 import com.sprint.mission.discodeit.domain.binarycontent.dto.request.BinaryContentCreateReq;
-import com.sprint.mission.discodeit.domain.binarycontent.dto.response.BinaryContentInfoRes;
 import com.sprint.mission.discodeit.domain.binarycontent.entity.BinaryContent;
 import com.sprint.mission.discodeit.domain.binarycontent.exception.BinaryContentNotFoundException;
 import com.sprint.mission.discodeit.domain.binarycontent.repository.BinaryContentRepository;
@@ -21,8 +20,10 @@ import org.springframework.core.io.Resource;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.times;
 
@@ -45,13 +46,13 @@ public class BinaryContentServiceImplTest {
         void success_upload() {
             // given
             byte[] data = "test".getBytes();
-            BinaryContentCreateReq req = new BinaryContentCreateReq(
+            BinaryContentCreateReq request = new BinaryContentCreateReq(
                     data, "test_file", "image/png", 30L);
-            BinaryContent binaryContent = BinaryContentFixture.create(req);
+            BinaryContent binaryContent = BinaryContentFixture.create(request);
             given(binaryContentRepository.save(any(BinaryContent.class))).willReturn(binaryContent);
 
             // when
-            BinaryContent result = binaryContentService.upload(req);
+            BinaryContent result = binaryContentService.upload(request);
 
             // then
             assertThat(result).isEqualTo(binaryContent);

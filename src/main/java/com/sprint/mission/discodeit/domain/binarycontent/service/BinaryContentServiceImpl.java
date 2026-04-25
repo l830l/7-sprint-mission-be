@@ -1,11 +1,8 @@
 package com.sprint.mission.discodeit.domain.binarycontent.service;
 
 import com.sprint.mission.discodeit.domain.binarycontent.dto.request.BinaryContentCreateReq;
-import com.sprint.mission.discodeit.domain.binarycontent.dto.response.BinaryContentInfoRes;
 import com.sprint.mission.discodeit.domain.binarycontent.entity.BinaryContent;
 import com.sprint.mission.discodeit.domain.binarycontent.exception.BinaryContentNotFoundException;
-import com.sprint.mission.discodeit.domain.binarycontent.factory.BinaryContentFactory;
-import com.sprint.mission.discodeit.domain.binarycontent.mapper.BinaryContentMapper;
 import com.sprint.mission.discodeit.domain.binarycontent.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.domain.binarycontent.storage.BinaryContentStorage;
 import com.sprint.mission.discodeit.global.exception.ErrorCode;
@@ -25,10 +22,10 @@ public class BinaryContentServiceImpl implements BinaryContentService {
 
     @Override
     @Transactional
-    public BinaryContent upload(BinaryContentCreateReq req) {
-        BinaryContent binaryContent = BinaryContentFactory.create(req);
+    public BinaryContent upload(BinaryContentCreateReq request) {
+        BinaryContent binaryContent = new BinaryContent(request.name(), request.type(), request.size());
         BinaryContent infoSaved = binaryContentRepository.save(binaryContent);
-        binaryContentStorage.put(infoSaved.getId(), req.data());
+        binaryContentStorage.put(infoSaved.getId(), request.data());
         return infoSaved;
     }
 

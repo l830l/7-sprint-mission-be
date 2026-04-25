@@ -11,10 +11,10 @@ public class BinaryContentFactory {
 
     public static BinaryContent create(BinaryContentCreateReq req) {
         long size = req.data() == null ? 0 : req.data().length;
-        return create(req.fileName(), req.fileType(), size);
+        return create(req.name(), req.type(), size);
     }
 
     public static BinaryContent create(String fileName, String fileType, long size) {
-        return BinaryContent.create(fileName, fileType, size);
+        return new BinaryContent(fileName, fileType, size);
     }
 }

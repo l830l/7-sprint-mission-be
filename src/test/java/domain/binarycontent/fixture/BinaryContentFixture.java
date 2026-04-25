@@ -8,24 +8,24 @@ import java.util.UUID;
 
 public class BinaryContentFixture {
     public static BinaryContent create() {
-        BinaryContent newBinaryContent = BinaryContent.create(
-                "test", "image/png", 64L);
+        BinaryContent newBinaryContent = new BinaryContent("test", "image/png", 64L);
+
         ReflectionTestUtils.setField(newBinaryContent, "id", UUID.randomUUID());
         return newBinaryContent;
     }
 
     public static BinaryContent create(
             String fileName, String fileType, long fileSize) {
-        BinaryContent newBinaryContent = BinaryContent.create(
+        BinaryContent newBinaryContent = new BinaryContent(
                 fileName, fileType, fileSize);
 
         ReflectionTestUtils.setField(newBinaryContent, "id", UUID.randomUUID());
         return newBinaryContent;
     }
 
-    public static BinaryContent create(BinaryContentCreateReq req) {
-        BinaryContent newBinaryContent = BinaryContent.create(
-                req.fileName(), req.fileType(), req.fileSize());
+    public static BinaryContent create(BinaryContentCreateReq request) {
+        BinaryContent newBinaryContent = new BinaryContent(
+                request.name(), request.type(), request.size());
         ReflectionTestUtils.setField(newBinaryContent, "id", UUID.randomUUID());
         return newBinaryContent;
     }

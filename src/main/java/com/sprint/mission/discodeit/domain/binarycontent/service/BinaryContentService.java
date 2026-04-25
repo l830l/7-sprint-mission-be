@@ -7,7 +7,7 @@ import org.springframework.core.io.Resource;
 import java.util.UUID;
 
 public interface BinaryContentService {
-    BinaryContent upload(BinaryContentCreateReq req);
+    BinaryContent upload(BinaryContentCreateReq request);
 
     Resource download(UUID binaryContentId);
 
