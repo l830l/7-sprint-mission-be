@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.domain.binarycontent.storage.s3;
 
 import com.sprint.mission.discodeit.domain.binarycontent.storage.BinaryContentStorage;
+import com.sprint.mission.discodeit.global.properties.StoragePathProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -17,16 +18,16 @@ import java.io.InputStream;
 import java.util.UUID;
 
 @Component
-@ConditionalOnProperty(value = "otboo.storage.type", havingValue = "s3")
+@ConditionalOnProperty(value = "discodeit.storage.type", havingValue = "s3")
 @RequiredArgsConstructor
 public class S3BinaryContentStorage implements BinaryContentStorage {
     private final S3Client s3Client;
     private final String bucket;
+    private final StoragePathProperties storagePathProperties;
 
-    @Value("${otboo.storage.s3.path}")
-    private String path;
 
     private String key(UUID binaryId) {
+        String path = storagePathProperties.s3().path();
         return path + "/" + binaryId;
     }
 

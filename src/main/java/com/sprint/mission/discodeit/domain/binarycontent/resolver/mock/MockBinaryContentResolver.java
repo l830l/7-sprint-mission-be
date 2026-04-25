@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-@ConditionalOnProperty(value = "otboo.storage.type", havingValue = "mock")
+@ConditionalOnProperty(value = "discodeit.storage.type", havingValue = "mock")
 @RequiredArgsConstructor
 public class MockBinaryContentResolver implements BinaryContentUrlResolver {
     @Override
