@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record MessageCursorReq(
+        UUID channelId,
         LocalDateTime cursor,
         UUID after,
         Integer size,

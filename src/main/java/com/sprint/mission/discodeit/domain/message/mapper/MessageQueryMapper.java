@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 public class MessageQueryMapper {
     public MessageCursorQuery toQuery(MessageCursorReq req) {
         return new MessageCursorQuery(
+                req.channelId(),
                 req.cursor(),
                 req.after(),
                 req.size(),

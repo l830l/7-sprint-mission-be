@@ -27,7 +27,11 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom {
     public Slice<Message> findAllByCursor(MessageCursorQuery query) {
         List<Message> result = queryFactory
                 .selectFrom(message)
-                .where(cursorCondition(query), keywordCondition(query))
+                .where(
+                        message.channel.id.eq(query.channelId()),
+                        cursorCondition(query),
+                        keywordCondition(query)
+                )
                 .orderBy(message.createdAt.desc(), message.id.desc())
                 .limit(query.limit() + 1)
                 .fetch();

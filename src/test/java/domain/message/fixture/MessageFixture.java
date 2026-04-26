@@ -9,6 +9,7 @@ import domain.channel.fixture.ChannelFixture;
 import domain.user.fixture.UserFixture;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -28,20 +29,21 @@ public class MessageFixture {
                 )
         );
         ReflectionTestUtils.setField(message, "id", UUID.randomUUID());
+        ReflectionTestUtils.setField(message, "createdAt", LocalDateTime.now());
         messageCount++;
         return message;
     }
 
     // 메세지 생성
-    public static Message create(Channel channel, User speaker, List<BinaryContent> attachments) {
+    public static Message create(Channel channel, User speaker, String content, List<BinaryContent> attachments) {
         Message message = Message.create(
                 channel,
                 speaker,
-                "메세지 내용" + messageCount,
+                content,
                 attachments
         );
         ReflectionTestUtils.setField(message, "id", UUID.randomUUID());
-        messageCount++;
+        ReflectionTestUtils.setField(message, "createdAt", LocalDateTime.now());
         return message;
     }
 
