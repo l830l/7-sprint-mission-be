@@ -5,11 +5,10 @@ import com.sprint.mission.discodeit.domain.binarycontent.mapper.BinaryContentMap
 import com.sprint.mission.discodeit.domain.message.dto.response.MessageViewRes;
 import com.sprint.mission.discodeit.domain.message.entity.Message;
 import com.sprint.mission.discodeit.global.util.DateTimeUtil;
-
-import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
