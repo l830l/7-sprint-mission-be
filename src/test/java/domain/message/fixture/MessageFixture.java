@@ -2,6 +2,7 @@ package domain.message.fixture;
 
 import com.sprint.mission.discodeit.domain.binarycontent.entity.BinaryContent;
 import com.sprint.mission.discodeit.domain.channel.entity.Channel;
+import com.sprint.mission.discodeit.domain.message.dto.request.MessageCreateReq;
 import com.sprint.mission.discodeit.domain.message.entity.Message;
 import com.sprint.mission.discodeit.domain.user.entity.User;
 import domain.binarycontent.fixture.BinaryContentFixture;

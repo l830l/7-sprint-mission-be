@@ -1,5 +1,7 @@
 package domain.message.unit.facade;
 
+import com.sprint.mission.discodeit.domain.binarycontent.dto.request.BinaryContentCreateReq;
+import com.sprint.mission.discodeit.domain.binarycontent.entity.BinaryContent;
 import com.sprint.mission.discodeit.domain.binarycontent.service.BinaryContentService;
 import com.sprint.mission.discodeit.domain.binarycontent.storage.BinaryContentStorage;
 import com.sprint.mission.discodeit.domain.channel.entity.Channel;
@@ -11,6 +13,7 @@ import com.sprint.mission.discodeit.domain.message.facade.MessageCreationFacade;
 import com.sprint.mission.discodeit.domain.message.factory.MessageFactory;
 import com.sprint.mission.discodeit.domain.message.service.MessageService;
 import com.sprint.mission.discodeit.domain.user.entity.User;
+import domain.binarycontent.fixture.BinaryContentFixture;
 import domain.channel.fixture.ChannelFixture;
 import domain.message.fixture.MessageFixture;
 import domain.user.fixture.UserFixture;
@@ -25,7 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class MessageCreationFacadeTest {
@@ -69,8 +72,14 @@ public class MessageCreationFacadeTest {
                     user.getId(), channel.getId(), req);
 
             // then
+            then(channelService).should(times(1)).findById(channel.getId());
+            then(messageService).should(times(1)).create(message);
+            then(binaryContentService).should(never()).upload(any());
+            then(binaryContentStorage).should(never()).put(any(), any());
+
             assertThat(result).isNotNull();
             assertThat(result.content()).isEqualTo(req.content());
+            assertThat(result.attachmentDatas()).isEmpty();
         }
     }
 
@@ -81,11 +90,33 @@ public class MessageCreationFacadeTest {
         @DisplayName("성공: 첨부파일들과 메세지들의 파라미터가 들어올 경우 메세지가 생성된다")
         void success_message_create_with_attachment() {
             // given
-            
+            User user = UserFixture.createWithoutProfile();
+            Channel channel = ChannelFixture.createPublicChannel();
+            BinaryContentCreateReq imageReq = new BinaryContentCreateReq(
+                    "test_image".getBytes(), "test_image.jpg", "image/jpg", 10L);
+            BinaryContent binaryContent = BinaryContentFixture.create(imageReq);
+            MessageCreateReq req = new MessageCreateReq("새 메세지", List.of(imageReq));
+            Message message = MessageFixture.create(channel, user, req.content(), List.of(binaryContent));
+
+            given(channelService.findById(channel.getId())).willReturn(channel);
+            given(messageFactory.create(user.getId(), channel.getId(), req.content(), List.of(binaryContent)))
+                    .willReturn(message);
+            given(messageService.create(message)).willReturn(message);
+            given(binaryContentService.upload(imageReq)).willReturn(binaryContent);
 
             // when
+            MessageViewRes result = messageCreationFacade.createMessage(
+                    user.getId(), channel.getId(), req);
 
             // then
+            then(channelService).should(times(1)).findById(channel.getId());
+            then(messageService).should(times(1)).create(message);
+            then(binaryContentService).should(times(req.attachmentIds().size())).upload(any());
+            then(binaryContentStorage).should(times(req.attachmentIds().size())).put(any(), any());
+
+            assertThat(result).isNotNull();
+            assertThat(result.content()).isEqualTo(req.content());
+            assertThat(result.attachmentDatas().size()).isEqualTo(req.attachmentIds().size());
         }
     }
 }
