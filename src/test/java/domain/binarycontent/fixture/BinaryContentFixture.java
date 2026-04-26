@@ -14,6 +14,13 @@ public class BinaryContentFixture {
         return newBinaryContent;
     }
 
+    public static BinaryContent create(UUID id) {
+        BinaryContent newBinaryContent = new BinaryContent("test", "image/png", 64L);
+
+        ReflectionTestUtils.setField(newBinaryContent, "id", id);
+        return newBinaryContent;
+    }
+
     public static BinaryContent create(
             String fileName, String fileType, long fileSize) {
         BinaryContent newBinaryContent = new BinaryContent(
