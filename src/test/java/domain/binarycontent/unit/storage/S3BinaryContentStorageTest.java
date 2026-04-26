@@ -1,6 +1,8 @@
 package domain.binarycontent.unit.storage;
 
 import com.sprint.mission.discodeit.domain.binarycontent.storage.s3.S3BinaryContentStorage;
+import com.sprint.mission.discodeit.global.properties.StoragePathProperties;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -25,11 +27,21 @@ import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 public class S3BinaryContentStorageTest {
+    private static final String BUCKET = "test-bucket";
+    private static final String PATH = "binary";
+
     @Mock
     private S3Client s3Client;
 
-    @InjectMocks
-    private S3BinaryContentStorage storage;
+    private S3BinaryContentStorage s3BinaryContentStorage;
+
+    @BeforeEach
+    void setUp() {
+        StoragePathProperties storagePathProperties = new StoragePathProperties(
+                new StoragePathProperties.S3(PATH));
+        s3BinaryContentStorage = new S3BinaryContentStorage(s3Client, BUCKET, storagePathProperties);
+    }
+
 
     @Nested
     @DisplayName("바이너리 데이터 저장")
@@ -44,7 +56,7 @@ public class S3BinaryContentStorageTest {
                     .willReturn(PutObjectResponse.builder().build());
 
             // when
-            UUID savedId = storage.put(binaryContentId, data);
+            UUID savedId = s3BinaryContentStorage.put(binaryContentId, data);
 
             // then
             assertThat(savedId).isEqualTo(binaryContentId);
@@ -69,7 +81,7 @@ public class S3BinaryContentStorageTest {
             given(s3Client.getObject(any(GetObjectRequest.class))).willReturn(responseStream);
 
             // when
-            InputStream inputStream = storage.get(binaryContentId);
+            InputStream inputStream = s3BinaryContentStorage.get(binaryContentId);
 
             // then
             assertThat(inputStream.readAllBytes()).isEqualTo(data);
@@ -94,7 +106,7 @@ public class S3BinaryContentStorageTest {
                     .willReturn(responseStream);
 
             // when
-            Resource resource = storage.download(binaryContentId);
+            Resource resource = s3BinaryContentStorage.download(binaryContentId);
 
             // then
             assertThat(resource).isNotNull();
@@ -115,7 +127,7 @@ public class S3BinaryContentStorageTest {
                     .willReturn(DeleteObjectResponse.builder().build());
 
             // when
-            storage.delete(binaryContentId);
+            s3BinaryContentStorage.delete(binaryContentId);
 
             // then
             then(s3Client).should().deleteObject(any(DeleteObjectRequest.class));
