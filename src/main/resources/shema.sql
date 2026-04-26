@@ -134,42 +134,4 @@ ALTER TABLE binary_contents
     RENAME COLUMN content_type TO type;
 
 
--- ==========================================
--- 모든 테이블 삭제
--- ==========================================
-DELETE
-FROM message_attachments;
-DELETE
-FROM messages;
-DELETE
-FROM channel_members;
-DELETE
-FROM channels;
-DELETE
-FROM user_statuses;
-DELETE
-FROM users;
-DELETE
-FROM binary_contents;
-
-
-
--- ==========================================
--- 테이블 조회
--- ==========================================
-SELECT *
-FROM message_attachments;
-SELECT *
-FROM messages;
-SELECT *
-FROM channel_members;
-SELECT *
-FROM channels;
-SELECT *
-FROM user_statuses;
-SELECT *
-FROM users;
-SELECT *
-FROM binary_contents;
-
 

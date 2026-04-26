@@ -33,7 +33,6 @@ public class S3BinaryContentStorageTest {
     @Mock
     private S3Client s3Client;
 
-    @InjectMocks
     private S3BinaryContentStorage s3BinaryContentStorage;
 
     @BeforeEach
@@ -42,6 +41,7 @@ public class S3BinaryContentStorageTest {
                 new StoragePathProperties.S3(PATH));
         s3BinaryContentStorage = new S3BinaryContentStorage(s3Client, BUCKET, storagePathProperties);
     }
+
 
     @Nested
     @DisplayName("바이너리 데이터 저장")

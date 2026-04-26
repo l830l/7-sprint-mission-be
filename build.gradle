@@ -44,7 +44,8 @@ jacocoTestReport {
                         '**/*Exception.class',
                         '**/generated/**',
                         '**/dto/**',
-                        '**/vo/**'
+                        '**/vo/**',
+                        '**/mock/**'
                 ])
             })
     )
