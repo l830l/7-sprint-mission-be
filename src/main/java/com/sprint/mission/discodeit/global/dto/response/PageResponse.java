@@ -1,6 +1,5 @@
 package com.sprint.mission.discodeit.global.dto.response;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public record PageResponse<T>(
