@@ -25,9 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.times;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 public class MessageCreationFacadeTest {
@@ -73,6 +71,21 @@ public class MessageCreationFacadeTest {
             // then
             assertThat(result).isNotNull();
             assertThat(result.content()).isEqualTo(req.content());
+        }
+    }
+
+    @Nested
+    @DisplayName("첨부파일이 존재하는 메세지 생성")
+    class CreateMessageWithAttachment {
+        @Test
+        @DisplayName("성공: 첨부파일들과 메세지들의 파라미터가 들어올 경우 메세지가 생성된다")
+        void success_message_create_with_attachment() {
+            // given
+            
+
+            // when
+
+            // then
         }
     }
 }
