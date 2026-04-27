@@ -6,24 +6,18 @@ import com.sprint.mission.discodeit.domain.channel.dto.request.ChannelCreateSecR
 import com.sprint.mission.discodeit.domain.channel.dto.request.ChannelUpdateReq;
 import com.sprint.mission.discodeit.domain.channel.entity.Channel;
 import com.sprint.mission.discodeit.domain.channel.entity.ChannelType;
-import com.sprint.mission.discodeit.domain.channel.repository.ChannelRepositoryCustom;
-import com.sprint.mission.discodeit.global.exception.ErrorCode;
 import com.sprint.mission.discodeit.domain.channel.exception.ChannelNotFoundException;
 import com.sprint.mission.discodeit.domain.channel.exception.ChannelPrivateCannotModifyException;
 import com.sprint.mission.discodeit.domain.channel.factory.ChannelFactory;
-import com.sprint.mission.discodeit.domain.channelmember.repository.ChannelMemberRepository;
 import com.sprint.mission.discodeit.domain.channel.repository.ChannelRepository;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
+import com.sprint.mission.discodeit.global.exception.ErrorCode;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -31,8 +25,6 @@ public class ChannelServiceImpl implements ChannelService {
 
     //레포지토리
     private final ChannelRepository channelRepository;
-    private final ChannelRepositoryCustom channelRepositoryCustom;
-    private final ChannelMemberRepository channelMemberRepository;
     private final ChannelFactory channelFactory;
 
     // ===== 🏗️ Domain Logic (Facade 용)  =====
@@ -60,14 +52,14 @@ public class ChannelServiceImpl implements ChannelService {
     // 내가 참여한 채널 목록 조회
     @Override
     public List<ChannelInfoQuery> getAllByUser(UUID userId, String searchTxt) {
-        return channelRepositoryCustom.findAllMyChannels(userId,
+        return channelRepository.findAllMyChannels(userId,
                 searchTxt);
     }
 
     // 단일 채널 조회
     @Override
     public ChannelInfoQuery get(UUID channelId) {
-        return channelRepositoryCustom.findByChannelId(channelId);
+        return channelRepository.findByChannelId(channelId);
     }
 
     //채널 id 로 조회
