@@ -39,13 +39,17 @@ jacocoTestReport {
                         '**/*Application.class',
                         '**/*Config.class',
                         '**/*Dto.class',
-                        '**/*Request.class',
-                        '**/*Response.class',
+                        '**/*Req.class',
+                        '**/*Res.class',
                         '**/*Exception.class',
                         '**/generated/**',
                         '**/dto/**',
                         '**/vo/**',
-                        '**/mock/**'
+                        '**/mock/**',
+                        '**/mapper/**',
+                        '**/*Exception.class',
+                        '**/generated/**'
+
                 ])
             })
     )
