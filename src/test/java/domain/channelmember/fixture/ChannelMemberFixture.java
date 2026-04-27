@@ -9,7 +9,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.UUID;
 
 public class ChannelMemberFixture {
-    public static ChannelMember create(User user, Channel channel) {
+    public static ChannelMember create(Channel channel, User user) {
         ChannelMember channelMember = ChannelMember.create(
                 user, channel, ChannelMemberRole.MEMBER);
         ReflectionTestUtils.setField(channelMember, "id", UUID.randomUUID());

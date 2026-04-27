@@ -71,7 +71,7 @@ public class ChannelDeleteFacadeTest {
             // given
             Channel channel = ChannelFixture.createPublicChannel();
             List<ChannelMember> channelMemberList = UserFixture.createMixedList().stream()
-                    .map(user -> ChannelMemberFixture.create(user, channel))
+                    .map(user -> ChannelMemberFixture.create(channel, user))
                     .toList();
             List<Message> messagelist = MessageFixture.createList(channel.getId());
 

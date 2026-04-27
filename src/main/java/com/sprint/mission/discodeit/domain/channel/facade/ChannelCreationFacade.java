@@ -27,8 +27,7 @@ public class ChannelCreationFacade {
 
     //공개 채널 추가
     @Transactional
-    public ChannelInfoRes createPublicChannel(@NonNull UUID managerId,
-                                              @NonNull ChannelCreateReq req) {
+    public ChannelInfoRes createPublicChannel(UUID managerId, ChannelCreateReq req) {
         Channel channel = channelService.create(req);
         channelMemberService.create(
                 channelMemberFactory.create(managerId, channel.getId(), ChannelMemberRole.MANAGER));
@@ -37,8 +36,7 @@ public class ChannelCreationFacade {
 
     //비밀 채널 추가
     @Transactional
-    public ChannelInfoRes createPrivateChannel(@NonNull UUID managerId,
-                                               @NonNull ChannelCreateSecReq req) {
+    public ChannelInfoRes createPrivateChannel(UUID managerId, ChannelCreateSecReq req) {
         Channel channel = channelService.create(req);
         channelMemberService.create(channelMemberFactory.create(
                 managerId, channel.getId(), ChannelMemberRole.MANAGER));
