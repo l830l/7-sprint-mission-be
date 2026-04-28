@@ -48,8 +48,8 @@ jacocoTestReport {
                         '**/mock/**',
                         '**/mapper/**',
                         '**/*Exception.class',
-                        '**/generated/**'
-
+                        '**/generated/**',
+                        '**/global/exception/**'
                 ])
             })
     )
