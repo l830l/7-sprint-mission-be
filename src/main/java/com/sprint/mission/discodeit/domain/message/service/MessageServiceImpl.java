@@ -5,7 +5,6 @@ import com.sprint.mission.discodeit.domain.message.dto.query.MessageCursorQuery;
 import com.sprint.mission.discodeit.domain.message.entity.Message;
 import com.sprint.mission.discodeit.domain.message.exception.MessageNotFoundException;
 import com.sprint.mission.discodeit.domain.message.repository.MessageRepository;
-import com.sprint.mission.discodeit.domain.message.repository.MessageRepositoryCustom;
 import com.sprint.mission.discodeit.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
@@ -19,8 +18,6 @@ import java.util.UUID;
 @Service
 public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
-    private final MessageRepositoryCustom messageRepositoryCustom;
-
 
     // ===== Domain Logic (Facade 용)  =====
     //메세지를 id 로 참음
@@ -61,6 +58,6 @@ public class MessageServiceImpl implements MessageService {
     // 메세지 조회
     @Override
     public Slice<Message> getMessages(MessageCursorQuery query) {
-        return messageRepositoryCustom.findAllByCursor(query);
+        return messageRepository.findAllByCursor(query);
     }
 }
