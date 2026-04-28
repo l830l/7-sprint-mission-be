@@ -3,11 +3,9 @@ package com.sprint.mission.discodeit.domain.channel.facade;
 import com.sprint.mission.discodeit.domain.channel.dto.query.ChannelInfoQuery;
 import com.sprint.mission.discodeit.domain.channel.dto.response.ChannelInfoRes;
 import com.sprint.mission.discodeit.domain.channel.entity.ChannelType;
-import com.sprint.mission.discodeit.domain.channel.exception.ChannelInvalideTypeException;
 import com.sprint.mission.discodeit.domain.channel.mapper.ChannelMapper;
 import com.sprint.mission.discodeit.domain.channel.service.ChannelService;
 import com.sprint.mission.discodeit.domain.channelmember.service.ChannelMemberService;
-import com.sprint.mission.discodeit.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +17,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-
 public class ChannelOverViewFacade {
 
     private final ChannelMemberService channelMemberService;
@@ -30,8 +27,9 @@ public class ChannelOverViewFacade {
     public Map<ChannelType, List<ChannelInfoRes>> findAllMyChannels(UUID userId,
                                                                     String searchTxt) {
         String normalizedSearch = (searchTxt == null || searchTxt.trim().isEmpty()) ? "" : searchTxt;
+        List<ChannelInfoQuery> channelInfoQueryList = channelService.getAllByUser(userId, normalizedSearch);
 
-        return channelService.getAllByUser(userId, normalizedSearch).stream()
+        return channelInfoQueryList.stream()
                 .collect(Collectors.groupingBy(
                         ChannelInfoQuery::getPublicType,
                         Collectors.mapping(channel -> switch (channel.getPublicType()) {
@@ -44,7 +42,6 @@ public class ChannelOverViewFacade {
                                             .map(cm -> cm.getUser().getId())
                                             .toList()
                             );
-                            default -> throw new ChannelInvalideTypeException(ErrorCode.INVALID_CHANNEL_TYPE);
                         }, Collectors.toList())
                 ));
     }

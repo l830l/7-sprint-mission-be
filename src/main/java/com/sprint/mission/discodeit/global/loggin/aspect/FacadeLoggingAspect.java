@@ -19,7 +19,7 @@ public class FacadeLoggingAspect {
     private final LogArgumentSanitizer logArgumentSanitizer;
 
     // Pointcut : Service 계층 전체
-    @Pointcut("execution(public * com.sprint.mission.discodeit.facade..*(..))")
+    @Pointcut("execution(public * com.sprint.mission.discodeit.domain..facade..*(..))")
     public void facadeMethods() {
     }
 

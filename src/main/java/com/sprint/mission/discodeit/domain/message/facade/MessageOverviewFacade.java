@@ -19,12 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MessageOverviewFacade {
     private final MessageService messageService;
-    private final MessageQueryMapper messageQueryMapper;
 
     //메세지 전체 조회
     @Transactional(readOnly = true)
     public PageResponse<MessageViewRes> findAllByChannelId(MessageCursorReq req) {
-        MessageCursorQuery query = messageQueryMapper.toQuery(req);
+        MessageCursorQuery query = MessageQueryMapper.toQuery(req);
         Slice<Message> slice = messageService.getMessages(query);
         Slice<MessageViewRes> dtoSlice = slice.map(MessageMapper::toResDto);
         NextCursor nextCursor = NextCursor.from(slice);

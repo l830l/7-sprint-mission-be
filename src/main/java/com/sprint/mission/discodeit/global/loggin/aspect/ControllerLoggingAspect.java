@@ -26,7 +26,7 @@ public class ControllerLoggingAspect {
     private final LogArgumentSanitizer logArgumentSanitizer;
 
     // Pointcut : Controller에서 GET 요청 빼고, CUD 관련 메서드들만
-    @Pointcut("execution(public * com.sprint.mission.discodeit.controller..*(..))")
+    @Pointcut("execution(public * com.sprint.mission.discodeit.domain..controller..*(..))")
     public void controllerMethods() {
     }
 

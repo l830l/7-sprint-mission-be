@@ -8,22 +8,17 @@ import com.sprint.mission.discodeit.domain.channel.entity.QChannel;
 import com.sprint.mission.discodeit.domain.channelmember.entity.ChannelMemberRole;
 import com.sprint.mission.discodeit.domain.channelmember.entity.QChannelMember;
 import com.sprint.mission.discodeit.domain.message.entity.QMessage;
-import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.stereotype.Repository;
-
 @Repository
+@RequiredArgsConstructor
 public class ChannelRepositoryImpl implements ChannelRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
-
-    public ChannelRepositoryImpl(EntityManager em) {
-        this.queryFactory = new JPAQueryFactory(em);
-    }
-
 
     @Override
     public List<ChannelInfoQuery> findAllMyChannels(UUID userId, String searchTxt) {

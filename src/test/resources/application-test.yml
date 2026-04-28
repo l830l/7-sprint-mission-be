@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:h2:mem:monew;MODE=PostgreSQL
+    url: jdbc:h2:mem:discodeit;MODE=PostgreSQL
     username: sa
     password:
     driver-class-name: org.h2.Driver

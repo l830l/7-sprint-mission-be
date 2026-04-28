@@ -10,7 +10,6 @@ import com.sprint.mission.discodeit.domain.message.entity.Message;
 import com.sprint.mission.discodeit.domain.message.factory.MessageFactory;
 import com.sprint.mission.discodeit.domain.message.mapper.MessageMapper;
 import com.sprint.mission.discodeit.domain.message.service.MessageService;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +21,6 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class MessageCreationFacade {
-
     private final MessageService messageService;
     private final BinaryContentService binaryContentService;
     private final ChannelService channelService;
@@ -31,8 +29,7 @@ public class MessageCreationFacade {
 
     //메세지 추가
     @Transactional
-    public MessageViewRes createMessage(@NonNull UUID speakerId, @NonNull UUID channelId,
-                                        @NonNull MessageCreateReq req) {
+    public MessageViewRes createMessage(UUID speakerId, UUID channelId, MessageCreateReq req) {
         channelService.findById(channelId);
         List<BinaryContent> attachments = new ArrayList<>();
         if (!req.attachmentIds().isEmpty()) {
