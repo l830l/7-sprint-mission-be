@@ -47,7 +47,7 @@ public class ChannelOverViewFacadeTest {
                 "   ",
                 "test"
         })
-        @DisplayName("성공: 채널 목록을 조회하고, 비밀방마다 채널 멤ㅂ들을 조회한다.")
+        @DisplayName("성공: 채널 목록을 조회하고, 비밀방마다 채널 멤버들을 조회한다.")
         void success_overview(String searchTxt) {
             // given
             User manager = UserFixture.createWithoutProfile();
