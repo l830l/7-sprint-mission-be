@@ -8,7 +8,6 @@ import com.sprint.mission.discodeit.domain.message.dto.response.MessageViewRes;
 import com.sprint.mission.discodeit.domain.message.entity.Message;
 import com.sprint.mission.discodeit.domain.message.mapper.MessageMapper;
 import com.sprint.mission.discodeit.domain.message.service.MessageService;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
