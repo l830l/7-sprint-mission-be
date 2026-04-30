@@ -21,6 +21,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
 public class ChannelServiceImpl implements ChannelService {
 
     //레포지토리
@@ -83,4 +84,5 @@ public class ChannelServiceImpl implements ChannelService {
         channel.update(req.name(), req.description());
         return channel;
     }
+
 }
