@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity
                 .status(errorCode.getStatus())
-                .body(ErrorResponse.from(errorCode, e));
+                .body(ErrorResponse.from(e));
     }
 
     @ExceptionHandler(Exception.class)
