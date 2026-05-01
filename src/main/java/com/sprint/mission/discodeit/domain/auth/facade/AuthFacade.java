@@ -1,13 +1,12 @@
 package com.sprint.mission.discodeit.domain.auth.facade;
 
 import com.sprint.mission.discodeit.domain.auth.dto.request.UserLoginReq;
+import com.sprint.mission.discodeit.domain.auth.exception.InvalidLoginException;
 import com.sprint.mission.discodeit.domain.binarycontent.mapper.BinaryContentMapper;
 import com.sprint.mission.discodeit.domain.user.dto.response.UserDetailInfoRes;
 import com.sprint.mission.discodeit.domain.user.entity.User;
 import com.sprint.mission.discodeit.domain.userstatus.entity.UserStatus;
 import com.sprint.mission.discodeit.global.exception.ErrorCode;
-import com.sprint.mission.discodeit.domain.auth.exception.InvalidNicknameException;
-import com.sprint.mission.discodeit.domain.auth.exception.InvalidPasswordException;
 import com.sprint.mission.discodeit.domain.user.mapper.UserMapper;
 import com.sprint.mission.discodeit.domain.binarycontent.service.BinaryContentService;
 import com.sprint.mission.discodeit.domain.user.service.UserService;
@@ -33,10 +32,10 @@ public class AuthFacade {
     public UserDetailInfoRes login(@NonNull UserLoginReq req) {
         User user = userService.findByNickname(req.nickname());
         if (user == null) {
-            throw new InvalidNicknameException(ErrorCode.INVALID_NICKNAME);
+            throw new InvalidLoginException(ErrorCode.INVALID_LOGIN);
         }
         if (!user.getPassword().equals(req.password())) {
-            throw new InvalidPasswordException(ErrorCode.INVALID_PASSWORD);
+            throw new InvalidLoginException(ErrorCode.INVALID_LOGIN);
         }
 
         UserStatus userStatus = userStatusService.findByUserId(user.getId());
