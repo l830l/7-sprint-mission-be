@@ -1,6 +1,9 @@
 package com.sprint.mission.discodeit.global.config;
 
 import com.sprint.mission.discodeit.global.security.csrf.SpaCsrfTokenRequestHandler;
+import com.sprint.mission.discodeit.global.security.handler.LoginFailureHandler;
+import com.sprint.mission.discodeit.global.security.handler.LoginSuccessHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -14,7 +17,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
+    private final LoginSuccessHandler loginSuccessHandler;
+    private final LoginFailureHandler loginFailureHandler;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
@@ -33,6 +40,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/binary-contents/**").permitAll()
                         .anyRequest().authenticated()
+                )
+                .formLogin(login -> login
+                        .loginProcessingUrl("/api/auth/login")
+                        .usernameParameter("nickname")
+                        .passwordParameter("password")
+                        .successHandler(loginSuccessHandler)
+                        .failureHandler(loginFailureHandler)
                 )
                 .build();
     }
