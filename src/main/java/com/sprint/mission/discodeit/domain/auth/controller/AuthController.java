@@ -8,9 +8,12 @@ import com.sprint.mission.discodeit.domain.auth.dto.response.VerifyCodeRes;
 import com.sprint.mission.discodeit.domain.user.dto.response.UserDetailInfoRes;
 import com.sprint.mission.discodeit.domain.auth.facade.AuthFacade;
 import com.sprint.mission.discodeit.domain.auth.service.AuthServiceImpl;
+import com.sprint.mission.discodeit.domain.user.dto.response.UserSimpleInfoRes;
+import com.sprint.mission.discodeit.global.security.user.detail.DiscodeitUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,5 +50,13 @@ public class AuthController implements AuthControllerDocs {
     public ResponseEntity<Void> getCsrfToken(CsrfToken csrfToken) {
         csrfToken.getToken();
         return ResponseEntity.noContent().build();
+    }
+
+    // 유저 정보 보내기
+    @GetMapping("/me")
+    public ResponseEntity<UserSimpleInfoRes> getLoginUserInfo(
+            @AuthenticationPrincipal DiscodeitUserDetails discodeitUserDetails
+    ) {
+        return ResponseEntity.ok(discodeitUserDetails.getUserInfo());
     }
 }
