@@ -16,6 +16,7 @@ import java.util.UUID;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +49,7 @@ public class AuthFacade {
 
     //로그아웃
     @Transactional
+    @PreAuthorize("#userId == authentication.principal.userInfo.userId")
     public void logout(@NonNull UUID userId) {
         userStatusService.findByUserId(userId);
         UserStatus userStatus = userStatusService.findByUserId(userId);
