@@ -36,6 +36,10 @@ discodeit:
     type: s3
     s3:
       path: binary
+  admin:
+    email: ${ADMIN_EMAIL}
+    nickname: ${ADMIN_NICKNAME}
+    password: ${ADMIN_PASSWORD}
 
 logging:
   level:

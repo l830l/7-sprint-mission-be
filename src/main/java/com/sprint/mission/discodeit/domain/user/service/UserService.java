@@ -3,7 +3,9 @@ package com.sprint.mission.discodeit.domain.user.service;
 import com.sprint.mission.discodeit.domain.auth.dto.response.AvailabilityRes;
 import com.sprint.mission.discodeit.domain.user.dto.request.UserFindPasswordReq;
 import com.sprint.mission.discodeit.domain.user.dto.request.UserUpdateReq;
+import com.sprint.mission.discodeit.domain.user.dto.response.UserSimpleInfoRes;
 import com.sprint.mission.discodeit.domain.user.entity.User;
+import com.sprint.mission.discodeit.domain.user.entity.UserRole;
 
 import java.util.List;
 import java.util.UUID;
@@ -31,4 +33,6 @@ public interface UserService {
     void sendEmailId(String email);
 
     void sendEmailTemporaryPassword(UserFindPasswordReq req);
+
+    UserSimpleInfoRes updateRole(UUID userId, UserRole role);
 }

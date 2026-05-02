@@ -25,6 +25,10 @@ discodeit:
     type: local
     local:
       root-path: ./storage
+  admin:
+    email: "principle950@naver.com"
+    nickname: "principle950"
+    password: "qwer123$"
 
 logging:
   level:

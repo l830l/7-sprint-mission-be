@@ -41,6 +41,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/binary-contents/**").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/api/auth/role").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login

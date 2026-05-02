@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.domain.user.dto.response;
 
 import com.sprint.mission.discodeit.domain.binarycontent.dto.response.BinaryContentInfoRes;
+import com.sprint.mission.discodeit.domain.user.entity.UserRole;
 
 import java.util.UUID;
 
@@ -9,7 +10,8 @@ public record UserSimpleInfoRes(
         String nickname,            //닉네임
         String email,               //이메일
         BinaryContentInfoRes profileImg,        //프로필 이미지
-        boolean isOnline            //온라인 상태
+        boolean isOnline,            //온라인 상태
+        UserRole userRole
 ) {
 
 }

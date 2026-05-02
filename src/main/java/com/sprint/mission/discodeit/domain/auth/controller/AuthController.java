@@ -3,12 +3,15 @@ package com.sprint.mission.discodeit.domain.auth.controller;
 import com.sprint.mission.discodeit.domain.auth.controller.docs.AuthControllerDocs;
 import com.sprint.mission.discodeit.domain.auth.dto.request.EmailCheckReq;
 import com.sprint.mission.discodeit.domain.auth.dto.request.UserLoginReq;
+import com.sprint.mission.discodeit.domain.auth.dto.request.UserRoleUpdateReq;
 import com.sprint.mission.discodeit.domain.auth.dto.request.VerifyCodeReq;
 import com.sprint.mission.discodeit.domain.auth.dto.response.VerifyCodeRes;
 import com.sprint.mission.discodeit.domain.user.dto.response.UserDetailInfoRes;
 import com.sprint.mission.discodeit.domain.auth.facade.AuthFacade;
 import com.sprint.mission.discodeit.domain.auth.service.AuthServiceImpl;
 import com.sprint.mission.discodeit.domain.user.dto.response.UserSimpleInfoRes;
+import com.sprint.mission.discodeit.domain.user.entity.User;
+import com.sprint.mission.discodeit.domain.user.service.UserService;
 import com.sprint.mission.discodeit.global.security.user.detail.DiscodeitUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +27,7 @@ public class AuthController implements AuthControllerDocs {
 
     private final AuthFacade authFacade;
     private final AuthServiceImpl basicAuthService;
+    private final UserService userService;
 
     // 로그인
     @PostMapping("/login")
@@ -58,5 +62,13 @@ public class AuthController implements AuthControllerDocs {
             @AuthenticationPrincipal DiscodeitUserDetails discodeitUserDetails
     ) {
         return ResponseEntity.ok(discodeitUserDetails.getUserInfo());
+    }
+
+    // 유저 권한 수정
+    @PatchMapping("/role")
+    public ResponseEntity<UserSimpleInfoRes> updateUserRole(
+            @Valid @RequestBody UserRoleUpdateReq req
+    ) {
+        return ResponseEntity.ok(userService.updateRole(req.userId(), req.userRole()));
     }
 }

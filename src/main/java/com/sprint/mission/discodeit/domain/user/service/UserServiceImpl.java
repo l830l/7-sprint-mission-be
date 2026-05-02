@@ -1,6 +1,10 @@
 package com.sprint.mission.discodeit.domain.user.service;
 
+import com.sprint.mission.discodeit.domain.binarycontent.mapper.BinaryContentMapper;
 import com.sprint.mission.discodeit.domain.user.dto.request.UserFindPasswordReq;
+import com.sprint.mission.discodeit.domain.user.dto.response.UserSimpleInfoRes;
+import com.sprint.mission.discodeit.domain.user.entity.UserRole;
+import com.sprint.mission.discodeit.domain.user.mapper.UserMapper;
 import com.sprint.mission.discodeit.global.email.EmailSender;
 import com.sprint.mission.discodeit.domain.auth.dto.response.AvailabilityRes;
 import com.sprint.mission.discodeit.domain.user.dto.request.UserUpdateReq;
@@ -53,6 +57,18 @@ public class UserServiceImpl implements UserService {
                 String.format("""
                         임시 비밀번호: %s
                         반드시 이후에 비밀번호 변경을 해주세요.""", passwordTemp)
+        );
+    }
+
+    @Override
+    @Transactional
+    public UserSimpleInfoRes updateRole(UUID userId, UserRole role) {
+        User user = findById(userId);
+        user.updateRole(role);
+        return UserMapper.toSimpleResDto(
+                user,
+                BinaryContentMapper.toResDto(user.getProfile()),
+                false
         );
     }
 

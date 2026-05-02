@@ -4,13 +4,8 @@ import com.sprint.mission.discodeit.domain.binarycontent.dto.response.BinaryCont
 import com.sprint.mission.discodeit.domain.user.dto.response.UserDetailInfoRes;
 import com.sprint.mission.discodeit.domain.user.dto.response.UserSimpleInfoRes;
 import com.sprint.mission.discodeit.domain.user.entity.User;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
-@Component
-@RequiredArgsConstructor
 public class UserMapper {
-
     public static UserSimpleInfoRes toSimpleResDto(
             User user,
             BinaryContentInfoRes profileImg,
@@ -20,7 +15,8 @@ public class UserMapper {
                 user.getNickname(),
                 user.getEmail(),
                 profileImg,
-                isOnline
+                isOnline,
+                user.getUserRole()
         );
     }
 
