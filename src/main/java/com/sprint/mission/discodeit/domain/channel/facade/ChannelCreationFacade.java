@@ -28,7 +28,10 @@ public class ChannelCreationFacade {
 
     //공개 채널 추가
     @Transactional
-    @PreAuthorize("#managerId == authentication.principal.userInfo.userId")
+    @PreAuthorize("""
+            hasRole('CHANNEL_MANAGER') and
+            #managerId == authentication.principal.userInfo.userId
+            """)
     public ChannelInfoRes createPublicChannel(UUID managerId, ChannelCreateReq req) {
         Channel channel = channelService.create(req);
         channelMemberService.create(
