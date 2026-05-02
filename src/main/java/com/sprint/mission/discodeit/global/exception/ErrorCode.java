@@ -18,6 +18,8 @@ public enum ErrorCode {
     // Auth
     INVALID_LOGIN("AUTH_001", HttpStatus.UNAUTHORIZED,
             "닉네임 또는 비밀번호가 올바르지 않습니다"),
+    ACCESS_DENIED("AUTH_002", HttpStatus.FORBIDDEN,
+            "접근 권한이 없습니다"),
     EMAIL_INVALID("AUTH_003", HttpStatus.BAD_REQUEST,
             "이메일 형식이 올바르지 않습니다."),
     NICKNAME_INVALID("AUTH_004", HttpStatus.BAD_REQUEST,

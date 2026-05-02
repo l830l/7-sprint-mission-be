@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.global.config;
 
 import com.sprint.mission.discodeit.global.security.csrf.SpaCsrfTokenRequestHandler;
+import com.sprint.mission.discodeit.global.security.handler.DiscodeitAccessDeniedHandler;
 import com.sprint.mission.discodeit.global.security.handler.LoginFailureHandler;
 import com.sprint.mission.discodeit.global.security.handler.LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
@@ -23,6 +28,7 @@ import java.util.List;
 public class SecurityConfig {
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
+    private final DiscodeitAccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -37,12 +43,27 @@ public class SecurityConfig {
                                 "/api/auth/login",
                                 "/api/auth/email-code",
                                 "/api/auth/email-code/verify",
-                                "/api/auth/csrf-token"
+                                "/api/auth/csrf-token",
+                                "/api-docs-ui.html",
+                                "/api-docs-ui/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/my-api/**",
+                                "/actuator/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/users/duplication/email").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/users/duplication/nickname").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/users/id").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/users/password/reset").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/binary-contents/**").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/api/auth/role").hasRole("ADMIN")
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling(
+                        exception -> exception.accessDeniedHandler(
+                                accessDeniedHandler
+                        )
                 )
                 .formLogin(login -> login
                         .loginProcessingUrl("/api/auth/login")
@@ -56,6 +77,26 @@ public class SecurityConfig {
                         .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.NO_CONTENT))
                 )
                 .build();
+    }
+
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        String roleHierarchy = String.join(
+                "\n",
+                "ROLE_ADMIN > ROLE_CHANNEL_MANAGER",
+                "ROLE_CHANNEL_MANAGER > ROLE_USER"
+        );
+        return RoleHierarchyImpl.fromHierarchy(roleHierarchy);
+    }
+
+    @Bean
+    public static MethodSecurityExpressionHandler methodSecurityExpressionHandler(
+            RoleHierarchy roleHierarchy
+    ) {
+        DefaultMethodSecurityExpressionHandler handler =
+                new DefaultMethodSecurityExpressionHandler();
+        handler.setRoleHierarchy(roleHierarchy);
+        return handler;
     }
 
     @Bean
