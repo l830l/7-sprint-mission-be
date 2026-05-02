@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ChannelMemberRole {
-    MANAGER("manager"),
+    OWNER("owner"),
     MEMBER("member");
 
     private final String value;

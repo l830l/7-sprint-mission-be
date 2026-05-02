@@ -55,11 +55,11 @@ public class ChannelCreationFacadeTest {
             User manager = UserFixture.createWithoutProfile();
             ChannelCreateReq req = new ChannelCreateReq("채널", "설명");
             Channel channel = ChannelFixture.createPublicChannel(req.name(), req.description());
-            ChannelMember channelMember = ChannelMember.create(manager, channel, ChannelMemberRole.MANAGER);
+            ChannelMember channelMember = ChannelMember.create(manager, channel, ChannelMemberRole.OWNER);
             ChannelInfoQuery query = ChannelFixture.toInfoQuery(channel, manager.getId());
 
             given(channelService.create(req)).willReturn(channel);
-            given(channelMemberFactory.create(manager.getId(), channel.getId(), ChannelMemberRole.MANAGER))
+            given(channelMemberFactory.create(manager.getId(), channel.getId(), ChannelMemberRole.OWNER))
                     .willReturn(channelMember);
             given(channelMemberService.create(channelMember)).willReturn(channelMember);
             given(channelService.get(channel.getId())).willReturn(query);
@@ -73,7 +73,7 @@ public class ChannelCreationFacadeTest {
 
             then(channelService).should(times(1)).create(req);
             then(channelMemberFactory).should(times(1))
-                    .create(manager.getId(), channel.getId(), ChannelMemberRole.MANAGER);
+                    .create(manager.getId(), channel.getId(), ChannelMemberRole.OWNER);
             then(channelMemberService).should(times(1)).create(channelMember);
             then(channelService).should(times(1)).get(channel.getId());
         }
@@ -91,11 +91,11 @@ public class ChannelCreationFacadeTest {
             List<UUID> memberIds = members.stream().map(BaseEntity::getId).toList();
             ChannelCreateSecReq req = new ChannelCreateSecReq(memberIds);
             Channel channel = ChannelFixture.createPrivateChannel();
-            ChannelMember channelMemberManager = ChannelMember.create(manager, channel, ChannelMemberRole.MANAGER);
+            ChannelMember channelMemberManager = ChannelMember.create(manager, channel, ChannelMemberRole.OWNER);
             ChannelInfoQuery query = ChannelFixture.toInfoQuery(channel, manager.getId());
 
             given(channelService.create(req)).willReturn(channel);
-            given(channelMemberFactory.create(manager.getId(), channel.getId(), ChannelMemberRole.MANAGER))
+            given(channelMemberFactory.create(manager.getId(), channel.getId(), ChannelMemberRole.OWNER))
                     .willReturn(channelMemberManager);
             given(channelMemberService.create(channelMemberManager)).willReturn(channelMemberManager);
             members.forEach(user -> {
@@ -110,17 +110,20 @@ public class ChannelCreationFacadeTest {
             given(channelService.get(channel.getId())).willReturn(query);
 
             // when
-            ChannelPrivateInfoRes result = (ChannelPrivateInfoRes) channelCreationFacade.createPrivateChannel(manager.getId(), req);
+            ChannelPrivateInfoRes result = (ChannelPrivateInfoRes) channelCreationFacade
+                    .createPrivateChannel(manager.getId(), req);
 
             // then
             assertThat(result).isNotNull();
 
             then(channelService).should(times(1)).create(req);
-            then(channelMemberFactory).should(times(1)).create(manager.getId(), channel.getId(), ChannelMemberRole.MANAGER);
+            then(channelMemberFactory).should(times(1))
+                    .create(manager.getId(), channel.getId(), ChannelMemberRole.OWNER);
             then(channelMemberService)
                     .should(times(1))
-                    .create(argThat(cm -> cm.getRole() == ChannelMemberRole.MANAGER));
-            then(channelMemberFactory).should(times(members.size())).create(any(UUID.class), eq(channel.getId()), eq(ChannelMemberRole.MEMBER));
+                    .create(argThat(cm -> cm.getRole() == ChannelMemberRole.OWNER));
+            then(channelMemberFactory).should(times(members.size()))
+                    .create(any(UUID.class), eq(channel.getId()), eq(ChannelMemberRole.MEMBER));
             then(channelMemberService)
                     .should(times(members.size()))
                     .create(argThat(cm -> cm.getRole() == ChannelMemberRole.MEMBER));

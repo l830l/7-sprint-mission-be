@@ -14,6 +14,7 @@ import java.util.UUID;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,19 +28,21 @@ public class ChannelCreationFacade {
 
     //공개 채널 추가
     @Transactional
+    @PreAuthorize("#managerId == authentication.principal.userInfo.userId")
     public ChannelInfoRes createPublicChannel(UUID managerId, ChannelCreateReq req) {
         Channel channel = channelService.create(req);
         channelMemberService.create(
-                channelMemberFactory.create(managerId, channel.getId(), ChannelMemberRole.MANAGER));
+                channelMemberFactory.create(managerId, channel.getId(), ChannelMemberRole.OWNER));
         return ChannelMapper.toPublicResDto(channelService.get(channel.getId()));
     }
 
     //비밀 채널 추가
     @Transactional
+    @PreAuthorize("#managerId == authentication.principal.userInfo.userId")
     public ChannelInfoRes createPrivateChannel(UUID managerId, ChannelCreateSecReq req) {
         Channel channel = channelService.create(req);
         channelMemberService.create(channelMemberFactory.create(
-                managerId, channel.getId(), ChannelMemberRole.MANAGER));
+                managerId, channel.getId(), ChannelMemberRole.OWNER));
         req.userIds().forEach(userId -> channelMemberService.create(
                 channelMemberFactory.create(userId, channel.getId(), ChannelMemberRole.MEMBER)));
         return ChannelMapper.toPrivateResDto(

@@ -56,7 +56,7 @@ public class ChannelMemberServiceImpl implements ChannelMemberService {
 
     @Override
     public ChannelMember findManagerByChannelId(UUID channelId) {
-        return channelMemberRepository.findByChannelIdAndRole(channelId, ChannelMemberRole.MANAGER)
+        return channelMemberRepository.findByChannelIdAndRole(channelId, ChannelMemberRole.OWNER)
                 .stream().findFirst().orElseThrow(
                         () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
                 );

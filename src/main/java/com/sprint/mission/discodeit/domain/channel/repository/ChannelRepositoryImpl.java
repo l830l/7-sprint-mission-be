@@ -35,7 +35,7 @@ public class ChannelRepositoryImpl implements ChannelRepositoryCustom {
                         queryFactory.select(cm.user.id)
                                 .from(cm)
                                 .where(cm.channel.eq(ch)
-                                        .and(cm.role.eq(ChannelMemberRole.MANAGER))),
+                                        .and(cm.role.eq(ChannelMemberRole.OWNER))),
                         queryFactory.select(m.createdAt.max())
                                 .from(m)
                                 .where(m.channel.eq(ch))
@@ -69,7 +69,7 @@ public class ChannelRepositoryImpl implements ChannelRepositoryCustom {
                         queryFactory.select(cm.user.id)
                                 .from(cm)
                                 .where(cm.channel.eq(ch)
-                                        .and(cm.role.eq(ChannelMemberRole.MANAGER))),
+                                        .and(cm.role.eq(ChannelMemberRole.OWNER))),
                         queryFactory.select(m.createdAt.max())
                                 .from(m)
                                 .where(m.channel.eq(ch))
