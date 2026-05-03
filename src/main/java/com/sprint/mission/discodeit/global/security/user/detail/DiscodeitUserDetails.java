@@ -30,4 +30,16 @@ public class DiscodeitUserDetails implements UserDetails {
     public String getUsername() {
         return userInfo.nickname();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DiscodeitUserDetails that)) return false;
+        return userInfo.userId().equals(that.userInfo.userId());
+    }
+
+    @Override
+    public int hashCode() {
+        return userInfo.userId().hashCode();
+    }
 }
