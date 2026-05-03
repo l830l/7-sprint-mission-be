@@ -16,6 +16,7 @@ import java.util.UUID;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,7 @@ public class UserUpdateFacade {
 
     //유저 수정
     @Transactional
+    @PreAuthorize("hasRole('ADMIN') or #userId == @loginUser.userId()")
     public UserDetailInfoRes updateUser(UUID userId, UserUpdateReq req) {
         User user = userService.findById(userId);
 

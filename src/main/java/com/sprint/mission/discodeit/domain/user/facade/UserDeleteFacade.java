@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ public class UserDeleteFacade {
     private final BinaryContentStorage binaryContentStorage;
 
     //유저 삭제
+    @PreAuthorize("hasRole('ADMIN') or #userId == @loginUser.userId()")
     @Transactional
     public void deleteUser(UUID userId) {
         User user = userService.findById(userId);
