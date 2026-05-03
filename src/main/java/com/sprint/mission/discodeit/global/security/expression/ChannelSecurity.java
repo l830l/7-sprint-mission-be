@@ -9,11 +9,15 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-@Component
+@Component("channelSecurity")
 @RequiredArgsConstructor
 public class ChannelSecurity {
     private final ChannelService channelService;
     private final ChannelMemberService channelMemberService;
+
+    public boolean canCreate(UUID managerId, UUID loginId) {
+        return managerId.equals(loginId);
+    }
 
     public boolean canUpdate(UUID channelId, UUID userId) {
         return isPublicChannel(channelId) && isChannelOwner(channelId, userId);
