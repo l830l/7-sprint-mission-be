@@ -49,7 +49,7 @@ public class AuthFacade {
 
     //로그아웃
     @Transactional
-    @PreAuthorize("#userId == authentication.principal.userInfo.userId")
+    @PreAuthorize("#userId == @loginUser.userId()")
     public void logout(@NonNull UUID userId) {
         userStatusService.findByUserId(userId);
         UserStatus userStatus = userStatusService.findByUserId(userId);

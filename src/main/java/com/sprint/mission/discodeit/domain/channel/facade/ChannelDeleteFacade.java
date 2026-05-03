@@ -27,10 +27,7 @@ public class ChannelDeleteFacade {
     @Transactional
     @PreAuthorize("""
                     hasRole('ADMIN') or
-                    @channelSecurity.canDelete(
-                        #channelId,
-                        authentication.principal.userInfo.userId
-                    )
+                    @channelSecurity.canDelete(#channelId, @loginUser.userId())
             """)
     public void deleteChannel(UUID channelId) {
         channelService.findById(channelId);

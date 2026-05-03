@@ -27,16 +27,16 @@ public class ChannelSecurity {
         return isChannelOwner(channelId, userId);
     }
 
-    private boolean isPublicChannel(UUID channelId) {
+    public boolean isPublicChannel(UUID channelId) {
         Channel channel = channelService.findById(channelId);
         return channel.getPublicType() == ChannelType.PUBLIC;
     }
 
-    private boolean isChannelMember(UUID channelId, UUID userId) {
+    public boolean isChannelMember(UUID channelId, UUID userId) {
         return channelMemberService.isMember(channelId, userId);
     }
 
-    private boolean isChannelOwner(UUID channelId, UUID userId) {
+    public boolean isChannelOwner(UUID channelId, UUID userId) {
         return channelMemberService.isManager(channelId, userId);
     }
 }

@@ -30,10 +30,7 @@ public class ChannelCreationFacade {
     @Transactional
     @PreAuthorize("""
             hasRole('CHANNEL_MANAGER') and
-            @channelSecurity.canCreate(
-                        #managerId,
-                        authentication.principal.userInfo.userId
-            )
+            @channelSecurity.canCreate(#managerId, @loginUser.userId())
             """)
     public ChannelInfoRes createPublicChannel(UUID managerId, ChannelCreateReq req) {
         Channel channel = channelService.create(req);
@@ -44,12 +41,7 @@ public class ChannelCreationFacade {
 
     //비밀 채널 추가
     @Transactional
-    @PreAuthorize("""
-            @channelSecurity.canCreate(
-                        #managerId,
-                        authentication.principal.userInfo.userId
-            )
-            """)
+    @PreAuthorize("@channelSecurity.canCreate(#managerId, @loginUser.userId())")
     public ChannelInfoRes createPrivateChannel(UUID managerId, ChannelCreateSecReq req) {
         Channel channel = channelService.create(req);
         channelMemberService.create(channelMemberFactory.create(
