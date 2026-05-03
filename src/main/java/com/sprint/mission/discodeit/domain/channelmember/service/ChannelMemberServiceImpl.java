@@ -73,6 +73,18 @@ public class ChannelMemberServiceImpl implements ChannelMemberService {
         return channelMemberRepository.findAllByChannelId(channelId);
     }
 
+    // Security 용
+
+    @Override
+    public boolean isManager(UUID channelId, UUID userId) {
+        return channelMemberRepository.existsByChannelIdAndUserIdAndRole(channelId, userId, ChannelMemberRole.OWNER);
+    }
+
+    @Override
+    public boolean isMember(UUID channelId, UUID userId) {
+        return channelMemberRepository.existsByChannelIdAndUserId(channelId, userId);
+    }
+
     // ===== 🎯 Controller Direct (DTO 반환) =====
     @Override
     @Transactional(readOnly = true)

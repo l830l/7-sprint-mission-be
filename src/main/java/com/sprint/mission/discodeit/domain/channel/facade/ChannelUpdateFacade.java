@@ -18,14 +18,7 @@ public class ChannelUpdateFacade {
     private final ChannelService channelService;
 
     @Transactional
-    @PreAuthorize("""
-                    hasRole('ADMIN') or
-                    @channelSecurity.isPublicChannel(#id) and
-                    @channelSecurity.isChannelOwner(
-                        #id,
-                        authentication.principal.userInfo.userId
-                    )
-            """)
+    @PreAuthorize("@channelSecurity.canUpdate(#id, authentication.principal.userInfo.userId)")
     public ChannelInfoRes update(UUID id, ChannelUpdateReq req) {
         channelService.update(id, req);
         return ChannelMapper.toPublicResDto(channelService.get(id));

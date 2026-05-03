@@ -7,6 +7,7 @@ import com.sprint.mission.discodeit.domain.channel.mapper.ChannelMapper;
 import com.sprint.mission.discodeit.domain.channel.service.ChannelService;
 import com.sprint.mission.discodeit.domain.channelmember.service.ChannelMemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ public class ChannelOverViewFacade {
 
     //채널 목록 : Public 인 경우 전부, Private 인 경우 자신이 참여한 채널만
     @Transactional(readOnly = true)
+    @PreAuthorize("#userId == authentication.principal.userInfo.userId")
     public Map<ChannelType, List<ChannelInfoRes>> findAllMyChannels(UUID userId,
                                                                     String searchTxt) {
         String normalizedSearch = (searchTxt == null || searchTxt.trim().isEmpty()) ? "" : searchTxt;

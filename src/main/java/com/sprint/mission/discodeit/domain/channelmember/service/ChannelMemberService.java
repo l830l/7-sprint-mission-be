@@ -21,4 +21,8 @@ public interface ChannelMemberService {
     List<ChannelMember> findAllByChannelId(UUID channelId);
 
     ChannelMemberInfoRes findById(UUID id);
+
+    boolean isManager(UUID channelId, UUID userId);
+
+    boolean isMember(UUID channelId, UUID userId);
 }

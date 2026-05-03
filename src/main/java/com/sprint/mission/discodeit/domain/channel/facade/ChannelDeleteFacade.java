@@ -27,13 +27,13 @@ public class ChannelDeleteFacade {
     @Transactional
     @PreAuthorize("""
                     hasRole('ADMIN') or
-                    @channelSecurity.isChannelOwner(
+                    @channelSecurity.canDelete(
                         #channelId,
                         authentication.principal.userInfo.userId
                     )
             """)
     public void deleteChannel(UUID channelId) {
-        Channel channel = channelService.findById(channelId);
+        channelService.findById(channelId);
         channelMemberService.findAllByChannelId(channelId)
                 .forEach(channelMember -> channelMemberService.delete(channelMember.getId()));
         messageService.findAllByChannelId(channelId).forEach(message -> {
