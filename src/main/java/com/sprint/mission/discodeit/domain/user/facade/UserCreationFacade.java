@@ -11,8 +11,6 @@ import com.sprint.mission.discodeit.domain.user.entity.User;
 import com.sprint.mission.discodeit.domain.user.factory.UserFactory;
 import com.sprint.mission.discodeit.domain.user.mapper.UserMapper;
 import com.sprint.mission.discodeit.domain.user.service.UserService;
-import com.sprint.mission.discodeit.domain.userstatus.entity.UserStatus;
-import com.sprint.mission.discodeit.domain.userstatus.service.UserStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +23,6 @@ public class UserCreationFacade {
     private final UserService userService;
     private final BinaryContentService binaryContentService;
     private final BinaryContentStorage binaryContentStorage;
-    private final UserStatusService userStatusService;
     private final UserFactory userFactory;
     private final PasswordEncoder passwordEncoder;
 
@@ -42,8 +39,7 @@ public class UserCreationFacade {
         } else {
             user = userService.create(userFactory.create(req, encodedPassword, null));
         }
-
-        userStatusService.create(UserStatus.create(user));
+        
         return UserMapper.toDetailResDto(
                 user,
                 user.getProfile() == null ?

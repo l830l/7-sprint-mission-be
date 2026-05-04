@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.global.security.csrf.SpaCsrfTokenRequestHand
 import com.sprint.mission.discodeit.global.security.handler.DiscodeitAccessDeniedHandler;
 import com.sprint.mission.discodeit.global.security.handler.LoginFailureHandler;
 import com.sprint.mission.discodeit.global.security.handler.LoginSuccessHandler;
+import com.sprint.mission.discodeit.global.security.user.detail.DiscodeitUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +36,7 @@ public class SecurityConfig {
     private final SessionRegistry sessionRegistry;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, DiscodeitUserDetailsService discodeitUserDetailsService) throws Exception {
         return http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf
@@ -81,6 +82,10 @@ public class SecurityConfig {
                                 .maximumSessions(1)
                                 .maxSessionsPreventsLogin(false)
                                 .sessionRegistry(sessionRegistry))
+                )
+                .rememberMe(remember -> remember
+                        .rememberMeParameter("rememberMe")
+                        .userDetailsService(discodeitUserDetailsService)
                 )
                 .logout(logout -> logout
                         .logoutUrl("/api/auth/logout")

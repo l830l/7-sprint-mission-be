@@ -9,13 +9,11 @@ import com.sprint.mission.discodeit.domain.user.dto.request.UserInfoReq;
 import com.sprint.mission.discodeit.domain.user.dto.request.UserUpdateReq;
 import com.sprint.mission.discodeit.domain.user.dto.response.UserDetailInfoRes;
 import com.sprint.mission.discodeit.domain.user.dto.response.UserSimpleInfoRes;
-import com.sprint.mission.discodeit.domain.userstatus.dto.response.UserStatusSimpleViewRes;
 import com.sprint.mission.discodeit.domain.user.facade.UserCreationFacade;
 import com.sprint.mission.discodeit.domain.user.facade.UserDeleteFacade;
 import com.sprint.mission.discodeit.domain.user.facade.UserDetailViewFacade;
 import com.sprint.mission.discodeit.domain.user.facade.UserOverviewFacade;
 import com.sprint.mission.discodeit.domain.user.facade.UserUpdateFacade;
-import com.sprint.mission.discodeit.domain.userstatus.facade.UserStatusUpdateFacade;
 import com.sprint.mission.discodeit.domain.binarycontent.mapper.BinaryContentMapper;
 import com.sprint.mission.discodeit.domain.user.service.UserService;
 import jakarta.validation.Valid;
@@ -50,7 +48,6 @@ public class UserController implements UserControllerDocs {
     private final UserDetailViewFacade userDetailViewFacade;
     private final UserUpdateFacade userUpdateFacade;
     private final UserDeleteFacade userDeleteFacade;
-    private final UserStatusUpdateFacade userStatusUpdateFacade;
     private final UserService userService;
 
     //사용자 목록 조회
@@ -93,12 +90,6 @@ public class UserController implements UserControllerDocs {
     public ResponseEntity<Void> deleteUser(@PathVariable UUID userId) {
         userDeleteFacade.deleteUser(userId);
         return ResponseEntity.noContent().build();
-    }
-
-    // 유저 온라인 상태 업그레이드
-    @PatchMapping("/{userId}/status")
-    public ResponseEntity<UserStatusSimpleViewRes> updateUserStatus(@PathVariable UUID userId) {
-        return ResponseEntity.ok(userStatusUpdateFacade.update(userId));
     }
 
     //이메일 가입되어있는지

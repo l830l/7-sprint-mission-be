@@ -4,7 +4,6 @@ import com.sprint.mission.discodeit.global.controller.docs.ResponseCode;
 import com.sprint.mission.discodeit.domain.user.dto.request.UserInfoReq;
 import com.sprint.mission.discodeit.domain.user.dto.response.UserDetailInfoRes;
 import com.sprint.mission.discodeit.domain.user.dto.response.UserSimpleInfoRes;
-import com.sprint.mission.discodeit.domain.userstatus.dto.response.UserStatusSimpleViewRes;
 import com.sprint.mission.discodeit.global.exception.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -447,44 +446,4 @@ public interface UserControllerDocs {
     ResponseEntity<Void> deleteUser(@PathVariable UUID userId);
 
 
-    @Operation(summary = "User 온라인 상태 업데이트")
-    @ApiResponses(
-            value = {
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                            responseCode = ResponseCode.OK,
-                            description = "User 온라인 상태가 성공적으로 업데이트됨",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = UserStatusSimpleViewRes.class),
-                                    examples = @ExampleObject(
-                                            name = "User 온라인 상태가 성공적으로 업데이트됨 예시",
-                                            value = """
-                                                    {
-                                                        "isOnline": false
-                                                    }
-                                                    """
-                                    )
-                            )
-                    ),
-                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                            responseCode = ResponseCode.NOT_FOUND,
-                            description = "해당 UUID 를 가진 사용자가 없음",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    schema = @Schema(implementation = ErrorResponse.class),
-                                    examples = @ExampleObject(
-                                            name = "해당 UUID 를 가진 사용자가 없음 예시",
-                                            value = """
-                                                    {
-                                                        "code": "USER_001",
-                                                        "message": "해당 UUID를 가진 유저가 존재하지 않습니다.",
-                                                        "httpStatus": 404
-                                                    }
-                                                    """
-                                    )
-                            )
-                    ),
-            }
-    )
-    ResponseEntity<UserStatusSimpleViewRes> updateUserStatus(@PathVariable UUID userId);
 }
