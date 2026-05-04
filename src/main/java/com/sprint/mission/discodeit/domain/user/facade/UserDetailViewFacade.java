@@ -6,8 +6,7 @@ import com.sprint.mission.discodeit.domain.user.dto.response.UserDetailInfoRes;
 import com.sprint.mission.discodeit.domain.user.entity.User;
 import com.sprint.mission.discodeit.domain.user.mapper.UserMapper;
 import com.sprint.mission.discodeit.domain.user.service.UserService;
-import com.sprint.mission.discodeit.domain.userstatus.entity.UserStatus;
-import com.sprint.mission.discodeit.domain.userstatus.service.UserStatusService;
+import com.sprint.mission.discodeit.domain.user.service.UserSessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +18,7 @@ import java.util.UUID;
 public class UserDetailViewFacade {
 
     private final UserService userService;
-    private final UserStatusService userStatusService;
+    private final UserSessionService userSessionService;
 
     //유저 단일 조회
     @Transactional(readOnly = true)
@@ -46,7 +45,6 @@ public class UserDetailViewFacade {
     private UserDetailInfoRes toDetailInfo(User user) {
         BinaryContentInfoRes profileImg;
         profileImg = BinaryContentMapper.toResDto(user.getProfile());
-        UserStatus userStatus = userStatusService.findByUserId(user.getId());
-        return UserMapper.toDetailResDto(user, profileImg, userStatus.isOnline());
+        return UserMapper.toDetailResDto(user, profileImg, userSessionService.isOnline(user.getId()));
     }
 }

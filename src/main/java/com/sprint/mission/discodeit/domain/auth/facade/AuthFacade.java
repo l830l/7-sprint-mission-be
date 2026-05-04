@@ -5,12 +5,10 @@ import com.sprint.mission.discodeit.domain.auth.exception.InvalidLoginException;
 import com.sprint.mission.discodeit.domain.binarycontent.mapper.BinaryContentMapper;
 import com.sprint.mission.discodeit.domain.user.dto.response.UserDetailInfoRes;
 import com.sprint.mission.discodeit.domain.user.entity.User;
-import com.sprint.mission.discodeit.domain.userstatus.entity.UserStatus;
 import com.sprint.mission.discodeit.global.exception.ErrorCode;
 import com.sprint.mission.discodeit.domain.user.mapper.UserMapper;
 import com.sprint.mission.discodeit.domain.binarycontent.service.BinaryContentService;
 import com.sprint.mission.discodeit.domain.user.service.UserService;
-import com.sprint.mission.discodeit.domain.userstatus.service.UserStatusService;
 
 import java.util.UUID;
 
@@ -25,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthFacade {
 
     private final UserService userService;
-    private final UserStatusService userStatusService;
     private final BinaryContentService binaryContentService;
 
     //로그인
@@ -39,8 +36,6 @@ public class AuthFacade {
             throw new InvalidLoginException(ErrorCode.INVALID_LOGIN);
         }
 
-        UserStatus userStatus = userStatusService.findByUserId(user.getId());
-        userStatusService.updateOfflineAt(userStatus.getId());
         return UserMapper.toDetailResDto(user,
                 user.getProfile() == null ? null
                         : BinaryContentMapper.toResDto(binaryContentService.getInfo(user.getProfile().getId())),
@@ -51,8 +46,6 @@ public class AuthFacade {
     @Transactional
     @PreAuthorize("#userId == @loginUser.userId()")
     public void logout(@NonNull UUID userId) {
-        userStatusService.findByUserId(userId);
-        UserStatus userStatus = userStatusService.findByUserId(userId);
-        userStatusService.updateOfflineAt(userStatus.getId());
+        
     }
 }

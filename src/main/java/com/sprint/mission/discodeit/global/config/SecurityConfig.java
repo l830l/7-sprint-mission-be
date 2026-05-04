@@ -15,6 +15,7 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -31,6 +32,7 @@ public class SecurityConfig {
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
     private final DiscodeitAccessDeniedHandler accessDeniedHandler;
+    private final SessionRegistry sessionRegistry;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -73,6 +75,12 @@ public class SecurityConfig {
                         .passwordParameter("password")
                         .successHandler(loginSuccessHandler)
                         .failureHandler(loginFailureHandler)
+                )
+                .sessionManagement(management -> management
+                        .sessionConcurrency(concurrency -> concurrency
+                                .maximumSessions(1)
+                                .maxSessionsPreventsLogin(false)
+                                .sessionRegistry(sessionRegistry))
                 )
                 .logout(logout -> logout
                         .logoutUrl("/api/auth/logout")
