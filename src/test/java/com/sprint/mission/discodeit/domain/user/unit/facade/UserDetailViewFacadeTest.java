@@ -3,10 +3,9 @@ package com.sprint.mission.discodeit.domain.user.unit.facade;
 import com.sprint.mission.discodeit.domain.user.dto.response.UserDetailInfoRes;
 import com.sprint.mission.discodeit.domain.user.entity.User;
 import com.sprint.mission.discodeit.domain.user.facade.UserDetailViewFacade;
-import com.sprint.mission.discodeit.domain.user.service.UserService;
-import com.sprint.mission.discodeit.domain.userstatus.entity.UserStatus;
-import com.sprint.mission.discodeit.domain.userstatus.service.UserStatusService;
 import com.sprint.mission.discodeit.domain.user.fixture.UserFixture;
+import com.sprint.mission.discodeit.domain.user.service.UserService;
+import com.sprint.mission.discodeit.domain.user.service.UserSessionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,8 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,7 +28,7 @@ public class UserDetailViewFacadeTest {
     private UserService userService;
 
     @Mock
-    private UserStatusService userStatusService;
+    private UserSessionService userSessionService;
 
     @InjectMocks
     private UserDetailViewFacade userDetailViewFacade;
@@ -41,9 +41,8 @@ public class UserDetailViewFacadeTest {
         void success_find_by_id_user() {
             // given
             User user = UserFixture.createWithoutProfile();
-            UserStatus userStatus = UserStatus.create(user);
-            given(userStatusService.findByUserId(user.getId())).willReturn(userStatus);
             given(userService.findById(any(UUID.class))).willReturn(user);
+            given(userSessionService.isOnline(user.getId())).willReturn(true);
 
             // when
             UserDetailInfoRes result = userDetailViewFacade.findById(user.getId());
@@ -51,7 +50,6 @@ public class UserDetailViewFacadeTest {
             // then
             assertThat(result).isNotNull();
 
-            then(userStatusService).should(times(1)).findByUserId(user.getId());
             then(userService).should(times(1)).findById(user.getId());
         }
     }
@@ -64,17 +62,14 @@ public class UserDetailViewFacadeTest {
         void success_find_by_nickname_user() {
             // given
             User user = UserFixture.createWithoutProfile();
-            UserStatus userStatus = UserStatus.create(user);
-            given(userStatusService.findByUserId(user.getId())).willReturn(userStatus);
             given(userService.findByNickname(any(String.class))).willReturn(user);
+            given(userSessionService.isOnline(user.getId())).willReturn(true);
 
             // when
             UserDetailInfoRes result = userDetailViewFacade.findByNickname(user.getNickname());
 
             // then
             assertThat(result).isNotNull();
-
-            then(userStatusService).should(times(1)).findByUserId(user.getId());
             then(userService).should(times(1)).findByNickname(user.getNickname());
         }
     }
@@ -87,17 +82,14 @@ public class UserDetailViewFacadeTest {
         void success_find_by_email_user() {
             // given
             User user = UserFixture.createWithoutProfile();
-            UserStatus userStatus = UserStatus.create(user);
-            given(userStatusService.findByUserId(user.getId())).willReturn(userStatus);
             given(userService.findByEmail(any(String.class))).willReturn(user);
+            given(userSessionService.isOnline(user.getId())).willReturn(true);
 
             // when
             UserDetailInfoRes result = userDetailViewFacade.findByEmail(user.getEmail());
 
             // then
             assertThat(result).isNotNull();
-
-            then(userStatusService).should(times(1)).findByUserId(user.getId());
             then(userService).should(times(1)).findByEmail(user.getEmail());
         }
     }

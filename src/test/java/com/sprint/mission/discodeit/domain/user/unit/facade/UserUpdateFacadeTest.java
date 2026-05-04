@@ -9,7 +9,6 @@ import com.sprint.mission.discodeit.domain.user.dto.response.UserDetailInfoRes;
 import com.sprint.mission.discodeit.domain.user.entity.User;
 import com.sprint.mission.discodeit.domain.user.facade.UserUpdateFacade;
 import com.sprint.mission.discodeit.domain.user.service.UserService;
-import com.sprint.mission.discodeit.domain.userstatus.service.UserStatusService;
 import com.sprint.mission.discodeit.domain.binarycontent.fixture.BinaryContentFixture;
 import com.sprint.mission.discodeit.domain.user.fixture.UserFixture;
 import org.junit.jupiter.api.DisplayName;
@@ -35,9 +34,6 @@ public class UserUpdateFacadeTest {
 
     @Mock
     private UserService userService;
-
-    @Mock
-    private UserStatusService userStatusService;
 
     @InjectMocks
     private UserUpdateFacade userUpdateFacade;
@@ -78,7 +74,6 @@ public class UserUpdateFacadeTest {
             then(binaryContentStorage).should(never()).delete(any());
             then(binaryContentService).should(never()).upload(any());
             then(binaryContentStorage).should(never()).put(any(), any());
-            then(userStatusService).should().updateByUserId(user.getId());
         }
 
         @Test
@@ -130,7 +125,6 @@ public class UserUpdateFacadeTest {
             then(binaryContentService).should(times(1)).upload(binaryReq);
             then(binaryContentStorage).should(times(1))
                     .put(binaryContent.getId(), binaryReq.data());
-            then(userStatusService).should().updateByUserId(user.getId());
         }
     }
 
@@ -170,7 +164,6 @@ public class UserUpdateFacadeTest {
             then(binaryContentStorage).should(times(1)).delete(any());
             then(binaryContentService).should(never()).upload(any());
             then(binaryContentStorage).should(never()).put(any(), any());
-            then(userStatusService).should().updateByUserId(user.getId());
         }
 
         @Test
@@ -222,7 +215,6 @@ public class UserUpdateFacadeTest {
             then(binaryContentService).should(times(1)).upload(binaryReq);
             then(binaryContentStorage).should(times(1))
                     .put(binaryContent.getId(), binaryReq.data());
-            then(userStatusService).should().updateByUserId(user.getId());
         }
     }
 }

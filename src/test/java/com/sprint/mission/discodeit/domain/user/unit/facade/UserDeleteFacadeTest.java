@@ -5,8 +5,6 @@ import com.sprint.mission.discodeit.domain.binarycontent.storage.BinaryContentSt
 import com.sprint.mission.discodeit.domain.user.entity.User;
 import com.sprint.mission.discodeit.domain.user.facade.UserDeleteFacade;
 import com.sprint.mission.discodeit.domain.user.service.UserService;
-import com.sprint.mission.discodeit.domain.userstatus.entity.UserStatus;
-import com.sprint.mission.discodeit.domain.userstatus.service.UserStatusService;
 import com.sprint.mission.discodeit.domain.user.fixture.UserFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -30,10 +28,6 @@ public class UserDeleteFacadeTest {
 
     @Mock
     private UserService userService;
-
-    @Mock
-    private UserStatusService userStatusService;
-
     @InjectMocks
     private UserDeleteFacade userDeleteFacade;
 
@@ -46,7 +40,6 @@ public class UserDeleteFacadeTest {
             // given
             User user = UserFixture.createWithoutProfile();
             given(userService.findById(user.getId())).willReturn(user);
-            given(userStatusService.findByUserId(user.getId())).willReturn(null);
 
             // when
             userDeleteFacade.deleteUser(user.getId());
@@ -54,7 +47,6 @@ public class UserDeleteFacadeTest {
             // then
             then(binaryContentService).should(never()).delete(any());
             then(binaryContentStorage).should(never()).delete(any());
-            then(userStatusService).should(never()).delete(any());
             then(userService).should(times(1)).delete(user.getId());
         }
     }
@@ -67,10 +59,8 @@ public class UserDeleteFacadeTest {
         void success_delete_with_status_user() {
             // given
             User user = UserFixture.createWithoutProfile();
-            UserStatus userStatus = UserStatus.create(user);
 
             given(userService.findById(user.getId())).willReturn(user);
-            given(userStatusService.findByUserId(user.getId())).willReturn(userStatus);
 
             // when
             userDeleteFacade.deleteUser(user.getId());
@@ -78,7 +68,6 @@ public class UserDeleteFacadeTest {
             // then
             then(binaryContentService).should(never()).delete(any());
             then(binaryContentStorage).should(never()).delete(any());
-            then(userStatusService).should(times(1)).delete(userStatus.getId());
             then(userService).should(times(1)).delete(user.getId());
         }
     }
@@ -91,10 +80,8 @@ public class UserDeleteFacadeTest {
         void success_delete_with_status_user() {
             // given
             User user = UserFixture.createWithProfile();
-            UserStatus userStatus = UserStatus.create(user);
 
             given(userService.findById(user.getId())).willReturn(user);
-            given(userStatusService.findByUserId(user.getId())).willReturn(userStatus);
 
             // when
             userDeleteFacade.deleteUser(user.getId());
@@ -102,7 +89,6 @@ public class UserDeleteFacadeTest {
             // then
             then(binaryContentService).should(times(1)).delete(user.getProfile().getId());
             then(binaryContentStorage).should(times(1)).delete(user.getProfile().getId());
-            then(userStatusService).should(times(1)).delete(userStatus.getId());
             then(userService).should(times(1)).delete(user.getId());
         }
     }

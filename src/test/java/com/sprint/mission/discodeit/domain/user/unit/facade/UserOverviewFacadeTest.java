@@ -3,10 +3,9 @@ package com.sprint.mission.discodeit.domain.user.unit.facade;
 import com.sprint.mission.discodeit.domain.user.dto.response.UserSimpleInfoRes;
 import com.sprint.mission.discodeit.domain.user.entity.User;
 import com.sprint.mission.discodeit.domain.user.facade.UserOverviewFacade;
-import com.sprint.mission.discodeit.domain.user.service.UserService;
-import com.sprint.mission.discodeit.domain.userstatus.entity.UserStatus;
-import com.sprint.mission.discodeit.domain.userstatus.service.UserStatusService;
 import com.sprint.mission.discodeit.domain.user.fixture.UserFixture;
+import com.sprint.mission.discodeit.domain.user.service.UserService;
+import com.sprint.mission.discodeit.domain.user.service.UserSessionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -30,7 +29,7 @@ public class UserOverviewFacadeTest {
     private UserService userService;
 
     @Mock
-    private UserStatusService userStatusService;
+    private UserSessionService userSessionService;
 
     @InjectMocks
     private UserOverviewFacade userOverviewFacade;
@@ -44,15 +43,7 @@ public class UserOverviewFacadeTest {
             // given
             List<User> users = UserFixture.createMixedList();
             given(userService.findAll()).willReturn(users);
-            given(userStatusService.findByUserId(any(UUID.class)))
-                    .willAnswer(invocation -> {
-                        UUID userId = invocation.getArgument(0);
-                        User matchedUser = users.stream()
-                                .filter(user -> user.getId().equals(userId))
-                                .findFirst()
-                                .orElseThrow();
-                        return UserStatus.create(matchedUser);
-                    });
+            given(userSessionService.isOnline(any(UUID.class))).willReturn(true);
 
             // when
             List<UserSimpleInfoRes> result = userOverviewFacade.findAll();
@@ -62,10 +53,6 @@ public class UserOverviewFacadeTest {
             assertThat(result).hasSize(users.size());
 
             then(userService).should(times(1)).findAll();
-            for (User user : users) {
-                then(userStatusService).should(times(1))
-                        .findByUserId(user.getId());
-            }
         }
     }
 }

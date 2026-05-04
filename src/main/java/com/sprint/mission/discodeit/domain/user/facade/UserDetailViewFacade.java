@@ -43,8 +43,7 @@ public class UserDetailViewFacade {
 
     //변환 메소드
     private UserDetailInfoRes toDetailInfo(User user) {
-        BinaryContentInfoRes profileImg;
-        profileImg = BinaryContentMapper.toResDto(user.getProfile());
+        BinaryContentInfoRes profileImg = BinaryContentMapper.toResDto(user.getProfile());
         return UserMapper.toDetailResDto(user, profileImg, userSessionService.isOnline(user.getId()));
     }
 }

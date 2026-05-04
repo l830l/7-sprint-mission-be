@@ -10,8 +10,6 @@ import com.sprint.mission.discodeit.domain.user.entity.User;
 import com.sprint.mission.discodeit.domain.user.facade.UserCreationFacade;
 import com.sprint.mission.discodeit.domain.user.factory.UserFactory;
 import com.sprint.mission.discodeit.domain.user.service.UserService;
-import com.sprint.mission.discodeit.domain.userstatus.entity.UserStatus;
-import com.sprint.mission.discodeit.domain.userstatus.service.UserStatusService;
 import com.sprint.mission.discodeit.domain.binarycontent.fixture.BinaryContentFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -39,9 +37,6 @@ public class UserCreationFacadeTest {
     private BinaryContentStorage binaryContentStorage;
 
     @Mock
-    private UserStatusService userStatusService;
-
-    @Mock
     private UserFactory userFactory;
 
     @Mock
@@ -63,13 +58,10 @@ public class UserCreationFacadeTest {
             String passwordEncoded = "qwer123$encoded";
             UserCreateReq req = new UserCreateReq(email, nickname, password, null);
             User user = User.createWithoutProfile(email, nickname, passwordEncoded);
-            UserStatus userStatus = UserStatus.create(user);
 
             given(userFactory.create(req, passwordEncoded, null)).willReturn(user);
             given(userService.create(any(User.class)))
                     .willReturn(user);
-            given(userStatusService.create(any(UserStatus.class)))
-                    .willReturn(userStatus);
             given(passwordEncoder.encode(password))
                     .willReturn(passwordEncoded);
 
@@ -83,7 +75,6 @@ public class UserCreationFacadeTest {
             then(binaryContentStorage).should(never()).put(any(), any());
             then(userFactory).should().create(eq(req), anyString(), eq(null));
             then(userService).should().create(any(User.class));
-            then(userStatusService).should().create(any(UserStatus.class));
         }
     }
 
@@ -103,14 +94,12 @@ public class UserCreationFacadeTest {
             BinaryContent binaryContent = BinaryContentFixture.create(binaryReq);
             UserCreateReq req = new UserCreateReq(email, nickname, password, binaryReq);
             User user = User.createWithProfile(req.email(), req.nickname(), passwordEncoded, binaryContent);
-            UserStatus userStatus = UserStatus.create(user);
 
             given(binaryContentService.upload(binaryReq)).willReturn(binaryContent);
             given(userFactory.create(req, passwordEncoded, binaryContent.getId())).willReturn(user);
             given(userService.create(any(User.class))).willReturn(user);
             given(binaryContentStorage.put(binaryContent.getId(), req.profileImage().data()))
                     .willReturn(binaryContent.getId());
-            given(userStatusService.create(any(UserStatus.class))).willReturn(userStatus);
             given(passwordEncoder.encode(password))
                     .willReturn(passwordEncoded);
 
@@ -124,7 +113,6 @@ public class UserCreationFacadeTest {
             then(binaryContentStorage).should(times(1)).put(binaryContent.getId(), req.profileImage().data());
             then(userFactory).should().create(req, passwordEncoded, binaryContent.getId());
             then(userService).should().create(any(User.class));
-            then(userStatusService).should().create(any(UserStatus.class));
         }
     }
 }

@@ -63,14 +63,7 @@ public enum ErrorCode {
     EMAIL_NOT_FOUND("USER_004", HttpStatus.NOT_FOUND,
             "해당 이메일을 가진 유저가 존재하지 않습니다."),
     INVALID_USER_NICKNAME("USER_005", HttpStatus.BAD_REQUEST,
-            "해당 이메일로 가입한 유저의 닉네임이 바르지 않습니다."),
-
-
-    // UserStatus
-    USERSTATUS_NOT_FOUND("USERSTATUS_001", HttpStatus.NOT_FOUND,
-            "해당 UUID를 가진 상태 정보가 존재하지 않습니다."),
-    USER_STATUS_MISSING("USERSTATUS_001", HttpStatus.NOT_FOUND,
-            "해당 유저의 상태 정보가 존재하지 않습니다.");
+            "해당 이메일로 가입한 유저의 닉네임이 바르지 않습니다.");
 
     //field
     private final String code;
