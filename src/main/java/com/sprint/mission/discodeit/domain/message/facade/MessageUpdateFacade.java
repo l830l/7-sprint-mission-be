@@ -9,6 +9,7 @@ import com.sprint.mission.discodeit.domain.message.entity.Message;
 import com.sprint.mission.discodeit.domain.message.mapper.MessageMapper;
 import com.sprint.mission.discodeit.domain.message.service.MessageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ public class MessageUpdateFacade {
     private final BinaryContentStorage binaryContentStorage;
 
     @Transactional
+    @PreAuthorize("@messageSecurity.canUpdate(#messageId, @loginUser.userId())")
     public MessageViewRes updateMessage(UUID messageId, MessageUpdateReq req) {
         Message message = messageService.findById(messageId);
         // 기존 첨부파일 중 삭제할 파일 처리

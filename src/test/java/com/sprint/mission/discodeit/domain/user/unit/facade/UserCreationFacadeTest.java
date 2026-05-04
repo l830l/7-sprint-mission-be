@@ -10,8 +10,6 @@ import com.sprint.mission.discodeit.domain.user.entity.User;
 import com.sprint.mission.discodeit.domain.user.facade.UserCreationFacade;
 import com.sprint.mission.discodeit.domain.user.factory.UserFactory;
 import com.sprint.mission.discodeit.domain.user.service.UserService;
-import com.sprint.mission.discodeit.domain.userstatus.entity.UserStatus;
-import com.sprint.mission.discodeit.domain.userstatus.service.UserStatusService;
 import com.sprint.mission.discodeit.domain.binarycontent.fixture.BinaryContentFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,10 +37,10 @@ public class UserCreationFacadeTest {
     private BinaryContentStorage binaryContentStorage;
 
     @Mock
-    private UserStatusService userStatusService;
+    private UserFactory userFactory;
 
     @Mock
-    private UserFactory userFactory;
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UserCreationFacade userCreationFacade;
@@ -56,15 +55,15 @@ public class UserCreationFacadeTest {
             String email = "tester@aaa.com";
             String nickname = "tester";
             String password = "qwer123$";
+            String passwordEncoded = "qwer123$encoded";
             UserCreateReq req = new UserCreateReq(email, nickname, password, null);
-            User user = User.createWithoutProfile(email, nickname, password);
-            UserStatus userStatus = UserStatus.create(user);
+            User user = User.createWithoutProfile(email, nickname, passwordEncoded);
 
-            given(userFactory.create(req, null)).willReturn(user);
+            given(userFactory.create(req, passwordEncoded, null)).willReturn(user);
             given(userService.create(any(User.class)))
                     .willReturn(user);
-            given(userStatusService.create(any(UserStatus.class)))
-                    .willReturn(userStatus);
+            given(passwordEncoder.encode(password))
+                    .willReturn(passwordEncoded);
 
             // when
             UserDetailInfoRes res = userCreationFacade.createUser(req);
@@ -74,9 +73,8 @@ public class UserCreationFacadeTest {
 
             then(binaryContentService).should(never()).upload(any());
             then(binaryContentStorage).should(never()).put(any(), any());
-            then(userFactory).should().create(req, null);
+            then(userFactory).should().create(eq(req), anyString(), eq(null));
             then(userService).should().create(any(User.class));
-            then(userStatusService).should().create(any(UserStatus.class));
         }
     }
 
@@ -90,19 +88,20 @@ public class UserCreationFacadeTest {
             String email = "tester@aaa.com";
             String nickname = "tester";
             String password = "qwer123$";
+            String passwordEncoded = "qwer123$encoded";
             BinaryContentCreateReq binaryReq = new BinaryContentCreateReq(
                     "test_profile".getBytes(), "test_profile.jpg", "image/jpg", 10L);
             BinaryContent binaryContent = BinaryContentFixture.create(binaryReq);
             UserCreateReq req = new UserCreateReq(email, nickname, password, binaryReq);
-            User user = User.createWithProfile(req.email(), req.nickname(), req.password(), binaryContent);
-            UserStatus userStatus = UserStatus.create(user);
+            User user = User.createWithProfile(req.email(), req.nickname(), passwordEncoded, binaryContent);
 
             given(binaryContentService.upload(binaryReq)).willReturn(binaryContent);
-            given(userFactory.create(req, binaryContent.getId())).willReturn(user);
+            given(userFactory.create(req, passwordEncoded, binaryContent.getId())).willReturn(user);
             given(userService.create(any(User.class))).willReturn(user);
             given(binaryContentStorage.put(binaryContent.getId(), req.profileImage().data()))
                     .willReturn(binaryContent.getId());
-            given(userStatusService.create(any(UserStatus.class))).willReturn(userStatus);
+            given(passwordEncoder.encode(password))
+                    .willReturn(passwordEncoded);
 
             // when
             UserDetailInfoRes res = userCreationFacade.createUser(req);
@@ -112,9 +111,8 @@ public class UserCreationFacadeTest {
 
             then(binaryContentService).should(times(1)).upload(binaryReq);
             then(binaryContentStorage).should(times(1)).put(binaryContent.getId(), req.profileImage().data());
-            then(userFactory).should().create(req, binaryContent.getId());
+            then(userFactory).should().create(req, passwordEncoded, binaryContent.getId());
             then(userService).should().create(any(User.class));
-            then(userStatusService).should().create(any(UserStatus.class));
         }
     }
 }

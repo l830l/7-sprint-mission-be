@@ -37,7 +37,7 @@ public class ChannelTestUtils {
             testEntityManager.persist(channel);
             if (channel.getPublicType() == ChannelType.PRIVATE) {
                 ChannelMember channelMember = ChannelMember.create(user, channel, role);
-                role = (role == ChannelMemberRole.MEMBER) ? ChannelMemberRole.MANAGER : ChannelMemberRole.MEMBER;
+                role = (role == ChannelMemberRole.MEMBER) ? ChannelMemberRole.OWNER : ChannelMemberRole.MEMBER;
                 testEntityManager.persist(channelMember);
                 testEntityManager.flush();
             }

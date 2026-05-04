@@ -56,7 +56,7 @@ public class ChannelMemberServiceImpl implements ChannelMemberService {
 
     @Override
     public ChannelMember findManagerByChannelId(UUID channelId) {
-        return channelMemberRepository.findByChannelIdAndRole(channelId, ChannelMemberRole.MANAGER)
+        return channelMemberRepository.findByChannelIdAndRole(channelId, ChannelMemberRole.OWNER)
                 .stream().findFirst().orElseThrow(
                         () -> new UserNotFoundException(ErrorCode.USER_NOT_FOUND)
                 );
@@ -71,6 +71,18 @@ public class ChannelMemberServiceImpl implements ChannelMemberService {
     @Override
     public List<ChannelMember> findAllByChannelId(UUID channelId) {
         return channelMemberRepository.findAllByChannelId(channelId);
+    }
+
+    // Security 용
+
+    @Override
+    public boolean isManager(UUID channelId, UUID userId) {
+        return channelMemberRepository.existsByChannelIdAndUserIdAndRole(channelId, userId, ChannelMemberRole.OWNER);
+    }
+
+    @Override
+    public boolean isMember(UUID channelId, UUID userId) {
+        return channelMemberRepository.existsByChannelIdAndUserId(channelId, userId);
     }
 
     // ===== 🎯 Controller Direct (DTO 반환) =====

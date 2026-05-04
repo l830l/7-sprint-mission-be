@@ -11,6 +11,7 @@ import com.sprint.mission.discodeit.domain.message.factory.MessageFactory;
 import com.sprint.mission.discodeit.domain.message.mapper.MessageMapper;
 import com.sprint.mission.discodeit.domain.message.service.MessageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,7 @@ public class MessageCreationFacade {
 
     //메세지 추가
     @Transactional
+    @PreAuthorize("@messageSecurity.canCreate(#speakerId, @loginUser.userId())")
     public MessageViewRes createMessage(UUID speakerId, UUID channelId, MessageCreateReq req) {
         channelService.findById(channelId);
         List<BinaryContent> attachments = new ArrayList<>();

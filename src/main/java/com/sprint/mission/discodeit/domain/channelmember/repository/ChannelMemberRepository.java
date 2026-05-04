@@ -12,6 +12,8 @@ public interface ChannelMemberRepository extends JpaRepository<ChannelMember, UU
 
     boolean existsByChannelIdAndUserId(UUID channelId, UUID userId);
 
+    boolean existsByChannelIdAndUserIdAndRole(UUID channelId, UUID userId, ChannelMemberRole role);
+
     List<ChannelMember> findAllByChannelId(UUID channelId);
 
     List<ChannelMember> findByChannelIdAndRole(UUID channelId, ChannelMemberRole role);

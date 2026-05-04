@@ -1,22 +1,25 @@
 package com.sprint.mission.discodeit.domain.user.service;
 
-import com.sprint.mission.discodeit.domain.user.dto.request.UserFindPasswordReq;
-import com.sprint.mission.discodeit.global.email.EmailSender;
 import com.sprint.mission.discodeit.domain.auth.dto.response.AvailabilityRes;
+import com.sprint.mission.discodeit.domain.binarycontent.mapper.BinaryContentMapper;
+import com.sprint.mission.discodeit.domain.user.dto.request.UserFindPasswordReq;
 import com.sprint.mission.discodeit.domain.user.dto.request.UserUpdateReq;
+import com.sprint.mission.discodeit.domain.user.dto.response.UserSimpleInfoRes;
 import com.sprint.mission.discodeit.domain.user.entity.User;
-import com.sprint.mission.discodeit.global.exception.ErrorCode;
+import com.sprint.mission.discodeit.domain.user.entity.UserRole;
 import com.sprint.mission.discodeit.domain.user.exception.InvalidUserNicknameException;
 import com.sprint.mission.discodeit.domain.user.exception.UserAlreadyExistsException;
 import com.sprint.mission.discodeit.domain.user.exception.UserNotFoundException;
+import com.sprint.mission.discodeit.domain.user.mapper.UserMapper;
 import com.sprint.mission.discodeit.domain.user.repository.UserRepository;
-
-import java.util.List;
-import java.util.UUID;
-
+import com.sprint.mission.discodeit.global.email.EmailSender;
+import com.sprint.mission.discodeit.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -25,6 +28,8 @@ public class UserServiceImpl implements UserService {
     //리포지토리
     private final UserRepository userRepository;
     private final EmailSender emailSender;
+    private final UserSessionService userSessionService;
+
 
     // ===== 🎯 Controller Direct (DTO 반환) =====
     //메일로 가입했던 아이디를 발송
@@ -55,6 +60,22 @@ public class UserServiceImpl implements UserService {
                         반드시 이후에 비밀번호 변경을 해주세요.""", passwordTemp)
         );
     }
+
+    @Override
+    @Transactional
+    public UserSimpleInfoRes updateRole(UUID userId, UserRole role) {
+        User user = findById(userId);
+        user.updateRole(role);
+
+        userSessionService.expireSessions(userId);
+
+        return UserMapper.toSimpleResDto(
+                user,
+                BinaryContentMapper.toResDto(user.getProfile()),
+                false
+        );
+    }
+
 
     // ===== 🏗️ Domain Logic (Facade 용)  =====
     //유저 추가

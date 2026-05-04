@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.domain.binarycontent.storage.BinaryContentSt
 import com.sprint.mission.discodeit.domain.message.entity.Message;
 import com.sprint.mission.discodeit.domain.message.service.MessageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,10 @@ public class MessageDeleteFacade {
 
     //메세지 삭제
     @Transactional
+    @PreAuthorize("""
+            hasRole('ADMIN') or
+            @messageSecurity.canDelete(#messageId, @loginUser.userId())
+            """)
     public void deleteMessage(UUID messageId) {
         Message message = messageService.findById(messageId);
         message.getAttachments().forEach(

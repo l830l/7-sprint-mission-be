@@ -12,14 +12,14 @@ public record ErrorResponse(
         int httpStatus
 ) {
 
-    public static ErrorResponse from(ErrorCode errorCode, DiscodeitException e) {
+    public static ErrorResponse from(DiscodeitException e) {
         return new ErrorResponse(
                 LocalDateTime.now(),
-                errorCode.getCode(),
-                errorCode.getMessage(),
+                e.getErrorCode().getCode(),
+                e.getErrorCode().getMessage(),
                 e.getDetails(),
                 e.getClass().getSimpleName(),
-                errorCode.getStatus().value()
+                e.getErrorCode().getStatus().value()
         );
     }
 
