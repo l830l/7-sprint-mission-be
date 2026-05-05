@@ -40,6 +40,10 @@ discodeit:
     email: ${ADMIN_EMAIL}
     nickname: ${ADMIN_NICKNAME}
     password: ${ADMIN_PASSWORD}
+  jwt:
+    secret: ${JWT_SECRET}
+    access-token-expiration-seconds: 1800 # 30minute
+    refresh-token-expiration-seconds: 1209600 # 14days
 
 logging:
   level:
