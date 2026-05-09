@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.global.security.csrf.SpaCsrfTokenRequestHand
 import com.sprint.mission.discodeit.global.security.handler.DiscodeitAccessDeniedHandler;
 import com.sprint.mission.discodeit.global.security.handler.JwtLoginSuccessHandler;
 import com.sprint.mission.discodeit.global.security.handler.LoginFailureHandler;
+import com.sprint.mission.discodeit.global.security.jwt.filter.JwtAuthenticationFilter;
 import com.sprint.mission.discodeit.global.security.user.detail.DiscodeitUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -17,8 +18,8 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
@@ -33,10 +34,12 @@ import java.util.List;
 public class SecurityConfig {
     private final LoginFailureHandler loginFailureHandler;
     private final DiscodeitAccessDeniedHandler accessDeniedHandler;
-    private final SessionRegistry sessionRegistry;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtLoginSuccessHandler jwtLoginSuccessHandler;
+    private final DiscodeitUserDetailsService discodeitUserDetailsService;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, DiscodeitUserDetailsService discodeitUserDetailsService, JwtLoginSuccessHandler jwtLoginSuccessHandler) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf
@@ -77,6 +80,7 @@ public class SecurityConfig {
                         .successHandler(jwtLoginSuccessHandler)
                         .failureHandler(loginFailureHandler)
                 )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )

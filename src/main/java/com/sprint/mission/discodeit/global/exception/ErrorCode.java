@@ -26,6 +26,12 @@ public enum ErrorCode {
             "닉네임은 2글자 이상이어야 합니다."),
     PASSWORD_INVALID("AUTH_005", HttpStatus.BAD_REQUEST,
             "비밀번호는 최소 6글자 이상이어야 합니다."),
+    INVALID_REFRESH_TOKEN("AUTH_006", HttpStatus.UNAUTHORIZED,
+            "유효하지 않은 리프레시 토큰입니다."),
+    REFRESH_TOKEN_NOT_FOUND("AUTH_007", HttpStatus.UNAUTHORIZED,
+            "리프레시 토큰을 찾을 수 없습니다."),
+    REFRESH_TOKEN_REUSED("AUTH_008", HttpStatus.UNAUTHORIZED,
+            "이미 사용된 리프레시 토큰입니다."),
 
     // BinaryContent
     BINARYCONTENT_NOT_FOUNT("BINARYCONTENT_001", HttpStatus.NOT_FOUND,

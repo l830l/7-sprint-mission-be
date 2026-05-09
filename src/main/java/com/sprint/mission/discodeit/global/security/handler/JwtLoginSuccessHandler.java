@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sprint.mission.discodeit.domain.auth.dto.response.JwtRes;
 import com.sprint.mission.discodeit.domain.user.dto.response.UserSimpleInfoRes;
 import com.sprint.mission.discodeit.global.properties.JwtProperties;
-import com.sprint.mission.discodeit.global.security.jwt.JwtTokenProvider;
+import com.sprint.mission.discodeit.global.security.jwt.provider.JwtTokenProvider;
 import com.sprint.mission.discodeit.global.security.user.detail.DiscodeitUserDetails;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
