@@ -1,4 +1,4 @@
-package com.sprint.mission.discodeit.global.security.jwt;
+package com.sprint.mission.discodeit.global.security.jwt.constant;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

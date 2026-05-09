@@ -1,4 +1,4 @@
-package com.sprint.mission.discodeit.global.security.jwt;
+package com.sprint.mission.discodeit.global.security.jwt.provider;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -13,6 +13,10 @@ import com.sprint.mission.discodeit.global.exception.ErrorCode;
 import com.sprint.mission.discodeit.global.properties.JwtProperties;
 import com.sprint.mission.discodeit.global.security.exception.JwtClaimExtractFailException;
 import com.sprint.mission.discodeit.global.security.exception.JwtCreateFailException;
+import com.sprint.mission.discodeit.global.security.jwt.constant.JwtClaim;
+import com.sprint.mission.discodeit.global.security.jwt.constant.JwtTokenType;
+import com.sprint.mission.discodeit.global.security.jwt.util.TokenHashUtils;
+import com.sprint.mission.discodeit.global.security.jwt.vo.IssuedJwtToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +29,23 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
     private final JwtProperties jwtProperties;
+
+    // [토큰 발급]
+    public IssuedJwtToken issueToken(UserSimpleInfoRes userInfo) {
+        String accessToken = createAccessToken(userInfo);
+        String refreshToken = createRefreshToken(userInfo);
+
+        return new IssuedJwtToken(
+                accessToken,
+                refreshToken,
+                TokenHashUtils.sha256(refreshToken),
+                createRefreshTokenExpiresAt()
+        );
+    }
+
+    public Instant createRefreshTokenExpiresAt() {
+        return Instant.now().plusSeconds(jwtProperties.refreshTokenExpirationSeconds());
+    }
 
     // [토큰 생성]
     public String createAccessToken(UserSimpleInfoRes userInfo) {
@@ -142,6 +163,7 @@ public class JwtTokenProvider {
     public UserRole getUserRole(String token) {
         return UserRole.valueOf(getClaim(token, JwtClaim.ROLE));
     }
+
 
     public JwtTokenType getTokenType(String token) {
         return JwtTokenType.valueOf(getClaim(token, JwtClaim.TOKEN_TYPE));
