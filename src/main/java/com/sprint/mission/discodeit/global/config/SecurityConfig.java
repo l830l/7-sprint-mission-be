@@ -87,10 +87,6 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .rememberMe(remember -> remember
-                        .rememberMeParameter("rememberMe")
-                        .userDetailsService(discodeitUserDetailsService)
-                )
                 .logout(logout -> logout
                         .logoutUrl("/api/auth/logout")
                         .addLogoutHandler(jwtLogoutHandler)
