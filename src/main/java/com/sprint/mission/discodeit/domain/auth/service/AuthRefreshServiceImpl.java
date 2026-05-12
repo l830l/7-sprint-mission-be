@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.domain.auth.service;
 
-import com.sprint.mission.discodeit.domain.auth.dto.response.JwtRes;
+import com.sprint.mission.discodeit.domain.auth.dto.inner.JwtRefreshResult;
 import com.sprint.mission.discodeit.domain.auth.dto.response.StoredRefreshTokenRes;
 import com.sprint.mission.discodeit.domain.auth.store.RefreshTokenStore;
 import com.sprint.mission.discodeit.domain.user.dto.response.UserSimpleInfoRes;
@@ -25,7 +25,7 @@ public class AuthRefreshServiceImpl implements AuthRefreshService {
     // 유저 정보 + 액세스 토큰 발급
     @Override
     @Transactional
-    public JwtRes refresh(String refreshToken) {
+    public JwtRefreshResult refresh(String refreshToken) {
         validateRefreshToken(refreshToken);
         StoredRefreshTokenRes storedToken = getStoredToken(refreshToken);
         UserSimpleInfoRes userInfo = getUserByToken(refreshToken);
@@ -37,7 +37,7 @@ public class AuthRefreshServiceImpl implements AuthRefreshService {
                 issuedJwtToken.refreshTokenExpiresAt()
         );
 
-        return new JwtRes(userInfo, issuedJwtToken.accessToken());
+        return new JwtRefreshResult(userInfo, issuedJwtToken.accessToken(), issuedJwtToken.refreshToken());
     }
 
     @Override

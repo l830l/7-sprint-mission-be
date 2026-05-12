@@ -52,6 +52,7 @@ public class SecurityConfig {
                                 "/api/auth/email-code",
                                 "/api/auth/email-code/verify",
                                 "/api/auth/csrf-token",
+                                "/api/auth/refresh",
                                 "/api-docs-ui.html",
                                 "/api-docs-ui/**",
                                 "/swagger-ui/**",

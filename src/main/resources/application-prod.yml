@@ -44,6 +44,12 @@ discodeit:
     secret: ${JWT_SECRET}
     access-token-expiration-seconds: 1800 # 30minute
     refresh-token-expiration-seconds: 1209600 # 14days
+    refresh-cookie:
+      name: REFRESH_TOKEN
+      path: /api/auth/refresh
+      http-only: true
+      secure: true
+      same-site: Strict # Best String Value: Strict, Lax, None
 
 logging:
   level:

@@ -6,6 +6,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record JwtProperties(
         String secret,
         long accessTokenExpirationSeconds,
-        long refreshTokenExpirationSeconds
+        long refreshTokenExpirationSeconds,
+        RefreshCookie refreshCookie
 ) {
+    public record RefreshCookie(
+            String name,
+            String path,
+            boolean httpOnly,
+            boolean secure,
+            String sameSite
+    ) {
+    }
 }
