@@ -47,6 +47,10 @@ public class JwtTokenProvider {
         return Instant.now().plusSeconds(jwtProperties.refreshTokenExpirationSeconds());
     }
 
+    public Instant createAccessTokenExpiresAt() {
+        return Instant.now().plusSeconds(jwtProperties.accessTokenExpirationSeconds());
+    }
+
     // [토큰 생성]
     public String createAccessToken(UserSimpleInfoRes userInfo) {
         return createToken(
