@@ -38,7 +38,9 @@ public class JwtTokenProvider {
         return new IssuedJwtToken(
                 accessToken,
                 refreshToken,
+                TokenHashUtils.sha256(accessToken),
                 TokenHashUtils.sha256(refreshToken),
+                createAccessTokenExpiresAt(),
                 createRefreshTokenExpiresAt()
         );
     }
