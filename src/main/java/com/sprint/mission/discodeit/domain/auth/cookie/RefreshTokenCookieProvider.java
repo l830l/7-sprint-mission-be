@@ -50,7 +50,7 @@ public class RefreshTokenCookieProvider {
     }
 
     // 쿠키에서 삭제
-    public ResponseCookie deleteCookie() {
+    private ResponseCookie deleteCookie() {
         JwtProperties.RefreshCookie cookie = jwtProperties.refreshCookie();
 
         return ResponseCookie.from(cookie.name(), "")
@@ -60,5 +60,12 @@ public class RefreshTokenCookieProvider {
                 .path(cookie.path())
                 .maxAge(0)
                 .build();
+    }
+
+    public void deleteRefreshTokenCookie(HttpServletResponse response) {
+        response.addHeader(
+                HttpHeaders.SET_COOKIE,
+                deleteCookie().toString()
+        );
     }
 }
